@@ -487,202 +487,116 @@ function cerrarModal() {
 // ============================================================
 // SILABEO AUTOMÁTICO (español)
 // ============================================================
+// Algoritmo basado en posiciones de vocales — sin loops infinitos.
+// 1. Se filtran caracteres no válidos (espacios, puntuación, etc.)
+// 2. Se marcan las 'u' mudas en 'qu' y 'gu' antes de e/i
+// 3. Se localizan todas las vocales
+// 4. Se calculan los puntos de corte entre pares de vocales consecutivas
+// 5. Se mapea de vuelta a los caracteres originales con acentos
 function separarSilabas(palabra) {
     if (!palabra || palabra.length < 2) return palabra;
 
-    // Normalizar: quitar acentos para el análisis, preservar originales en output
-    const norm = palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const original = palabra;
+    // Solo mantener letras válidas del español (sin espacios, guiones, etc.)
+    const original = palabra.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/g, '');
+    if (original.length < 2) return original;
 
+    // Normalizar: minúsculas + quitar acentos para el análisis
+    const norm = original.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     if (norm.length < 2) return original;
 
-    const vocales = 'aeiouáéíóú';
-    const fuertes = 'aeoáéó';
-    const debiles = 'iuíú';
+    const vocales = 'aeiou';
+    const fuertes = 'aeo';
+    const debiles = 'iu';
+    const inseparables = ['bl','br','cl','cr','dr','fl','fr','gl','gr','pl','pr','tr','tl','rr','ch','ll'];
 
-    // Grupos consonánticos inseparables (inician sílaba)
-    const inseparables = ['bl', 'br', 'cl', 'cr', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'tr', 'tl', 'rr', 'ch', 'll'];
-
-    // Clasificar cada carácter
     function esVocal(c) { return vocales.includes(c); }
     function esFuerte(c) { return fuertes.includes(c); }
     function esDebil(c) { return debiles.includes(c); }
-    function esConsonante(c) { return !esVocal(c) && /[a-zñ]/.test(c); }
 
-    function grupoInseparable(texto, pos) {
-        // Verifica si empezando en pos hay un grupo consonántico inseparable
-        if (pos + 1 >= texto.length) return null;
-        const par = texto.substring(pos, pos + 2);
-        if (inseparables.includes(par)) return par;
-        return null;
+    // Pre-procesar: marcar 'u' muda en 'qu' y 'gu' antes de e/i
+    // Reemplazamos por 'x' para que no se detecte como vocal
+    let chars = norm.split('');
+    for (let k = 0; k < chars.length; k++) {
+        if (chars[k] === 'q' && k + 1 < chars.length && chars[k + 1] === 'u'
+            && k + 2 < chars.length && (chars[k + 2] === 'e' || chars[k + 2] === 'i')) {
+            chars[k + 1] = 'x'; // u muda en "qu"
+        }
+        if (chars[k] === 'g' && k + 1 < chars.length && chars[k + 1] === 'u'
+            && k + 2 < chars.length && (chars[k + 2] === 'e' || chars[k + 2] === 'i')
+            && original[k + 1] !== 'ü' && original[k + 1] !== 'Ü') {
+            chars[k + 1] = 'x'; // u muda en "gu" (pero NO en "gü")
+        }
+    }
+    const proc = chars.join('');
+
+    // Encontrar posiciones de todas las vocales
+    let vowelPos = [];
+    for (let k = 0; k < proc.length; k++) {
+        if (esVocal(proc[k])) vowelPos.push(k);
     }
 
+    // Sin vocales o una sola → una sílaba
+    if (vowelPos.length <= 1) return original;
+
+    // Calcular puntos de corte entre pares de vocales consecutivas
+    let breaks = new Set();
+
+    for (let v = 0; v < vowelPos.length - 1; v++) {
+        const p1 = vowelPos[v];
+        const p2 = vowelPos[v + 1];
+        const gap = p2 - p1 - 1; // consonantes entre las dos vocales
+
+        if (gap === 0) {
+            // Vocales adyacentes: ¿hiato o diptongo?
+            const c1 = proc[p1], c2 = proc[p2];
+            const f1 = esFuerte(c1), f2 = esFuerte(c2);
+            const d1 = esDebil(c1), d2 = esDebil(c2);
+
+            // Verificar acentos en la original para las débiles
+            const o1 = original[p1], o2 = original[p2];
+            const d1Acentuada = d1 && /[íúÍÚ]/.test(o1);
+            const d2Acentuada = d2 && /[íúÍÚ]/.test(o2);
+
+            // Hiato: fuerte+fuerte, o débil acentuada con fuerte
+            if ((f1 && f2) || (f1 && d2Acentuada) || (f2 && d1Acentuada)) {
+                breaks.add(p2); // corte antes de la segunda vocal
+            }
+            // Diptongo: no hay corte
+        } else if (gap === 1) {
+            // Una consonante entre vocales → inicia la próxima sílaba (CV-CV)
+            breaks.add(p1 + 1);
+        } else if (gap === 2) {
+            const c1 = proc[p1 + 1], c2 = proc[p1 + 2];
+            const par = c1 + c2;
+            if (inseparables.includes(par)) {
+                // Grupo inseparable va con la vocal siguiente: V-CV
+                breaks.add(p1 + 1);
+            } else {
+                // Dividir: VC-CV
+                breaks.add(p1 + 2);
+            }
+        } else {
+            // 3+ consonantes: las últimas forman onset de la próxima sílaba
+            const ult2 = proc.substring(p2 - 2, p2);
+            if (inseparables.includes(ult2)) {
+                breaks.add(p2 - 2); // las últimas 2 van con la vocal siguiente
+            } else {
+                breaks.add(p2 - 1); // la última va con la vocal siguiente
+            }
+        }
+    }
+
+    // Construir sílabas usando los puntos de corte
+    const sortedBreaks = [...breaks].sort((a, b) => a - b);
     let silabas = [];
-    let i = 0;
-
-    while (i < norm.length) {
-        let silaba = '';
-        let hayVocal = false;
-
-        // Consonantes iniciales de la sílaba
-        while (i < norm.length && esConsonante(norm[i])) {
-            const gi = grupoInseparable(norm, i);
-            if (gi) {
-                // Grupo inseparable: va con la siguiente vocal
-                if (hayVocal) break; // Ya tenemos vocal, el grupo empieza nueva sílaba... no, va con la próxima
-                // Si no hay vocal todavía, miramos qué viene después
-                if (i + gi.length < norm.length && esVocal(norm[i + gi.length])) {
-                    silaba += gi;
-                    i += gi.length;
-                    break;
-                } else {
-                    silaba += norm[i];
-                    i++;
-                    break;
-                }
-            }
-
-            // Consonante sola
-            if (hayVocal) {
-                // Ya tenemos vocal en esta sílaba; esta consonante podría empezar la próxima
-                // Pero si la siguiente es consonante y forman grupo inseparable, esta va sola
-                if (i + 1 < norm.length && esConsonante(norm[i + 1])) {
-                    const giNext = grupoInseparable(norm, i + 1);
-                    if (giNext) {
-                        // i va con sílaba anterior, i+1,i+2 inician nueva
-                        silabas.push(silaba);
-                        silaba = '';
-                        hayVocal = false;
-                        break;
-                    } else {
-                        // Dos consonantes que no son grupo inseparable: se dividen
-                        silabas.push(silaba);
-                        silaba = '';
-                        hayVocal = false;
-                        break;
-                    }
-                }
-                // Consonante antes de vocal: ¿va con esta sílaba o la próxima?
-                if (i + 1 < norm.length && esVocal(norm[i + 1])) {
-                    // CV — consonante inicia nueva sílaba
-                    silabas.push(silaba);
-                    silaba = '';
-                    hayVocal = false;
-                    break;
-                }
-                // Consonante al final
-                silaba += norm[i];
-                i++;
-                continue;
-            }
-
-            // No hay vocal todavía en esta sílaba
-            silaba += norm[i];
-            i++;
-        }
-
-        // Vocal de la sílaba
-        if (i < norm.length && esVocal(norm[i])) {
-            silaba += norm[i];
-            hayVocal = true;
-            i++;
-
-            // Verificar hiato: si la siguiente vocal forma hiato con esta
-            if (i < norm.length && esVocal(norm[i])) {
-                const actual = norm[i - 1];
-                const siguiente = norm[i];
-                const actualFuerte = esFuerte(actual);
-                const sigFuerte = esFuerte(siguiente);
-                const actualDebil = esDebil(actual);
-                const sigDebil = esDebil(siguiente);
-
-                // Hiato: fuerte+fuerte, fuerte+debil (con acento), debil acentuada+fuerte
-                if (actualFuerte && sigFuerte) {
-                    // Hiato: separar
-                    silabas.push(silaba);
-                    silaba = '';
-                    hayVocal = false;
-                    continue;
-                }
-                if (actualFuerte && sigDebil) {
-                    // Generalmente diptongo (cae en "cai-da"), separar solo si la débil tiene acento
-                    const sigOriginal = original[i];
-                    if (/[íú]/.test(sigOriginal)) {
-                        // Hiato: la débil acentuada se separa
-                        silabas.push(silaba);
-                        silaba = '';
-                        hayVocal = false;
-                        continue;
-                    }
-                    // Diptongo: la segunda vocal va en la misma sílaba
-                    silaba += norm[i];
-                    i++;
-                }
-                if (actualDebil && sigFuerte) {
-                    const actOriginal = original[i - 1];
-                    if (/[íú]/.test(actOriginal)) {
-                        // Hiato
-                        silabas.push(silaba);
-                        silaba = '';
-                        hayVocal = false;
-                        continue;
-                    }
-                    // Diptongo
-                    silaba += norm[i];
-                    i++;
-                }
-                if (actualDebil && sigDebil) {
-                    // Dos débiles: diptongo
-                    silaba += norm[i];
-                    i++;
-                }
-            }
-        }
-
-        // Consonantes post-vocálicas (coda)
-        if (hayVocal && i < norm.length && esConsonante(norm[i])) {
-            // Verificar si hay más consonantes después
-            if (i + 1 < norm.length && esConsonante(norm[i + 1])) {
-                const giNext = grupoInseparable(norm, i + 1);
-                if (giNext) {
-                    // La consonante actual va con la sílaba anterior (coda)
-                    // El grupo inseparable inicia la próxima sílaba
-                    silaba += norm[i];
-                    i++;
-                    silabas.push(silaba);
-                    silaba = '';
-                    hayVocal = false;
-                    continue;
-                } else {
-                    // Dos consonantes que no forman grupo inseparable
-                    // La primera va con esta sílaba (coda), la segunda inicia la próxima
-                    silaba += norm[i];
-                    i++;
-                    silabas.push(silaba);
-                    silaba = '';
-                    hayVocal = false;
-                    continue;
-                }
-            }
-
-            // Una sola consonante antes de algo que no es consonante o fin de palabra
-            if (i + 1 < norm.length && esVocal(norm[i + 1])) {
-                // CV: la consonante inicia la próxima sílaba
-                silabas.push(silaba);
-                silaba = '';
-                hayVocal = false;
-                continue;
-            }
-
-            // Consonante al final de palabra
-            silaba += norm[i];
-            i++;
-        }
-
-        if (silaba) silabas.push(silaba);
+    let prev = 0;
+    for (const b of sortedBreaks) {
+        silabas.push(proc.substring(prev, b));
+        prev = b;
     }
+    silabas.push(proc.substring(prev));
 
-    // Mapear sílabas normalizadas de vuelta a los caracteres acentuados originales
+    // Mapear de vuelta a caracteres originales (con acentos y ü)
     let result = [];
     let origIdx = 0;
     for (const sil of silabas) {
