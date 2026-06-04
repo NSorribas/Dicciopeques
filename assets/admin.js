@@ -8,6 +8,7 @@ let supabaseClient = null;
 let todasLasPalabras = [];
 let palabraEnEdicion = null;
 let palabraAEliminar = null;
+let eventListenersInitialized = false;
 
 // ============================================================
 // INICIALIZACIÓN CON AUTH
@@ -790,6 +791,9 @@ function mostrarToast(mensaje, tipo = 'info') {
 // EVENT LISTENERS
 // ============================================================
 function initEventListeners() {
+    if (eventListenersInitialized) return;
+    eventListenersInitialized = true;
+
     // Logout
     document.getElementById('btnLogout').addEventListener('click', logout);
 
