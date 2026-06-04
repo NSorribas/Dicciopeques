@@ -1335,10 +1335,208 @@ function initEventListeners() {
     document.getElementById('btnDownloadTemplateJSON').addEventListener('click', descargarTemplateJSON);
     document.getElementById('btnDownloadTemplateXLSX').addEventListener('click', descargarTemplateXLSX);
 
+    // Dashboard FAB + sidebar
+    document.getElementById('btnDashboard').addEventListener('click', toggleDashboard);
+    document.getElementById('btnDashboardClose').addEventListener('click', cerrarDashboard);
+    document.getElementById('dashboardOverlay').addEventListener('click', cerrarDashboard);
+
     // Atajos de teclado
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             cerrarModal();
+            cerrarDashboard();
         }
+    });
+}
+
+// ============================================================
+// DASHBOARD: SIDEBAR CON ESTADÍSTICAS
+// ============================================================
+let dashboardAbierto = false;
+
+function toggleDashboard() {
+    if (dashboardAbierto) {
+        cerrarDashboard();
+    } else {
+        abrirDashboard();
+    }
+}
+
+function abrirDashboard() {
+    dashboardAbierto = true;
+    document.getElementById('dashboardSidebar').classList.add('open');
+    document.getElementById('dashboardOverlay').classList.add('open');
+    document.getElementById('btnDashboard').classList.add('active');
+    renderDashboard();
+    // Enfocar la sidebar para accesibilidad
+    setTimeout(() => {
+        document.getElementById('btnDashboardClose').focus();
+    }, 350);
+}
+
+function cerrarDashboard() {
+    if (!dashboardAbierto) return;
+    dashboardAbierto = false;
+    document.getElementById('dashboardSidebar').classList.remove('open');
+    document.getElementById('dashboardOverlay').classList.remove('open');
+    document.getElementById('btnDashboard').classList.remove('active');
+    // Devolver foco al FAB
+    document.getElementById('btnDashboard').focus();
+}
+
+function renderDashboard() {
+    const body = document.getElementById('dashboardBody');
+    const palabras = todasLasPalabras;
+
+    if (palabras.length === 0) {
+        body.innerHTML = '<p style="color:var(--fg-muted);text-align:center;padding:40px 0;">No hay palabras cargadas</p>';
+        return;
+    }
+
+    // 1. Total de palabras
+    const total = palabras.length;
+
+    // 2. Distribución por categoría
+    const catCount = {};
+    palabras.forEach(p => {
+        catCount[p.categoria] = (catCount[p.categoria] || 0) + 1;
+    });
+    const catMax = Math.max(...Object.values(catCount));
+    const catEntries = Object.entries(catCount).sort((a, b) => b[1] - a[1]);
+
+    // 3. Distribución por letra inicial
+    const letterCount = {};
+    palabras.forEach(p => {
+        const letter = p.palabra.charAt(0).toUpperCase();
+        letterCount[letter] = (letterCount[letter] || 0) + 1;
+    });
+    const letterMax = Math.max(...Object.values(letterCount));
+    const letterEntries = Object.entries(letterCount).sort((a, b) => a[0].localeCompare(b[0]));
+
+    // 4. Últimas palabras (las de ID más alto = más recientes)
+    const recientes = [...palabras].sort((a, b) => b.id - a.id).slice(0, 5);
+
+    // 5. Top sinónimos
+    const topSinonimos = [...palabras]
+        .sort((a, b) => b.sinonimos.length - a.sinonimos.length)
+        .slice(0, 5);
+
+    // 6. Promedio de definiciones
+    const totalDefs = palabras.reduce((sum, p) => sum + p.definiciones.length, 0);
+    const avgDefs = (totalDefs / total).toFixed(1);
+
+    // Render
+    let html = '';
+
+    // Total
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Total de palabras</div>
+            <div class="dash-big-number">
+                <span class="dash-num">${total}</span>
+                <span class="dash-label">palabras</span>
+            </div>
+        </div>
+    `;
+
+    html += '<hr class="dash-divider">';
+
+    // Por categoría
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Por categoría</div>
+            <div class="dash-bar-chart">
+                ${catEntries.map(([cat, count]) => `
+                    <div class="dash-bar-row">
+                        <span class="dash-bar-label">${escaparHTML(cat)}</span>
+                        <div class="dash-bar-track">
+                            <div class="dash-bar-fill cat-${cat}" style="width:${(count / catMax * 100).toFixed(1)}%"></div>
+                        </div>
+                        <span class="dash-bar-value">${count}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    html += '<hr class="dash-divider">';
+
+    // Por letra inicial
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Por letra inicial</div>
+            <div class="dash-bar-chart">
+                ${letterEntries.map(([letter, count]) => `
+                    <div class="dash-bar-row">
+                        <span class="dash-bar-label dash-bar-letter">${escaparHTML(letter)}</span>
+                        <div class="dash-bar-track">
+                            <div class="dash-bar-fill cat-default" style="width:${(count / letterMax * 100).toFixed(1)}%"></div>
+                        </div>
+                        <span class="dash-bar-value">${count}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    html += '<hr class="dash-divider">';
+
+    // Últimas agregadas
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Últimas agregadas</div>
+            <div class="dash-word-list">
+                ${recientes.map(p => `
+                    <div class="dash-word-item">
+                        <span class="dash-word-name">${escaparHTML(p.palabra)}</span>
+                        <span class="dash-word-cat cat-${p.categoria}">${escaparHTML(p.categoria)}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    html += '<hr class="dash-divider">';
+
+    // Top sinónimos
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Más sinónimos</div>
+            <div class="dash-word-list">
+                ${topSinonimos.map(p => `
+                    <div class="dash-word-item">
+                        <span class="dash-word-name">${escaparHTML(p.palabra)}</span>
+                        <span class="dash-word-cat cat-${p.categoria}">${escaparHTML(p.categoria)}</span>
+                        <span class="dash-word-count">${p.sinonimos.length} sin.</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    html += '<hr class="dash-divider">';
+
+    // Promedio definiciones
+    html += `
+        <div class="dash-stat-block">
+            <div class="dash-stat-title">Promedio de definiciones</div>
+            <div class="dash-avg">
+                <span class="dash-num">${avgDefs}</span>
+                <span class="dash-label">defs/palabra</span>
+            </div>
+        </div>
+    `;
+
+    body.innerHTML = html;
+
+    // Animar las barras después de insertar
+    requestAnimationFrame(() => {
+        body.querySelectorAll('.dash-bar-fill').forEach(fill => {
+            const targetWidth = fill.style.width;
+            fill.style.width = '0%';
+            requestAnimationFrame(() => {
+                fill.style.width = targetWidth;
+            });
+        });
     });
 }
