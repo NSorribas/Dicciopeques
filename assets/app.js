@@ -682,7 +682,38 @@ function initFAB() {
         toggle.setAttribute('aria-expanded', 'false');
     });
 
+    // Tips / Atajos de teclado
+    document.getElementById('fabTips').addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggleShortcutsPanel(true);
+    });
+
     actualizarBadgeFavoritos();
+}
+
+// ============================================================
+// PANEL DE ATAJOS DE TECLADO
+// ============================================================
+function toggleShortcutsPanel(open) {
+    const panel = document.getElementById('shortcutsPanel');
+    const isOpen = panel.classList.contains('open');
+
+    if (open === true || !isOpen) {
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+        // Enfocar el botón de cerrar
+        document.getElementById('shortcutsClose').focus();
+    } else {
+        closeShortcutsPanel();
+    }
+}
+
+function closeShortcutsPanel() {
+    const panel = document.getElementById('shortcutsPanel');
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
 }
 
 // ============================================================
@@ -722,6 +753,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Inicializar FAB
     initFAB();
+
+    // Panel de atajos: cerrar con X, click afuera, Escape
+    document.getElementById('shortcutsClose').addEventListener('click', closeShortcutsPanel);
+    document.addEventListener('click', (e) => {
+        const panel = document.getElementById('shortcutsPanel');
+        if (panel.classList.contains('open') && !e.target.closest('.shortcuts-panel') && !e.target.closest('#fabTips')) {
+            closeShortcutsPanel();
+        }
+    });
 
     // Mostrar app con fade
     setTimeout(() => {
@@ -776,6 +816,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             searchInput.focus();
         }
         if (e.key === "Escape") {
+            // Cerrar panel de atajos si está abierto
+            const shortcutsPanel = document.getElementById('shortcutsPanel');
+            if (shortcutsPanel.classList.contains('open')) {
+                closeShortcutsPanel();
+                return;
+            }
             if (document.activeElement === searchInput) {
                 searchInput.blur();
             }
