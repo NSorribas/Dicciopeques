@@ -11,6 +11,9 @@
 </head>
 <body>
 
+    <!-- Skip link para accesibilidad -->
+    <a href="#adminPanel" class="skip-link">Saltar al panel</a>
+
     <!-- ============================================ -->
     <!-- SPLASH SCREEN                                -->
     <!-- ============================================ -->
@@ -55,7 +58,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="login-error" id="loginError"></div>
+                <div class="login-error" id="loginError" role="alert" aria-live="assertive"></div>
                 <button type="submit" class="login-submit" id="loginSubmit">
                     <span class="login-submit-text">Ingresar</span>
                     <span class="login-submit-loading"><i class="fas fa-circle-notch fa-spin"></i></span>
@@ -71,10 +74,10 @@
     <!-- ============================================ -->
     <!-- ADMIN PANEL (solo visible si autenticado)    -->
     <!-- ============================================ -->
-    <div class="admin-container" id="adminPanel" style="display:none">
+    <div class="admin-container" id="adminPanel" style="display:none" role="main">
 
         <!-- Header -->
-        <header class="admin-header">
+        <header class="admin-header" role="banner">
             <div class="admin-logo">
                 <div class="admin-logo-icon"><i class="fas fa-book-open"></i></div>
                 <div>
@@ -87,11 +90,11 @@
                     <i class="fas fa-user-circle"></i>
                     <span id="userEmail"></span>
                 </span>
-                <button class="admin-btn admin-btn-ghost" id="btnLogout">
-                    <i class="fas fa-sign-out-alt"></i> Salir
+                <button class="admin-btn admin-btn-ghost" id="btnLogout" aria-label="Cerrar sesión">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Salir
                 </button>
-                <a href="index.html" class="admin-btn admin-btn-ghost">
-                    <i class="fas fa-arrow-left"></i> Diccionario
+                <a href="index.html" class="admin-btn admin-btn-ghost" aria-label="Volver al diccionario">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i> Diccionario
                 </a>
             </div>
         </header>
@@ -143,22 +146,22 @@
         </section>
 
         <!-- Buscador -->
-        <div class="admin-search">
-            <i class="fas fa-search"></i>
-            <input type="text" id="adminSearch" placeholder="Buscar palabra..." autocomplete="off">
+        <div class="admin-search" role="search">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="text" id="adminSearch" placeholder="Buscar palabra..." autocomplete="off" aria-label="Buscar palabra en el panel de administración">
         </div>
 
         <!-- Tabla de palabras -->
-        <div class="admin-table-wrapper">
+        <div class="admin-table-wrapper" role="region" aria-label="Tabla de palabras" tabindex="0">
             <table class="admin-table" id="tablaPalabras">
                 <thead>
                     <tr>
-                        <th>Palabra</th>
-                        <th>Categoría</th>
-                        <th>Sílabas</th>
-                        <th>Definiciones</th>
-                        <th>Sinónimos</th>
-                        <th class="admin-th-actions">Acciones</th>
+                        <th scope="col">Palabra</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Sílabas</th>
+                        <th scope="col">Definiciones</th>
+                        <th scope="col">Sinónimos</th>
+                        <th scope="col" class="admin-th-actions">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaBody">
@@ -170,11 +173,11 @@
     </div>
 
     <!-- Modal: Formulario de palabra -->
-    <div class="admin-modal-overlay" id="modalPalabra">
+    <div class="admin-modal-overlay" id="modalPalabra" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
         <div class="admin-modal">
             <div class="admin-modal-header">
                 <h3 id="modalTitulo">Nueva palabra</h3>
-                <button class="admin-modal-close" id="modalClose">&times;</button>
+                <button class="admin-modal-close" id="modalClose" aria-label="Cerrar modal">&times;</button>
             </div>
             <form id="formPalabra" class="admin-form">
                 <input type="hidden" id="formPalabraId">
@@ -248,7 +251,7 @@
     </div>
 
     <!-- Toast container -->
-    <div class="admin-toast-container" id="toastContainer"></div>
+    <div class="admin-toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
 
     <!-- Inputs ocultos para importar archivos -->
     <input type="file" id="fileInputJSON" accept=".json" style="display:none">

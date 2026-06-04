@@ -11,6 +11,9 @@
 </head>
 <body>
 
+    <!-- Skip link para accesibilidad -->
+    <a href="#wordList" class="skip-link">Saltar al contenido</a>
+
     <!-- Splash Screen -->
     <div class="splash" id="splash">
         <div class="splash-inner">
@@ -32,15 +35,15 @@
     <div class="app-container" id="appContainer" style="opacity:0">
 
         <!-- Cabecera -->
-        <header>
+        <header role="banner">
             <div class="logo-mark">
-                <div class="logo-icon"><i class="fas fa-book-open"></i></div>
+                <div class="logo-icon" aria-hidden="true"><i class="fas fa-book-open"></i></div>
                 <h1 class="logo-title">DiccioPeques</h1>
             </div>
             <p class="logo-subtitle">Diccionario de palabras</p>
             <div class="header-stats">
                 <div class="stat-item">
-                    <span class="stat-num" id="totalWords">0</span> palabras
+                    <span class="stat-num" id="totalWords" role="status" aria-live="polite">0</span> <span>palabras</span>
                 </div>
             </div>
         </header>
@@ -55,7 +58,9 @@
                     id="searchInput"
                     placeholder="Buscar palabra, definición o sinónimo..."
                     autocomplete="off"
-                    aria-label="Buscar palabra"
+                    aria-label="Buscar palabra, definición o sinónimo"
+                    aria-describedby="resultsInfo"
+                    role="searchbox"
                 >
                 <button class="search-clear" id="searchClear" aria-label="Limpiar búsqueda">
                     <i class="fas fa-times"></i>
@@ -64,10 +69,10 @@
         </section>
 
         <!-- Navegación A-Z -->
-        <nav class="az-nav" id="azNav" aria-label="Navegación alfabética"></nav>
+        <nav class="az-nav" id="azNav" aria-label="Navegación alfabética" role="tablist"></nav>
 
         <!-- Palabra del día -->
-        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día">
+        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día" aria-roledescription="destacado">
             <div class="wod-content">
                 <div class="skel skel-label"></div>
                 <div class="skel skel-title"></div>
@@ -82,38 +87,38 @@
         </div>
 
         <!-- Info de resultados -->
-        <div class="results-info" id="resultsInfo"></div>
+        <div class="results-info" id="resultsInfo" aria-live="polite" aria-atomic="true"></div>
 
         <!-- Listado de palabras -->
-        <main class="word-list" id="wordList" role="list">
+        <main class="word-list" id="wordList" role="list" aria-label="Lista de palabras">
             <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
             <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
             <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
             <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
         </main>
 
-        <footer>
+        <footer role="contentinfo">
             Proyecto Léxico &mdash; Datos alojados en Supabase
-            <span class="footer-sep">|</span>
-            <a href="admin.html" class="footer-admin-link"><i class="fas fa-cog"></i> Administración</a>
+            <span class="footer-sep" aria-hidden="true">|</span>
+            <a href="admin.html" class="footer-admin-link"><i class="fas fa-cog" aria-hidden="true"></i> Administración</a>
         </footer>
     </div>
 
     <!-- FAB: Floating Action Button -->
-    <div class="fab-container" id="fabContainer">
-        <div class="fab-menu" id="fabMenu">
-            <button class="fab-action" id="fabFavorites" aria-label="Favoritos" title="Favoritos">
-                <i class="fas fa-star"></i>
+    <div class="fab-container" id="fabContainer" role="group" aria-label="Acciones rápidas">
+        <div class="fab-menu" id="fabMenu" role="menu">
+            <button class="fab-action" id="fabFavorites" aria-label="Favoritos" title="Favoritos" role="menuitem">
+                <i class="fas fa-star" aria-hidden="true"></i>
             </button>
-            <button class="fab-action" id="fabRandom" aria-label="Palabra aleatoria" title="Palabra aleatoria">
-                <i class="fas fa-shuffle"></i>
+            <button class="fab-action" id="fabRandom" aria-label="Palabra aleatoria" title="Palabra aleatoria" role="menuitem">
+                <i class="fas fa-shuffle" aria-hidden="true"></i>
             </button>
-            <button class="fab-action" id="fabTheme" aria-label="Cambiar tema" title="Cambiar tema">
-                <i class="fas fa-moon"></i>
+            <button class="fab-action" id="fabTheme" aria-label="Cambiar tema" title="Cambiar tema" role="menuitem">
+                <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
         </div>
-        <button class="fab-toggle" id="fabToggle" aria-label="Menú de acciones">
-            <i class="fas fa-wand-magic-sparkles"></i>
+        <button class="fab-toggle" id="fabToggle" aria-label="Abrir menú de acciones" aria-expanded="false" aria-haspopup="true">
+            <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
         </button>
     </div>
 

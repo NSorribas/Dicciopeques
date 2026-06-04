@@ -1141,3 +1141,75 @@ body.light-mode .fab-action {
         transform: none;
     }
 }
+
+/* === SKIP LINK (accesibilidad) === */
+.skip-link {
+    position: fixed;
+    top: -100%;
+    left: 16px;
+    z-index: 10000;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Source Sans 3', sans-serif;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--fg);
+    outline-offset: 2px;
+}
+
+/* === FOCUS VISIBLE (accesibilidad) === */
+:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Anillos de foco específicos para no romper el diseño */
+.search-input:focus-visible {
+    outline: none; /* Ya tiene box-shadow en :focus */
+}
+
+.az-letter:focus-visible {
+    outline-offset: 1px;
+}
+
+.word-card:focus-visible {
+    outline-offset: 0;
+    border-color: var(--accent);
+}
+
+.word-fav:focus-visible {
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+.word-speak:focus-visible {
+    outline-offset: 1px;
+    border-radius: 4px;
+}
+
+.synonym-tag:focus-visible {
+    outline-offset: 1px;
+}
+
+.fab-toggle:focus-visible {
+    outline-offset: 3px;
+}
+
+.fab-action:focus-visible {
+    outline-offset: 2px;
+}
+
+/* === SINÓNIMO COMO BOTÓN (antes era span) === */
+.synonym-tag {
+    font-family: 'Source Sans 3', sans-serif;
+    border: none;
+    cursor: pointer;
+}

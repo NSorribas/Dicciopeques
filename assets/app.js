@@ -168,9 +168,9 @@ function renderAZNav() {
             isDisabled ? "disabled" : ""
         ].filter(Boolean).join(" ");
 
-        return `<button class="${classes}" data-letter="${letra}" ${isDisabled ? 'tabindex="-1"' : ''} aria-label="Letra ${letra}${count ? ', ' + count + ' palabras' : ', sin palabras'}">
+        return `<button class="${classes}" data-letter="${letra}" ${isDisabled ? 'tabindex="-1"' : ''} role="tab" aria-selected="${isActive}" aria-label="Letra ${letra}${count ? ', ' + count + ' palabras' : ', sin palabras'}">
             ${letra}
-            ${count > 0 ? `<span class="az-count">${count}</span>` : ''}
+            ${count > 0 ? `<span class="az-count" aria-hidden="true">${count}</span>` : ''}
         </button>`;
     }).join('');
 
@@ -182,6 +182,30 @@ function renderAZNav() {
             renderAZNav();
             renderLista();
         });
+    });
+
+    // Teclado: flechas izq/derecha para navegar letras
+    nav.addEventListener('keydown', (e) => {
+        const letrasActivas = [...nav.querySelectorAll('.az-letter:not(.disabled)')];
+        const idx = letrasActivas.indexOf(document.activeElement);
+        if (idx === -1) return;
+
+        let nextIdx = -1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            nextIdx = (idx + 1) % letrasActivas.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            nextIdx = (idx - 1 + letrasActivas.length) % letrasActivas.length;
+        } else if (e.key === 'Home') {
+            nextIdx = 0;
+        } else if (e.key === 'End') {
+            nextIdx = letrasActivas.length - 1;
+        }
+
+        if (nextIdx >= 0) {
+            e.preventDefault();
+            letrasActivas[nextIdx].focus();
+            letrasActivas[nextIdx].click();
+        }
     });
 }
 
@@ -230,7 +254,9 @@ function renderLista(forzar = false) {
             <article class="word-card ${expandida ? 'expanded' : ''}"
                 data-palabra="${p.palabra}"
                 role="listitem"
-                aria-expanded="${expandida}">
+                tabindex="0"
+                aria-expanded="${expandida}"
+                aria-label="${p.palabra}, ${p.categoria}">
                 <button class="word-fav ${fav ? 'favorited' : ''}" data-fav="${p.palabra}" aria-label="${fav ? 'Quitar de favoritos' : 'Agregar a favoritos'}" title="${fav ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
                     <i class="${fav ? 'fas' : 'far'} fa-star"></i>
                 </button>
@@ -263,7 +289,7 @@ function renderLista(forzar = false) {
                             ${p.sinonimos.length ? `
                                 <div class="synonyms-block">
                                     <div class="synonyms-label">Sinónimos</div>
-                                    ${p.sinonimos.map(s => `<span class="synonym-tag" data-synonym="${s}">${resaltar(s, terminoBusqueda)}</span>`).join('')}
+                                    ${p.sinonimos.map(s => `<button class="synonym-tag" data-synonym="${s}" aria-label="Buscar sinónimo: ${s}">${resaltar(s, terminoBusqueda)}</button>`).join('')}
                                 </div>
                             ` : ''}
                             ${p.origen ? `
@@ -399,6 +425,16 @@ function bindCardEvents() {
                 hablarPalabra(speakBtn.dataset.speak, speakBtn);
             });
         }
+
+        // Teclado: Enter/Space para expandir tarjeta
+        card.addEventListener("keydown", (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                // No interceptar si el foco está en un botón interno
+                if (e.target.closest('.word-fav') || e.target.closest('.word-speak') || e.target.closest('.synonym-tag')) return;
+                e.preventDefault();
+                card.click();
+            }
+        });
 
         card.addEventListener("click", (e) => {
             // Ignorar clicks en el botón de favoritos
@@ -536,11 +572,12 @@ function irAPalabraAleatoria() {
     renderAZNav();
     renderLista(true);
 
-    // Scroll a la tarjeta
+    // Scroll a la tarjeta y enfocar
     setTimeout(() => {
         const card = document.querySelector(`.word-card[data-palabra="${CSS.escape(palabra)}"]`);
         if (card) {
             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.focus();
             // Breve highlight
             card.style.boxShadow = '0 0 0 2px var(--accent), var(--card-shadow)';
             setTimeout(() => { card.style.boxShadow = ''; }, 1500);
@@ -559,11 +596,16 @@ function initFAB() {
     // Agregar badges a los botones
     const fabFav = document.getElementById('fabFavorites');
     fabFav.style.position = 'relative';
-    fabFav.innerHTML = '<i class="fas fa-star"></i><span class="fab-badge" id="fabFavBadge">0</span>';
+    fabFav.innerHTML = '<i class="fas fa-star" aria-hidden="true"></i><span class="fab-badge" id="fabFavBadge" aria-hidden="true">0</span>';
 
     toggle.addEventListener('click', () => {
         const isOpen = menu.classList.toggle('open');
         toggle.classList.toggle('active', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen);
+        // Si abrió, enfocar primer botón del menú
+        if (isOpen) {
+            menu.querySelector('.fab-action')?.focus();
+        }
     });
 
     // Cerrar al hacer click fuera
@@ -571,6 +613,35 @@ function initFAB() {
         if (!e.target.closest('.fab-container')) {
             menu.classList.remove('open');
             toggle.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Teclado: Escape cierra el menú, flechas navegan
+    document.querySelector('.fab-container').addEventListener('keydown', (e) => {
+        const actions = [...menu.querySelectorAll('.fab-action')];
+        if (e.key === 'Escape') {
+            menu.classList.remove('open');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.focus();
+            return;
+        }
+        if (!menu.classList.contains('open')) return;
+        const idx = actions.indexOf(document.activeElement);
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const next = idx <= 0 ? actions.length - 1 : idx - 1;
+            actions[next].focus();
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const next = (idx + 1) % actions.length;
+            actions[next].focus();
+        } else if (e.key === 'Tab' && !e.shiftKey && idx === actions.length - 1) {
+            // Cerrar al tabular fuera del menú
+            menu.classList.remove('open');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
         }
     });
 
@@ -582,6 +653,7 @@ function initFAB() {
         renderLista(true);
         menu.classList.remove('open');
         toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
 
         if (filtroFavoritos) {
             // Desactivar búsqueda y letra cuando filtramos favoritos
@@ -599,6 +671,7 @@ function initFAB() {
         irAPalabraAleatoria();
         menu.classList.remove('open');
         toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
     });
 
     // Tema
@@ -606,6 +679,7 @@ function initFAB() {
         toggleTema();
         menu.classList.remove('open');
         toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
     });
 
     actualizarBadgeFavoritos();
@@ -694,12 +768,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Atajos de teclado
     document.addEventListener("keydown", (e) => {
-        if (e.key === "/" && document.activeElement !== searchInput) {
+        // Si estamos en un input/textarea/select, no interceptar (salvo Escape)
+        const inInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+
+        if (e.key === "/" && !inInput) {
             e.preventDefault();
             searchInput.focus();
         }
-        if (e.key === "Escape" && document.activeElement === searchInput) {
-            searchInput.blur();
+        if (e.key === "Escape") {
+            if (document.activeElement === searchInput) {
+                searchInput.blur();
+            }
+            // Cerrar FAB si está abierto
+            const fabMenu = document.getElementById('fabMenu');
+            const fabToggle = document.getElementById('fabToggle');
+            if (fabMenu.classList.contains('open')) {
+                fabMenu.classList.remove('open');
+                fabToggle.classList.remove('active');
+                fabToggle.setAttribute('aria-expanded', 'false');
+                fabToggle.focus();
+            }
         }
     });
 });

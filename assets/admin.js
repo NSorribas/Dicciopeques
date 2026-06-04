@@ -247,11 +247,11 @@ function renderTabla(filtro = '') {
             <td class="admin-td-count">${p.definiciones.length}</td>
             <td class="admin-td-sinonimos" title="${escaparHTML(p.sinonimos.join(', '))}">${escaparHTML(p.sinonimos.join(', ')) || '—'}</td>
             <td class="admin-td-actions">
-                <button class="admin-btn admin-btn-icon edit" onclick="editarPalabra(${p.id})" title="Editar">
-                    <i class="fas fa-pen"></i>
+                <button class="admin-btn admin-btn-icon edit" onclick="editarPalabra(${p.id})" aria-label="Editar ${escaparHTML(p.palabra)}" title="Editar">
+                    <i class="fas fa-pen" aria-hidden="true"></i>
                 </button>
-                <button class="admin-btn admin-btn-icon delete" onclick="confirmarEliminar(${p.id})" title="Eliminar">
-                    <i class="fas fa-trash"></i>
+                <button class="admin-btn admin-btn-icon delete" onclick="confirmarEliminar(${p.id})" aria-label="Eliminar ${escaparHTML(p.palabra)}" title="Eliminar">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
                 </button>
             </td>
         </tr>
@@ -446,16 +446,17 @@ function mostrarToastUndo(palabra, onUndo) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = 'admin-toast admin-toast-undo';
+    toast.setAttribute('role', 'alert');
 
     const DURACION = 10000;
 
     toast.innerHTML = `
         <div class="undo-content">
-            <i class="fas fa-trash"></i>
+            <i class="fas fa-trash" aria-hidden="true"></i>
             <span class="undo-text">"<strong>${escaparHTML(palabra)}</strong>" eliminada</span>
-            <button class="undo-btn">Deshacer</button>
+            <button class="undo-btn" aria-label="Deshacer eliminación de ${escaparHTML(palabra)}">Deshacer</button>
         </div>
-        <div class="undo-bar-track">
+        <div class="undo-bar-track" role="timer" aria-label="Tiempo restante para deshacer">
             <div class="undo-bar-fill" style="width:100%"></div>
         </div>
     `;
@@ -511,7 +512,7 @@ function editarPalabra(id) {
     p.definiciones.forEach((d, i) => agregarDefBlock(i + 1, d.texto, d.ejemplo));
 
     document.getElementById('modalTitulo').textContent = `Editar: ${p.palabra}`;
-    document.getElementById('modalPalabra').classList.add('open');
+    abrirModal();
 }
 
 // ============================================================
@@ -524,7 +525,7 @@ function nuevaPalabra() {
     document.getElementById('definicionesContainer').innerHTML = '';
     agregarDefBlock(1);
     document.getElementById('modalTitulo').textContent = 'Nueva palabra';
-    document.getElementById('modalPalabra').classList.add('open');
+    abrirModal();
 }
 
 // ============================================================
@@ -558,12 +559,66 @@ function renumerarDefs() {
 }
 
 // ============================================================
-// MODAL: ABRIR / CERRAR
+// MODAL: ABRIR / CERRAR (con focus trap)
 // ============================================================
+let ultimoFocoAntesDelModal = null;
+
+function abrirModal() {
+    ultimoFocoAntesDelModal = document.activeElement;
+    const modal = document.getElementById('modalPalabra');
+    modal.classList.add('open');
+    // Enfocar el primer campo del formulario
+    setTimeout(() => {
+        const primerInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
+        if (primerInput) primerInput.focus();
+    }, 100);
+    // Focus trap
+    document.addEventListener('keydown', modalFocusTrap);
+}
+
 function cerrarModal() {
     document.getElementById('modalPalabra').classList.remove('open');
     palabraEnEdicion = null;
     document.getElementById('synonymSuggestions').innerHTML = '';
+    document.removeEventListener('keydown', modalFocusTrap);
+    // Devolver el foco al elemento que abrió el modal
+    if (ultimoFocoAntesDelModal) {
+        ultimoFocoAntesDelModal.focus();
+        ultimoFocoAntesDelModal = null;
+    }
+}
+
+function modalFocusTrap(e) {
+    const modal = document.getElementById('modalPalabra');
+    if (!modal.classList.contains('open')) return;
+
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        cerrarModal();
+        return;
+    }
+
+    if (e.key !== 'Tab') return;
+
+    const focusable = modal.querySelectorAll(
+        'input:not([type="hidden"]):not([disabled]), select, textarea, button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey) {
+        if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        }
+    } else {
+        if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    }
 }
 
 // ============================================================
@@ -1069,12 +1124,13 @@ function mostrarToast(mensaje, tipo = 'info') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `admin-toast ${tipo}`;
+    toast.setAttribute('role', 'alert');
 
     const icono = tipo === 'success' ? 'fa-check-circle'
         : tipo === 'error' ? 'fa-exclamation-circle'
         : 'fa-info-circle';
 
-    toast.innerHTML = `<i class="fas ${icono}"></i> ${mensaje}`;
+    toast.innerHTML = `<i class="fas ${icono}" aria-hidden="true"></i> ${mensaje}`;
     container.appendChild(toast);
     setTimeout(() => {
         toast.style.opacity = '0';
@@ -1129,19 +1185,72 @@ function initEventListeners() {
         renderTabla(e.target.value.trim());
     });
 
-    // Dropdowns
-    document.getElementById('btnImportar').addEventListener('click', (e) => {
+    // Dropdowns (con soporte de teclado y aria-expanded)
+    const btnImportar = document.getElementById('btnImportar');
+    const btnExportar = document.getElementById('btnExportar');
+    const importDropdown = document.getElementById('importMenu').parentElement;
+    const exportDropdown = document.getElementById('exportMenu').parentElement;
+
+    btnImportar.setAttribute('aria-haspopup', 'true');
+    btnImportar.setAttribute('aria-expanded', 'false');
+    btnExportar.setAttribute('aria-haspopup', 'true');
+    btnExportar.setAttribute('aria-expanded', 'false');
+
+    btnImportar.addEventListener('click', (e) => {
         e.stopPropagation();
-        document.getElementById('importMenu').parentElement.classList.toggle('open');
-        document.getElementById('exportMenu').parentElement.classList.remove('open');
+        const isOpen = importDropdown.classList.toggle('open');
+        importDropdown.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', !isOpen);
+        btnImportar.setAttribute('aria-expanded', isOpen);
+        exportDropdown.classList.remove('open');
+        exportDropdown.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', 'true');
+        btnExportar.setAttribute('aria-expanded', 'false');
+        if (isOpen) {
+            importDropdown.querySelector('.admin-dropdown-item').focus();
+        }
     });
-    document.getElementById('btnExportar').addEventListener('click', (e) => {
+    btnExportar.addEventListener('click', (e) => {
         e.stopPropagation();
-        document.getElementById('exportMenu').parentElement.classList.toggle('open');
-        document.getElementById('importMenu').parentElement.classList.remove('open');
+        const isOpen = exportDropdown.classList.toggle('open');
+        exportDropdown.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', !isOpen);
+        btnExportar.setAttribute('aria-expanded', isOpen);
+        importDropdown.classList.remove('open');
+        importDropdown.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', 'true');
+        btnImportar.setAttribute('aria-expanded', 'false');
+        if (isOpen) {
+            exportDropdown.querySelector('.admin-dropdown-item').focus();
+        }
     });
     document.addEventListener('click', () => {
-        document.querySelectorAll('.admin-dropdown').forEach(d => d.classList.remove('open'));
+        document.querySelectorAll('.admin-dropdown').forEach(d => {
+            d.classList.remove('open');
+            d.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', 'true');
+        });
+        btnImportar.setAttribute('aria-expanded', 'false');
+        btnExportar.setAttribute('aria-expanded', 'false');
+    });
+
+    // Teclado en dropdowns: flechas, Escape, Enter
+    document.querySelectorAll('.admin-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('keydown', (e) => {
+            const items = [...dropdown.querySelectorAll('.admin-dropdown-item')];
+            const idx = items.indexOf(document.activeElement);
+
+            if (e.key === 'Escape') {
+                dropdown.classList.remove('open');
+                dropdown.querySelector('.admin-dropdown-menu').setAttribute('aria-hidden', 'true');
+                const triggerBtn = dropdown.querySelector('button[id^="btn"]');
+                triggerBtn?.setAttribute('aria-expanded', 'false');
+                triggerBtn?.focus();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const next = idx < items.length - 1 ? idx + 1 : 0;
+                items[next].focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prev = idx > 0 ? idx - 1 : items.length - 1;
+                items[prev].focus();
+            }
+        });
     });
 
     // Import JSON
