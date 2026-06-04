@@ -6,22 +6,34 @@
 const webpush = require('web-push');
 const https = require('https');
 
-// Configurar VAPID
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT,
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
-
+// Verificar que las variables de entorno existen
+const VAPID_SUBJECT = process.env.VAPID_SUBJECT;
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
+if (!VAPID_SUBJECT || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+  console.error('Error: Faltan variables de entorno VAPID (VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)');
+  process.exit(1);
+}
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.error('Error: Faltan variables de entorno de Supabase (SUPABASE_URL, SUPABASE_ANON_KEY)');
+  process.exit(1);
+}
+
+// Configurar VAPID
+webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+
 /**
  * Fetch helper para Supabase REST API
+ * Retorna { data, error } para manejar errores limpiamente
  */
 function supabaseFetch(path) {
   return new Promise((resolve, reject) => {
-    const url = new URL(`${SUPABASE_URL}/rest/v1${path}`);
+    const fullUrl = `${SUPABASE_URL}/rest/v1${path}`;
+    const url = new URL(fullUrl);
     const options = {
       hostname: url.hostname,
       path: url.pathname + url.search,
@@ -37,15 +49,30 @@ function supabaseFetch(path) {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
+        console.log(`[SUPABASE] GET ${path} → HTTP ${res.statusCode}`);
         try {
-          resolve(JSON.parse(data));
+          const parsed = JSON.parse(data);
+
+          // Supabase devuelve errores como { message, code, ... } o { msg, ... }
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && (parsed.message || parsed.msg || parsed.error)) {
+            console.error(`[SUPABASE] Error en respuesta: ${JSON.stringify(parsed)}`);
+            resolve({ data: null, error: parsed });
+            return;
+          }
+
+          // Si es un array o un objeto válido, devolver como data
+          resolve({ data: parsed, error: null });
         } catch (e) {
-          reject(new Error(`Error parsing response: ${data}`));
+          console.error(`[SUPABASE] Error parseando respuesta: ${data.substring(0, 200)}`);
+          reject(new Error(`Error parsing response: ${data.substring(0, 200)}`));
         }
       });
     });
 
-    req.on('error', reject);
+    req.on('error', (err) => {
+      console.error(`[SUPABASE] Error de red: ${err.message}`);
+      reject(err);
+    });
     req.end();
   });
 }
@@ -100,7 +127,10 @@ function deleteExpiredSubscription(endpoint) {
     const req = https.request(options, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
-      res.on('end', () => resolve());
+      res.on('end', () => {
+        console.log(`[SUPABASE] DELETE expired → HTTP ${res.statusCode}`);
+        resolve();
+      });
     });
     req.on('error', reject);
     req.end();
@@ -135,9 +165,14 @@ async function main() {
   } else {
     // Palabra del día automática
     console.log('[1/3] Obteniendo palabras...');
-    const palabras = await supabaseFetch('/palabras?select=palabra,categoria,definiciones(numero,texto)&definiciones.order=numero.asc&order=palabra.asc');
+    const { data: palabras, error: errPalabras } = await supabaseFetch('/palabras?select=palabra,categoria,definiciones(numero,texto)&definiciones.order=numero.asc&order=palabra.asc');
 
-    if (!palabras || palabras.length === 0) {
+    if (errPalabras) {
+      console.error('Error obteniendo palabras:', JSON.stringify(errPalabras));
+      process.exit(1);
+    }
+
+    if (!palabras || !Array.isArray(palabras) || palabras.length === 0) {
       console.log('No hay palabras en la base de datos. Saliendo.');
       return;
     }
@@ -160,9 +195,14 @@ async function main() {
 
   // Obtener suscripciones y enviar
   console.log('Obteniendo suscripciones...');
-  const subscriptions = await supabaseFetch('/push_subscriptions?select=endpoint,p256dh,auth');
+  const { data: subscriptions, error: errSubs } = await supabaseFetch('/push_subscriptions?select=endpoint,p256dh,auth');
 
-  if (!subscriptions || subscriptions.length === 0) {
+  if (errSubs) {
+    console.error('Error obteniendo suscripciones:', JSON.stringify(errSubs));
+    process.exit(1);
+  }
+
+  if (!subscriptions || !Array.isArray(subscriptions) || subscriptions.length === 0) {
     console.log('No hay suscripciones push. Saliendo.');
     return;
   }

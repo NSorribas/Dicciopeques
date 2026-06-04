@@ -1553,19 +1553,73 @@ function renderDashboard() {
 // ============================================================
 
 // ============================================================
-// ENVIAR PUSH TEST (abre GitHub Actions para disparar manualmente)
+// ENVIAR PUSH TEST (dispara GitHub Actions workflow_dispatch via API)
 // ============================================================
-function enviarPushTest() {
+async function enviarPushTest() {
     const message = document.getElementById('pushMessage').value.trim();
-    const url = 'https://github.com/NSorribas/Dicciopeques/actions/workflows/daily-word-push.yml';
-    
-    if (!message) {
-        // Sin mensaje: abrir directamente (se enviará la palabra del día)
-        window.open(url, '_blank');
-        mostrarToast('Abrí "Run workflow" en la página de GitHub para enviar', 'success');
-    } else {
-        // Con mensaje: abrir la página y mostrar toast con instrucciones
-        window.open(url, '_blank');
-        mostrarToast('Abrí "Run workflow" y usá este mensaje: "' + message.substring(0, 60) + (message.length > 60 ? '...' : '') + '"', 'success');
+    const btn = document.getElementById('btnSendPush');
+
+    // Estado cargando
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+
+    try {
+        // Obtener el token de GitHub desde la tabla app_config (solo visible para admins)
+        const { data: config, error: errConfig } = await supabaseClient
+            .from('app_config')
+            .select('value')
+            .eq('key', 'github_token')
+            .single();
+
+        if (errConfig || !config) {
+            console.error('Error obteniendo config:', errConfig);
+            mostrarToast('Error: no se pudo obtener la configuración de GitHub', 'error');
+            return;
+        }
+
+        const GITHUB_TOKEN = config.value;
+        const REPO = 'NSorribas/Dicciopeques';
+        const WORKFLOW = 'daily-word-push.yml';
+
+        const body = {
+            ref: 'main',
+            inputs: {}
+        };
+
+        if (message) {
+            body.inputs.custom_title = 'DiccioPeques';
+            body.inputs.custom_body = message;
+        }
+
+        const response = await fetch(
+            `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }
+        );
+
+        if (response.status === 204) {
+            mostrarToast('Notificación enviada. Llegará en unos segundos.', 'success');
+            document.getElementById('pushMessage').value = '';
+        } else if (response.status === 401) {
+            mostrarToast('Token de GitHub expirado. Necesitás actualizarlo en la base de datos.', 'error');
+        } else if (response.status === 422) {
+            mostrarToast('Error: el workflow no existe o la rama es incorrecta.', 'error');
+        } else {
+            const data = await response.json();
+            mostrarToast(`Error: ${data.message || response.statusText}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error disparando workflow:', error);
+        mostrarToast('Error de conexión al enviar la notificación', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
     }
 }
