@@ -141,6 +141,71 @@ async function updateCacheInBackground(request) {
   }
 }
 
+// ============================================
+// Notificaciones Push
+// ============================================
+
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push recibido');
+
+  let data = {
+    title: 'DiccioPeques',
+    body: '¡Descubrí la palabra del día!',
+    icon: './assets/icons/icon-192x192.png',
+    badge: './assets/icons/icon-192x192.png',
+    url: './index.html'
+  };
+
+  if (event.data) {
+    try {
+      const parsed = event.data.json();
+      data = { ...data, ...parsed };
+    } catch (e) {
+      data.body = event.data.text() || data.body;
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: data.badge,
+    vibrate: [100, 50, 100],
+    data: {
+      url: data.url
+    },
+    actions: [
+      { action: 'open', title: 'Ver palabra' },
+      { action: 'close', title: 'Cerrar' }
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Manejar click en notificación
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'close') return;
+
+  const urlToOpen = event.notification.data?.url || './index.html';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Si ya hay una ventana abierta, enfocarla
+      for (const client of clientList) {
+        if (client.url.includes('index.html') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Si no, abrir nueva ventana
+      return self.clients.openWindow(urlToOpen);
+    })
+  );
+});
+
 // Escuchar mensajes desde la app
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

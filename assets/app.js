@@ -550,6 +550,183 @@ function toggleTema() {
 }
 
 // ============================================================
+// NOTIFICACIONES PUSH
+// ============================================================
+const VAPID_PUBLIC_KEY = 'BCbTcZ795C1qAvmM5-xafLOEwLrUlimJ02wON2E4xr3-X1P34xUuxDROtxx3yWt1jB8Q7ag6iZqYXV3fOkQwZBw';
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+async function suscribirPush() {
+    if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
+        mostrarToast('Tu navegador no soporta notificaciones push');
+        return;
+    }
+
+    try {
+        const registration = await navigator.serviceWorker.ready;
+
+        // Verificar si ya está suscrito
+        const existingSub = await registration.pushManager.getSubscription();
+        if (existingSub) {
+            // Ya suscrito, guardar en Supabase por si acaso
+            await guardarSuscripcionEnSupabase(existingSub);
+            mostrarToast('Ya estás suscrito a las notificaciones');
+            return;
+        }
+
+        // Pedir permiso
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            mostrarToast('Necesitás permitir las notificaciones');
+            return;
+        }
+
+        // Crear suscripción
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+
+        // Guardar en Supabase
+        await guardarSuscripcionEnSupabase(subscription);
+        mostrarToast('¡Listo! Recibirás la palabra del día a las 8 AM');
+    } catch (error) {
+        console.error('Error al suscribirse a push:', error);
+        mostrarToast('No se pudo activar las notificaciones');
+    }
+}
+
+async function guardarSuscripcionEnSupabase(subscription) {
+    if (!supabaseClient) return;
+
+    const subData = subscription.toJSON();
+    const payload = {
+        endpoint: subData.endpoint,
+        p256dh: subData.keys.p256dh,
+        auth: subData.keys.auth
+    };
+
+    // Upsert: si ya existe el endpoint, actualizar; si no, insertar
+    const { error } = await supabaseClient
+        .from('push_subscriptions')
+        .upsert(payload, { onConflict: 'endpoint' });
+
+    if (error) {
+        console.error('Error guardando suscripción:', error);
+    }
+}
+
+async function desuscribirPush() {
+    if (!('serviceWorker' in navigator)) return;
+
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+            await subscription.unsubscribe();
+
+            // Eliminar de Supabase
+            if (supabaseClient) {
+                await supabaseClient
+                    .from('push_subscriptions')
+                    .delete()
+                    .eq('endpoint', subscription.endpoint);
+            }
+            mostrarToast('Notificaciones desactivadas');
+            actualizarBotonNotificaciones();
+        }
+    } catch (error) {
+        console.error('Error al desuscribirse:', error);
+    }
+}
+
+function actualizarBotonNotificaciones() {
+    const btn = document.getElementById('fabNotify');
+    if (!btn) return;
+
+    if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
+        btn.style.display = 'none';
+        return;
+    }
+
+    navigator.serviceWorker.ready.then(reg => {
+        return reg.pushManager.getSubscription();
+    }).then(sub => {
+        const suscrito = !!sub;
+        btn.classList.toggle('subscribed', suscrito);
+        const icon = btn.querySelector('i');
+        if (icon) {
+            icon.className = suscrito ? 'fas fa-bell' : 'fas fa-bell-slash';
+        }
+        btn.setAttribute('aria-label', suscrito ? 'Desactivar notificaciones' : 'Activar notificaciones');
+        btn.setAttribute('title', suscrito ? 'Desactivar notificaciones' : 'Activar notificaciones');
+    });
+}
+
+function initNotificaciones() {
+    const btn = document.getElementById('fabNotify');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        // Cerrar menú FAB
+        const menu = document.getElementById('fabMenu');
+        const toggle = document.getElementById('fabToggle');
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+
+        // Verificar si ya está suscrito
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+
+        if (subscription) {
+            await desuscribirPush();
+        } else {
+            await suscribirPush();
+        }
+        actualizarBotonNotificaciones();
+    });
+
+    actualizarBotonNotificaciones();
+}
+
+// ============================================================
+// TOAST (notificaciones en pantalla)
+// ============================================================
+function mostrarToast(mensaje, duracion = 3000) {
+    let container = document.getElementById('appToastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'appToastContainer';
+        container.className = 'app-toast-container';
+        container.setAttribute('aria-live', 'polite');
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'app-toast';
+    toast.textContent = mensaje;
+    container.appendChild(toast);
+
+    // Animar entrada
+    requestAnimationFrame(() => toast.classList.add('visible'));
+
+    setTimeout(() => {
+        toast.classList.remove('visible');
+        toast.addEventListener('transitionend', () => toast.remove());
+    }, duracion);
+}
+
+// ============================================================
 // PALABRA ALEATORIA
 // ============================================================
 function irAPalabraAleatoria() {
@@ -753,6 +930,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Inicializar FAB
     initFAB();
+
+    // Inicializar notificaciones push
+    initNotificaciones();
 
     // Panel de atajos: cerrar con X, click afuera, Escape
     document.getElementById('shortcutsClose').addEventListener('click', closeShortcutsPanel);
