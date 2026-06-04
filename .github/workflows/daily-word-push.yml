@@ -4,7 +4,16 @@ on:
   schedule:
     # 8:00 AM Argentina (UTC-3) = 11:00 UTC
     - cron: '0 11 * * *'
-  workflow_dispatch: # Permite ejecutar manualmente desde GitHub
+  workflow_dispatch:
+    inputs:
+      custom_title:
+        description: 'Título personalizado (vacío = palabra del día)'
+        required: false
+        default: ''
+      custom_body:
+        description: 'Mensaje personalizado (vacío = palabra del día automático)'
+        required: false
+        default: ''
 
 jobs:
   send-daily-word:
@@ -29,4 +38,6 @@ jobs:
           VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          CUSTOM_TITLE: ${{ github.event.inputs.custom_title }}
+          CUSTOM_BODY: ${{ github.event.inputs.custom_body }}
         run: node .github/scripts/send-push.js

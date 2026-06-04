@@ -1340,6 +1340,15 @@ function initEventListeners() {
     document.getElementById('btnDashboardClose').addEventListener('click', cerrarDashboard);
     document.getElementById('dashboardOverlay').addEventListener('click', cerrarDashboard);
 
+    // Enviar notificación push (test)
+    document.getElementById('btnSendPush').addEventListener('click', enviarPushTest);
+    document.getElementById('pushMessage').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            enviarPushTest();
+        }
+    });
+
     // Atajos de teclado
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -1539,4 +1548,24 @@ function renderDashboard() {
             });
         });
     });
+}
+
+// ============================================================
+
+// ============================================================
+// ENVIAR PUSH TEST (abre GitHub Actions para disparar manualmente)
+// ============================================================
+function enviarPushTest() {
+    const message = document.getElementById('pushMessage').value.trim();
+    const url = 'https://github.com/NSorribas/Dicciopeques/actions/workflows/daily-word-push.yml';
+    
+    if (!message) {
+        // Sin mensaje: abrir directamente (se enviará la palabra del día)
+        window.open(url, '_blank');
+        mostrarToast('Abrí "Run workflow" en la página de GitHub para enviar', 'success');
+    } else {
+        // Con mensaje: abrir la página y mostrar toast con instrucciones
+        window.open(url, '_blank');
+        mostrarToast('Abrí "Run workflow" y usá este mensaje: "' + message.substring(0, 60) + (message.length > 60 ? '...' : '') + '"', 'success');
+    }
 }
