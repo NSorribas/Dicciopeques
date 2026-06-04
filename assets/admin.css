@@ -741,13 +741,6 @@ body {
     color: var(--red);
 }
 
-.admin-confirm-text {
-    padding: 20px 24px;
-    color: var(--fg-muted);
-    font-size: 15px;
-    line-height: 1.5;
-}
-
 /* === FORMULARIO === */
 .admin-form {
     padding: 24px;
@@ -996,6 +989,71 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* === TOAST CON UNDO === */
+.admin-toast-undo {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    gap: 0;
+    min-width: 320px;
+    overflow: hidden;
+}
+
+.admin-toast-undo .undo-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+}
+
+.admin-toast-undo .undo-content i {
+    color: var(--red);
+    flex-shrink: 0;
+}
+
+.admin-toast-undo .undo-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--fg);
+}
+
+.admin-toast-undo .undo-text strong {
+    color: var(--fg);
+}
+
+.admin-toast-undo .undo-btn {
+    background: var(--accent-dim);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'Source Sans 3', sans-serif;
+    flex-shrink: 0;
+}
+
+.admin-toast-undo .undo-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.admin-toast-undo .undo-bar-track {
+    width: 100%;
+    height: 3px;
+    background: var(--bg-surface);
+}
+
+.admin-toast-undo .undo-bar-fill {
+    height: 100%;
+    background: var(--red);
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     .admin-header { flex-direction: column; gap: 16px; text-align: center; }
@@ -1006,4 +1064,5 @@ body {
     .admin-form-row { grid-template-columns: 1fr; }
     .admin-table th, .admin-table td { padding: 10px 12px; font-size: 13px; }
     .login-card { padding: 32px 24px; }
+    .admin-toast-undo { min-width: 280px; }
 }

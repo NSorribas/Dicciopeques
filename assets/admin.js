@@ -7,7 +7,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 let supabaseClient = null;
 let todasLasPalabras = [];
 let palabraEnEdicion = null;
-let palabraAEliminar = null;
 let eventListenersInitialized = false;
 
 // ============================================================
@@ -294,6 +293,19 @@ async function guardarPalabra(event) {
         return;
     }
 
+    // Validar palabra duplicada
+    const palabraNormalizada = palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const duplicada = todasLasPalabras.find(p => {
+        const pNorm = p.palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        // Ignorar la palabra que se está editando (mismo id)
+        if (id && p.id === parseInt(id)) return false;
+        return pNorm === palabraNormalizada;
+    });
+    if (duplicada) {
+        mostrarToast(`Ya existe la palabra "${duplicada.palabra}" en el diccionario`, 'error');
+        return;
+    }
+
     const sinonimos = sinonimosRaw
         ? sinonimosRaw.split(',').map(s => s.trim()).filter(s => s)
         : [];
@@ -374,37 +386,107 @@ async function guardarPalabra(event) {
 }
 
 // ============================================================
-// CRUD: ELIMINAR
+// CRUD: ELIMINAR (con UNDO)
 // ============================================================
+let eliminacionPendiente = null; // { id, palabra, data, timer, timeout }
+
 function confirmarEliminar(id) {
-    palabraAEliminar = id;
+    // Eliminar inmediatamente del estado local y de la tabla
     const p = todasLasPalabras.find(x => x.id === id);
-    document.getElementById('confirmText').innerHTML =
-        `¿Estás seguro de que querés eliminar <strong>"${escaparHTML(p.palabra)}"</strong>? Esta acción no se puede deshacer.`;
-    document.getElementById('modalConfirmar').classList.add('open');
+    if (!p) return;
+
+    // Guardar datos por si hay que restaurar
+    const dataBackup = JSON.parse(JSON.stringify(p));
+
+    // Quitar del array local
+    todasLasPalabras = todasLasPalabras.filter(x => x.id !== id);
+    renderTabla(document.getElementById('adminSearch')?.value.trim() || '');
+    document.getElementById('totalCount').textContent = todasLasPalabras.length;
+
+    // Mostrar toast con UNDO
+    mostrarToastUndo(p.palabra, () => {
+        // UNDO: restaurar en el array local
+        todasLasPalabras.push(dataBackup);
+        todasLasPalabras.sort((a, b) => a.palabra.localeCompare(b.palabra));
+        renderTabla(document.getElementById('adminSearch')?.value.trim() || '');
+        document.getElementById('totalCount').textContent = todasLasPalabras.length;
+
+        // Cancelar eliminación pendiente
+        if (eliminacionPendiente && eliminacionPendiente.id === id) {
+            clearTimeout(eliminacionPendiente.timeout);
+            eliminacionPendiente = null;
+        }
+    });
+
+    // Programar eliminación real en Supabase después de 10 segundos
+    eliminacionPendiente = {
+        id: id,
+        palabra: p.palabra,
+        timeout: setTimeout(async () => {
+            try {
+                const { error } = await supabaseClient
+                    .from('palabras')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error eliminando:', error);
+                // Si falla, recargar para restaurar consistencia
+                await cargarPalabras();
+                mostrarToast('Error al eliminar, se restauró la palabra', 'error');
+            }
+            eliminacionPendiente = null;
+        }, 10000)
+    };
 }
 
-async function eliminarPalabra() {
-    if (!palabraAEliminar) return;
+// Toast con barra de progreso y botón Deshacer
+function mostrarToastUndo(palabra, onUndo) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'admin-toast admin-toast-undo';
 
-    try {
-        // Las definiciones y sinónimos se eliminan en cascada (ON DELETE CASCADE)
-        const { error } = await supabaseClient
-            .from('palabras')
-            .delete()
-            .eq('id', palabraAEliminar);
+    const DURACION = 10000;
 
-        if (error) throw error;
+    toast.innerHTML = `
+        <div class="undo-content">
+            <i class="fas fa-trash"></i>
+            <span class="undo-text">"<strong>${escaparHTML(palabra)}</strong>" eliminada</span>
+            <button class="undo-btn">Deshacer</button>
+        </div>
+        <div class="undo-bar-track">
+            <div class="undo-bar-fill" style="width:100%"></div>
+        </div>
+    `;
 
-        mostrarToast('Palabra eliminada correctamente', 'success');
-        palabraAEliminar = null;
-        document.getElementById('modalConfirmar').classList.remove('open');
-        await cargarPalabras();
+    container.appendChild(toast);
 
-    } catch (error) {
-        console.error('Error eliminando:', error);
-        mostrarToast('Error al eliminar', 'error');
-    }
+    // Animar la barra
+    const fill = toast.querySelector('.undo-bar-fill');
+    fill.style.transition = `width ${DURACION}ms linear`;
+    // Trigger reflow para que la transición funcione
+    fill.offsetHeight;
+    fill.style.width = '0%';
+
+    // Botón deshacer
+    const undoBtn = toast.querySelector('.undo-btn');
+    undoBtn.addEventListener('click', () => {
+        clearTimeout(removeTimer);
+        if (onUndo) onUndo();
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    });
+
+    // Auto-remover después de la duración
+    const removeTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, DURACION + 200);
 }
 
 // ============================================================
@@ -1047,23 +1129,6 @@ function initEventListeners() {
         renderTabla(e.target.value.trim());
     });
 
-    // Eliminar
-    document.getElementById('btnConfirmEliminar').addEventListener('click', eliminarPalabra);
-    document.getElementById('btnConfirmCancelar').addEventListener('click', () => {
-        palabraAEliminar = null;
-        document.getElementById('modalConfirmar').classList.remove('open');
-    });
-    document.getElementById('confirmClose').addEventListener('click', () => {
-        palabraAEliminar = null;
-        document.getElementById('modalConfirmar').classList.remove('open');
-    });
-    document.getElementById('modalConfirmar').addEventListener('click', (e) => {
-        if (e.target === e.currentTarget) {
-            palabraAEliminar = null;
-            e.currentTarget.classList.remove('open');
-        }
-    });
-
     // Dropdowns
     document.getElementById('btnImportar').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1115,8 +1180,6 @@ function initEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             cerrarModal();
-            palabraAEliminar = null;
-            document.getElementById('modalConfirmar').classList.remove('open');
         }
     });
 }
