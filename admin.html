@@ -200,7 +200,7 @@
 
                 <div class="admin-form-row">
                     <div class="admin-form-group">
-                        <label for="formSilabas">Sílabas</label>
+                        <label for="formSilabas">Sílabas <span class="admin-form-hint">(auto)</span></label>
                         <input type="text" id="formSilabas" placeholder="Ej: se-ren-di-pia">
                     </div>
                     <div class="admin-form-group">
@@ -227,8 +227,14 @@
 
                 <!-- Sinónimos -->
                 <div class="admin-form-group">
-                    <label for="formSinonimos">Sinónimos (separados por coma)</label>
+                    <div class="admin-form-label-row">
+                        <label for="formSinonimos">Sinónimos (separados por coma)</label>
+                        <button type="button" class="admin-btn admin-btn-xs" id="btnSugerirSinonimos">
+                            <i class="fas fa-magic"></i> Sugerir
+                        </button>
+                    </div>
                     <input type="text" id="formSinonimos" placeholder="Ej: hallazgo, descubrimiento casual">
+                    <div class="synonym-suggestions" id="synonymSuggestions"></div>
                 </div>
 
                 <div class="admin-form-actions">

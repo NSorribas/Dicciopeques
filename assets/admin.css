@@ -881,6 +881,85 @@ body {
     border-top: 1px solid var(--border);
 }
 
+/* === FORM HINTS & LABEL ROW === */
+.admin-form-hint {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--accent);
+    text-transform: lowercase;
+    letter-spacing: 0;
+    opacity: 0.7;
+}
+
+.admin-form-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.admin-form-label-row label {
+    margin-bottom: 0;
+}
+
+/* === SUGERIR SINÓNIMOS === */
+.synonym-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    min-height: 0;
+}
+
+.syn-suggest-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--fg-muted);
+    font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.syn-suggest-chip:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+}
+
+.syn-suggest-chip.selected {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.syn-suggest-chip i {
+    font-size: 9px;
+}
+
+.syn-suggest-hint {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-style: italic;
+}
+
+.syn-suggest-loading {
+    font-size: 13px;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.syn-suggest-loading i {
+    color: var(--accent);
+}
+
 /* === TOAST === */
 .admin-toast-container {
     position: fixed;

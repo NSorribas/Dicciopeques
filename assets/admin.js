@@ -481,6 +481,307 @@ function renumerarDefs() {
 function cerrarModal() {
     document.getElementById('modalPalabra').classList.remove('open');
     palabraEnEdicion = null;
+    document.getElementById('synonymSuggestions').innerHTML = '';
+}
+
+// ============================================================
+// SILABEO AUTOMÁTICO (español)
+// ============================================================
+function separarSilabas(palabra) {
+    if (!palabra || palabra.length < 2) return palabra;
+
+    // Normalizar: quitar acentos para el análisis, preservar originales en output
+    const norm = palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const original = palabra;
+
+    if (norm.length < 2) return original;
+
+    const vocales = 'aeiouáéíóú';
+    const fuertes = 'aeoáéó';
+    const debiles = 'iuíú';
+
+    // Grupos consonánticos inseparables (inician sílaba)
+    const inseparables = ['bl', 'br', 'cl', 'cr', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'tr', 'tl', 'rr', 'ch', 'll'];
+
+    // Clasificar cada carácter
+    function esVocal(c) { return vocales.includes(c); }
+    function esFuerte(c) { return fuertes.includes(c); }
+    function esDebil(c) { return debiles.includes(c); }
+    function esConsonante(c) { return !esVocal(c) && /[a-zñ]/.test(c); }
+
+    function grupoInseparable(texto, pos) {
+        // Verifica si empezando en pos hay un grupo consonántico inseparable
+        if (pos + 1 >= texto.length) return null;
+        const par = texto.substring(pos, pos + 2);
+        if (inseparables.includes(par)) return par;
+        return null;
+    }
+
+    let silabas = [];
+    let i = 0;
+
+    while (i < norm.length) {
+        let silaba = '';
+        let hayVocal = false;
+
+        // Consonantes iniciales de la sílaba
+        while (i < norm.length && esConsonante(norm[i])) {
+            const gi = grupoInseparable(norm, i);
+            if (gi) {
+                // Grupo inseparable: va con la siguiente vocal
+                if (hayVocal) break; // Ya tenemos vocal, el grupo empieza nueva sílaba... no, va con la próxima
+                // Si no hay vocal todavía, miramos qué viene después
+                if (i + gi.length < norm.length && esVocal(norm[i + gi.length])) {
+                    silaba += gi;
+                    i += gi.length;
+                    break;
+                } else {
+                    silaba += norm[i];
+                    i++;
+                    break;
+                }
+            }
+
+            // Consonante sola
+            if (hayVocal) {
+                // Ya tenemos vocal en esta sílaba; esta consonante podría empezar la próxima
+                // Pero si la siguiente es consonante y forman grupo inseparable, esta va sola
+                if (i + 1 < norm.length && esConsonante(norm[i + 1])) {
+                    const giNext = grupoInseparable(norm, i + 1);
+                    if (giNext) {
+                        // i va con sílaba anterior, i+1,i+2 inician nueva
+                        silabas.push(silaba);
+                        silaba = '';
+                        hayVocal = false;
+                        break;
+                    } else {
+                        // Dos consonantes que no son grupo inseparable: se dividen
+                        silabas.push(silaba);
+                        silaba = '';
+                        hayVocal = false;
+                        break;
+                    }
+                }
+                // Consonante antes de vocal: ¿va con esta sílaba o la próxima?
+                if (i + 1 < norm.length && esVocal(norm[i + 1])) {
+                    // CV — consonante inicia nueva sílaba
+                    silabas.push(silaba);
+                    silaba = '';
+                    hayVocal = false;
+                    break;
+                }
+                // Consonante al final
+                silaba += norm[i];
+                i++;
+                continue;
+            }
+
+            // No hay vocal todavía en esta sílaba
+            silaba += norm[i];
+            i++;
+        }
+
+        // Vocal de la sílaba
+        if (i < norm.length && esVocal(norm[i])) {
+            silaba += norm[i];
+            hayVocal = true;
+            i++;
+
+            // Verificar hiato: si la siguiente vocal forma hiato con esta
+            if (i < norm.length && esVocal(norm[i])) {
+                const actual = norm[i - 1];
+                const siguiente = norm[i];
+                const actualFuerte = esFuerte(actual);
+                const sigFuerte = esFuerte(siguiente);
+                const actualDebil = esDebil(actual);
+                const sigDebil = esDebil(siguiente);
+
+                // Hiato: fuerte+fuerte, fuerte+debil (con acento), debil acentuada+fuerte
+                if (actualFuerte && sigFuerte) {
+                    // Hiato: separar
+                    silabas.push(silaba);
+                    silaba = '';
+                    hayVocal = false;
+                    continue;
+                }
+                if (actualFuerte && sigDebil) {
+                    // Generalmente diptongo (cae en "cai-da"), separar solo si la débil tiene acento
+                    const sigOriginal = original[i];
+                    if (/[íú]/.test(sigOriginal)) {
+                        // Hiato: la débil acentuada se separa
+                        silabas.push(silaba);
+                        silaba = '';
+                        hayVocal = false;
+                        continue;
+                    }
+                    // Diptongo: la segunda vocal va en la misma sílaba
+                    silaba += norm[i];
+                    i++;
+                }
+                if (actualDebil && sigFuerte) {
+                    const actOriginal = original[i - 1];
+                    if (/[íú]/.test(actOriginal)) {
+                        // Hiato
+                        silabas.push(silaba);
+                        silaba = '';
+                        hayVocal = false;
+                        continue;
+                    }
+                    // Diptongo
+                    silaba += norm[i];
+                    i++;
+                }
+                if (actualDebil && sigDebil) {
+                    // Dos débiles: diptongo
+                    silaba += norm[i];
+                    i++;
+                }
+            }
+        }
+
+        // Consonantes post-vocálicas (coda)
+        if (hayVocal && i < norm.length && esConsonante(norm[i])) {
+            // Verificar si hay más consonantes después
+            if (i + 1 < norm.length && esConsonante(norm[i + 1])) {
+                const giNext = grupoInseparable(norm, i + 1);
+                if (giNext) {
+                    // La consonante actual va con la sílaba anterior (coda)
+                    // El grupo inseparable inicia la próxima sílaba
+                    silaba += norm[i];
+                    i++;
+                    silabas.push(silaba);
+                    silaba = '';
+                    hayVocal = false;
+                    continue;
+                } else {
+                    // Dos consonantes que no forman grupo inseparable
+                    // La primera va con esta sílaba (coda), la segunda inicia la próxima
+                    silaba += norm[i];
+                    i++;
+                    silabas.push(silaba);
+                    silaba = '';
+                    hayVocal = false;
+                    continue;
+                }
+            }
+
+            // Una sola consonante antes de algo que no es consonante o fin de palabra
+            if (i + 1 < norm.length && esVocal(norm[i + 1])) {
+                // CV: la consonante inicia la próxima sílaba
+                silabas.push(silaba);
+                silaba = '';
+                hayVocal = false;
+                continue;
+            }
+
+            // Consonante al final de palabra
+            silaba += norm[i];
+            i++;
+        }
+
+        if (silaba) silabas.push(silaba);
+    }
+
+    // Mapear sílabas normalizadas de vuelta a los caracteres acentuados originales
+    let result = [];
+    let origIdx = 0;
+    for (const sil of silabas) {
+        let silabaOrig = '';
+        for (let j = 0; j < sil.length; j++) {
+            if (origIdx < original.length) {
+                silabaOrig += original[origIdx];
+                origIdx++;
+            }
+        }
+        result.push(silabaOrig);
+    }
+
+    return result.join('-');
+}
+
+// Auto-completar sílabas al escribir la palabra
+let silabasAutocompletadas = false;
+
+function onPalabraInput() {
+    const palabra = document.getElementById('formPalabraTexto').value.trim();
+    const silabasInput = document.getElementById('formSilabas');
+
+    // Solo auto-completar si el campo está vacío o fue auto-completado antes
+    if (palabra.length >= 2 && (!silabasInput.value || silabasAutocompletadas)) {
+        const separadas = separarSilabas(palabra);
+        silabasInput.value = separadas;
+        silabasAutocompletadas = true;
+    }
+
+    // Reset flag si el usuario borra la palabra
+    if (!palabra) {
+        silabasAutocompletadas = false;
+    }
+}
+
+// ============================================================
+// SUGERIR SINÓNIMOS (Datamuse API)
+// ============================================================
+async function sugerirSinonimos() {
+    const palabra = document.getElementById('formPalabraTexto').value.trim();
+    const container = document.getElementById('synonymSuggestions');
+
+    if (!palabra) {
+        container.innerHTML = '<span class="syn-suggest-hint">Escribí una palabra primero</span>';
+        return;
+    }
+
+    container.innerHTML = '<span class="syn-suggest-loading"><i class="fas fa-circle-notch fa-spin"></i> Buscando...</span>';
+
+    try {
+        const response = await fetch(`https://api.datamuse.com/words?rel_syn=${encodeURIComponent(palabra)}&v=es&max=8`);
+        if (!response.ok) throw new Error('Error en la API');
+        const data = await response.json();
+
+        if (data.length === 0) {
+            container.innerHTML = '<span class="syn-suggest-hint">No se encontraron sinónimos</span>';
+            return;
+        }
+
+        const sinonimosActuales = document.getElementById('formSinonimos').value
+            .split(',').map(s => s.trim().toLowerCase()).filter(s => s);
+
+        container.innerHTML = data.map(item => {
+            const word = item.word;
+            const yaAgregado = sinonimosActuales.includes(word.toLowerCase());
+            return `<button type="button" class="syn-suggest-chip ${yaAgregado ? 'selected' : ''}"
+                        data-synonym="${escaparHTML(word)}"
+                        onclick="agregarSinonimoSugerido(this)">
+                        ${escaparHTML(word)}
+                        ${yaAgregado ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>'}
+                    </button>`;
+        }).join('');
+
+    } catch (error) {
+        console.error('Error buscando sinónimos:', error);
+        container.innerHTML = '<span class="syn-suggest-hint">Error al buscar sinónimos. Intentá de nuevo.</span>';
+    }
+}
+
+function agregarSinonimoSugerido(btn) {
+    const sinonimo = btn.dataset.synonym;
+    const input = document.getElementById('formSinonimos');
+    const actuales = input.value.split(',').map(s => s.trim()).filter(s => s);
+
+    if (actuales.map(s => s.toLowerCase()).includes(sinonimo.toLowerCase())) {
+        // Ya está, lo quitamos
+        const nuevos = actuales.filter(s => s.toLowerCase() !== sinonimo.toLowerCase());
+        input.value = nuevos.join(', ');
+        btn.classList.remove('selected');
+        btn.innerHTML = `${escaparHTML(sinonimo)} <i class="fas fa-plus"></i>`;
+        return;
+    }
+
+    // Agregar
+    actuales.push(sinonimo);
+    input.value = actuales.join(', ');
+    btn.classList.add('selected');
+    btn.innerHTML = `${escaparHTML(sinonimo)} <i class="fas fa-check"></i>`;
 }
 
 // ============================================================
@@ -815,6 +1116,17 @@ function initEventListeners() {
         const count = document.querySelectorAll('.def-item').length;
         agregarDefBlock(count + 1);
     });
+
+    // Auto-completar sílabas al escribir la palabra
+    document.getElementById('formPalabraTexto').addEventListener('input', onPalabraInput);
+
+    // Reset flag de sílabas auto cuando el usuario edita manualmente
+    document.getElementById('formSilabas').addEventListener('input', () => {
+        silabasAutocompletadas = false;
+    });
+
+    // Sugerir sinónimos
+    document.getElementById('btnSugerirSinonimos').addEventListener('click', sugerirSinonimos);
 
     // Buscador
     document.getElementById('adminSearch').addEventListener('input', (e) => {
