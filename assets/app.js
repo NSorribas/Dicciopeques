@@ -324,7 +324,6 @@ function bindCardEvents() {
                 document.getElementById("searchClear").classList.add("visible");
                 tarjetaExpandida = null;
                 renderLista(true);
-                mostrarToast(`Buscando: "${syn}"`);
                 return;
             }
 
@@ -455,7 +454,6 @@ function irAPalabraAleatoria() {
         }
     }, 100);
 
-    mostrarToast(`Aleatoria: "${palabra}"`);
 }
 
 // ============================================================
@@ -518,18 +516,6 @@ function initFAB() {
     });
 
     actualizarBadgeFavoritos();
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-function mostrarToast(mensaje) {
-    const container = document.getElementById("toastContainer");
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerHTML = `<i class="fas fa-search"></i> ${mensaje}`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
 }
 
 // ============================================================
