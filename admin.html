@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiccioPeques — Administración</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+
+    <div class="admin-container">
+
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-logo">
+                <div class="admin-logo-icon"><i class="fas fa-book-open"></i></div>
+                <div>
+                    <h1 class="admin-title">DiccioPeques</h1>
+                    <p class="admin-subtitle">Panel de Administración</p>
+                </div>
+            </div>
+            <div class="admin-header-actions">
+                <a href="index.html" class="admin-btn admin-btn-ghost">
+                    <i class="fas fa-arrow-left"></i> Volver al diccionario
+                </a>
+            </div>
+        </header>
+
+        <!-- Barra de acciones -->
+        <section class="admin-toolbar">
+            <div class="admin-toolbar-left">
+                <h2 class="admin-section-title">Palabras</h2>
+                <span class="admin-badge" id="totalCount">0</span>
+            </div>
+            <div class="admin-toolbar-right">
+                <button class="admin-btn admin-btn-primary" id="btnNueva">
+                    <i class="fas fa-plus"></i> Nueva palabra
+                </button>
+                <div class="admin-dropdown">
+                    <button class="admin-btn admin-btn-secondary" id="btnImportar">
+                        <i class="fas fa-upload"></i> Importar
+                    </button>
+                    <div class="admin-dropdown-menu" id="importMenu">
+                        <button class="admin-dropdown-item" id="btnImportJSON">
+                            <i class="fas fa-file-code"></i> Importar JSON
+                        </button>
+                        <button class="admin-dropdown-item" id="btnImportXLSX">
+                            <i class="fas fa-file-excel"></i> Importar XLSX
+                        </button>
+                        <hr class="admin-dropdown-divider">
+                        <button class="admin-dropdown-item" id="btnDownloadTemplateJSON">
+                            <i class="fas fa-download"></i> Descargar template JSON
+                        </button>
+                        <button class="admin-dropdown-item" id="btnDownloadTemplateXLSX">
+                            <i class="fas fa-download"></i> Descargar template XLSX
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-dropdown">
+                    <button class="admin-btn admin-btn-secondary" id="btnExportar">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <div class="admin-dropdown-menu" id="exportMenu">
+                        <button class="admin-dropdown-item" id="btnExportJSON">
+                            <i class="fas fa-file-code"></i> Exportar JSON
+                        </button>
+                        <button class="admin-dropdown-item" id="btnExportXLSX">
+                            <i class="fas fa-file-excel"></i> Exportar XLSX
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buscador -->
+        <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="adminSearch" placeholder="Buscar palabra..." autocomplete="off">
+        </div>
+
+        <!-- Tabla de palabras -->
+        <div class="admin-table-wrapper">
+            <table class="admin-table" id="tablaPalabras">
+                <thead>
+                    <tr>
+                        <th>Palabra</th>
+                        <th>Categoría</th>
+                        <th>Sílabas</th>
+                        <th>Definiciones</th>
+                        <th>Sinónimos</th>
+                        <th class="admin-th-actions">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaBody">
+                    <tr><td colspan="6" class="admin-table-empty">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Modal: Formulario de palabra -->
+    <div class="admin-modal-overlay" id="modalPalabra">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3 id="modalTitulo">Nueva palabra</h3>
+                <button class="admin-modal-close" id="modalClose">&times;</button>
+            </div>
+            <form id="formPalabra" class="admin-form">
+                <input type="hidden" id="formPalabraId">
+
+                <div class="admin-form-row">
+                    <div class="admin-form-group admin-form-group-wide">
+                        <label for="formPalabraTexto">Palabra *</label>
+                        <input type="text" id="formPalabraTexto" required placeholder="Ej: serendipia">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="formCategoria">Categoría *</label>
+                        <select id="formCategoria" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="sustantivo">Sustantivo</option>
+                            <option value="verbo">Verbo</option>
+                            <option value="adjetivo">Adjetivo</option>
+                            <option value="adverbio">Adverbio</option>
+                            <option value="expresion">Expresión</option>
+                            <option value="conjugacion">Conjugación</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="formSilabas">Sílabas</label>
+                        <input type="text" id="formSilabas" placeholder="Ej: se-ren-di-pia">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="formPronunciacion">Pronunciación</label>
+                        <input type="text" id="formPronunciacion" placeholder="Ej: /se.ɾenˈdi.pja/">
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="formOrigen">Etimología / Origen</label>
+                    <input type="text" id="formOrigen" placeholder="Ej: Del inglés serendipity...">
+                </div>
+
+                <!-- Definiciones dinámicas -->
+                <div class="admin-form-section">
+                    <div class="admin-form-section-header">
+                        <label>Definiciones *</label>
+                        <button type="button" class="admin-btn admin-btn-xs" id="btnAgregarDef">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                    <div id="definicionesContainer"></div>
+                </div>
+
+                <!-- Sinónimos -->
+                <div class="admin-form-group">
+                    <label for="formSinonimos">Sinónimos (separados por coma)</label>
+                    <input type="text" id="formSinonimos" placeholder="Ej: hallazgo, descubrimiento casual">
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="button" class="admin-btn admin-btn-ghost" id="btnCancelar">Cancelar</button>
+                    <button type="submit" class="admin-btn admin-btn-primary" id="btnGuardar">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="admin-modal-overlay" id="modalConfirmar">
+        <div class="admin-modal admin-modal-sm">
+            <div class="admin-modal-header">
+                <h3>Confirmar eliminación</h3>
+                <button class="admin-modal-close" id="confirmClose">&times;</button>
+            </div>
+            <p class="admin-confirm-text" id="confirmText">¿Estás seguro de que querés eliminar esta palabra?</p>
+            <div class="admin-form-actions">
+                <button class="admin-btn admin-btn-ghost" id="btnConfirmCancelar">Cancelar</button>
+                <button class="admin-btn admin-btn-danger" id="btnConfirmEliminar">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div class="admin-toast-container" id="toastContainer"></div>
+
+    <!-- Inputs ocultos para importar archivos -->
+    <input type="file" id="fileInputJSON" accept=".json" style="display:none">
+    <input type="file" id="fileInputXLSX" accept=".xlsx,.xls" style="display:none">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="assets/admin.js"></script>
+</body>
+</html>

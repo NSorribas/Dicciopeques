@@ -1,4 +1,12 @@
 // ============================================================
+// CONFIGURACIÓN SUPABASE
+// ============================================================
+const SUPABASE_URL = 'https://leivaafvepovjrkzntxr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlaXZhYWZ2ZXBvdmpya3pudHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MjgxNTgsImV4cCI6MjA5NjEwNDE1OH0.a0OrAI9cxSFzOXJqbjfBDflNa7Ehxmn4t4MHQnHc2gk';
+
+let supabaseClient = null;
+
+// ============================================================
 // ESTADO DE LA APP
 // ============================================================
 let DICCIONARIO = [];
@@ -12,15 +20,90 @@ const STORAGE_KEY_LETRA = "dicciopeques_letra";
 const ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 // ============================================================
-// CARGA DE DATOS
+// INICIALIZAR SUPABASE
+// ============================================================
+function initSupabase() {
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+        console.warn('Supabase JS no está cargado. Usando datos locales como fallback.');
+    }
+}
+
+// ============================================================
+// CARGA DE DATOS DESDE SUPABASE
 // ============================================================
 async function cargarDiccionario() {
+    if (!supabaseClient) {
+        await cargarDesdeJSON();
+        return;
+    }
+
     try {
-        const response = await fetch("assets/data/diccionario.json");
-        if (!response.ok) throw new Error("No se pudo cargar el diccionario");
+        // Cargar palabras
+        const { data: palabras, error: errPalabras } = await supabaseClient
+            .from('palabras')
+            .select('*')
+            .order('palabra', { ascending: true });
+
+        if (errPalabras) throw errPalabras;
+        if (!palabras || palabras.length === 0) {
+            await cargarDesdeJSON();
+            return;
+        }
+
+        // Cargar definiciones
+        const { data: definiciones, error: errDef } = await supabaseClient
+            .from('definiciones')
+            .select('*')
+            .order('numero', { ascending: true });
+
+        if (errDef) throw errDef;
+
+        // Cargar sinónimos
+        const { data: sinonimos, error: errSin } = await supabaseClient
+            .from('sinonimos')
+            .select('*');
+
+        if (errSin) throw errSin;
+
+        // Armar estructura de datos
+        const defMap = {};
+        (definiciones || []).forEach(d => {
+            if (!defMap[d.palabra_id]) defMap[d.palabra_id] = [];
+            defMap[d.palabra_id].push({ texto: d.texto, ejemplo: d.ejemplo || '' });
+        });
+
+        const sinMap = {};
+        (sinonimos || []).forEach(s => {
+            if (!sinMap[s.palabra_id]) sinMap[s.palabra_id] = [];
+            sinMap[s.palabra_id].push(s.sinonimo);
+        });
+
+        DICCIONARIO = palabras.map(p => ({
+            palabra: p.palabra,
+            categoria: p.categoria,
+            silabas: p.silabas || '',
+            pronunciacion: p.pronunciacion || '',
+            origen: p.origen || '',
+            definiciones: defMap[p.id] || [],
+            sinonimos: sinMap[p.id] || []
+        }));
+
+    } catch (error) {
+        console.error('Error cargando desde Supabase:', error);
+        await cargarDesdeJSON();
+    }
+}
+
+// Fallback: cargar desde JSON local
+async function cargarDesdeJSON() {
+    try {
+        const response = await fetch('assets/data/diccionario.json');
+        if (!response.ok) throw new Error('No se pudo cargar el diccionario local');
         DICCIONARIO = await response.json();
     } catch (error) {
-        console.error("Error cargando diccionario:", error);
+        console.error('Error cargando diccionario local:', error);
         DICCIONARIO = [];
     }
 }
@@ -50,7 +133,6 @@ function getLetraGuardada() {
     if (guardada && ALFABETO.includes(guardada)) {
         return guardada;
     }
-    // Por defecto, la primera letra que tenga palabras
     const disponibles = getLetrasDisponibles();
     const primera = ALFABETO.find(l => disponibles[l]);
     return primera || "A";
@@ -65,11 +147,9 @@ function guardarLetra(letra) {
 // ============================================================
 function filtrarPalabras() {
     return DICCIONARIO.filter(p => {
-        // Filtro por letra activa (solo si no hay búsqueda)
         if (!terminoBusqueda && letraActiva) {
             if (getLetraInicial(p.palabra) !== letraActiva) return false;
         }
-        // Filtro por término de búsqueda
         if (terminoBusqueda) {
             const q = normalizar(terminoBusqueda);
             const campos = [
@@ -132,12 +212,10 @@ function renderLista(forzar = false) {
     const info = document.getElementById("resultsInfo");
     const resultados = filtrarPalabras();
 
-    // Clave para detectar cambios reales
     const nuevaKey = resultados.map(p => p.palabra).join("|") + "|" + terminoBusqueda + "|" + letraActiva;
     const contenidoCambio = nuevaKey !== ultimoResultadoKey;
     ultimoResultadoKey = nuevaKey;
 
-    // Info de resultados
     if (terminoBusqueda) {
         info.innerHTML = `<strong>${resultados.length}</strong> resultado${resultados.length !== 1 ? 's' : ''} para "${terminoBusqueda}"`;
     } else if (letraActiva) {
@@ -158,7 +236,6 @@ function renderLista(forzar = false) {
         return;
     }
 
-    // Solo reconstruir el DOM si el contenido realmente cambió
     if (contenidoCambio || forzar) {
         lista.innerHTML = resultados.map((p) => {
             const expandida = tarjetaExpandida === p.palabra;
@@ -206,7 +283,6 @@ function renderLista(forzar = false) {
 
         bindCardEvents();
     } else {
-        // Solo actualizar expansión sin tocar el DOM completo
         lista.querySelectorAll(".word-card").forEach(card => {
             const palabra = card.dataset.palabra;
             const debeExpandir = tarjetaExpandida === palabra;
@@ -215,7 +291,6 @@ function renderLista(forzar = false) {
         });
     }
 
-    // Estadísticas
     document.getElementById("totalWords").textContent = DICCIONARIO.length;
 }
 
@@ -290,6 +365,9 @@ function mostrarToast(mensaje) {
 // INICIALIZACIÓN
 // ============================================================
 document.addEventListener("DOMContentLoaded", async () => {
+    // Inicializar Supabase
+    initSupabase();
+
     // Cargar datos
     await cargarDiccionario();
 
@@ -301,7 +379,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderAZNav();
     renderLista();
 
-    // Búsqueda con debounce de 150ms
+    // Búsqueda con debounce
     const searchInput = document.getElementById("searchInput");
     const searchClear = document.getElementById("searchClear");
 
@@ -311,7 +389,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             terminoBusqueda = searchInput.value.trim();
             searchClear.classList.toggle("visible", terminoBusqueda.length > 0);
             tarjetaExpandida = null;
-            // Al buscar, actualizar la navegación A-Z (desactivar letra si hay búsqueda)
             if (terminoBusqueda) {
                 document.querySelectorAll(".az-letter.active").forEach(el => el.classList.remove("active"));
             } else {

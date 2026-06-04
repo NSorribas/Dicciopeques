@@ -1,23 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 30" width="600" height="30" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 30" width="800" height="30" preserveAspectRatio="xMidYMid meet">
   <defs>
-    <linearGradient id="sepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="sepLeft" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:transparent"/>
-      <stop offset="20%" style="stop-color:#d4a843;stop-opacity:0.4"/>
-      <stop offset="50%" style="stop-color:#d4a843;stop-opacity:0.6"/>
-      <stop offset="80%" style="stop-color:#d4a843;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#d4a843;stop-opacity:0.35"/>
+    </linearGradient>
+    <linearGradient id="sepRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d4a843;stop-opacity:0.35"/>
       <stop offset="100%" style="stop-color:transparent"/>
     </linearGradient>
   </defs>
-  <!-- Línea central -->
-  <line x1="0" y1="15" x2="260" y2="15" stroke="url(#sepGrad)" stroke-width="1"/>
-  <line x1="340" y1="15" x2="600" y2="15" stroke="url(#sepGrad)" stroke-width="1"/>
-  <!-- Ornamento central - diamante con curvas -->
-  <path d="M270 15 Q280 5 290 5 Q300 5 300 15 Q300 5 310 5 Q320 5 330 15 Q320 25 310 25 Q300 25 300 15 Q300 25 290 25 Q280 25 270 15 Z" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.5"/>
+  <!-- Línea izquierda -->
+  <line x1="0" y1="15" x2="350" y2="15" stroke="url(#sepLeft)" stroke-width="1"/>
+  <!-- Ornamento central -->
+  <path d="M360 15 Q370 5 380 5 Q390 5 400 15 Q390 25 380 25 Q370 25 360 15 Z" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.45"/>
+  <path d="M390 15 Q400 5 410 5 Q420 5 430 15 Q420 25 410 25 Q400 25 390 15 Z" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.45"/>
+  <path d="M394 15 L400 9 L406 15 L400 21 Z" fill="#d4a843" opacity="0.3"/>
   <!-- Puntos decorativos -->
-  <circle cx="290" cy="5" r="1.5" fill="#d4a843" opacity="0.4"/>
-  <circle cx="310" cy="5" r="1.5" fill="#d4a843" opacity="0.4"/>
-  <circle cx="290" cy="25" r="1.5" fill="#d4a843" opacity="0.4"/>
-  <circle cx="310" cy="25" r="1.5" fill="#d4a843" opacity="0.4"/>
-  <!-- Diamante central pequeño -->
-  <path d="M296 15 L300 10 L304 15 L300 20 Z" fill="#d4a843" opacity="0.3"/>
+  <circle cx="370" cy="5" r="1.5" fill="#d4a843" opacity="0.35"/>
+  <circle cx="410" cy="5" r="1.5" fill="#d4a843" opacity="0.35"/>
+  <circle cx="370" cy="25" r="1.5" fill="#d4a843" opacity="0.35"/>
+  <circle cx="410" cy="25" r="1.5" fill="#d4a843" opacity="0.35"/>
+  <!-- Línea derecha -->
+  <line x1="440" y1="15" x2="800" y2="15" stroke="url(#sepRight)" stroke-width="1"/>
 </svg>

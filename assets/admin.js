@@ -1,0 +1,727 @@
+// ============================================================
+// CONFIGURACIÓN SUPABASE
+// ============================================================
+const SUPABASE_URL = 'https://leivaafvepovjrkzntxr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlaXZhYWZ2ZXBvdmpya3pudHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MjgxNTgsImV4cCI6MjA5NjEwNDE1OH0.a0OrAI9cxSFzOXJqbjfBDflNa7Ehxmn4t4MHQnHc2gk';
+
+let supabaseClient = null;
+let todasLasPalabras = [];
+let palabraEnEdicion = null;
+let palabraAEliminar = null;
+
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    initEventListeners();
+    await cargarPalabras();
+});
+
+// ============================================================
+// CARGA DE DATOS
+// ============================================================
+async function cargarPalabras() {
+    if (!supabaseClient) {
+        mostrarToast('Error: No hay conexión con Supabase', 'error');
+        return;
+    }
+
+    try {
+        const { data: palabras, error } = await supabaseClient
+            .from('palabras')
+            .select('*, definiciones(*), sinonimos(*)')
+            .order('palabra', { ascending: true });
+
+        if (error) throw error;
+
+        todasLasPalabras = (palabras || []).map(p => ({
+            id: p.id,
+            palabra: p.palabra,
+            categoria: p.categoria,
+            silabas: p.silabas || '',
+            pronunciacion: p.pronunciacion || '',
+            origen: p.origen || '',
+            definiciones: (p.definiciones || [])
+                .sort((a, b) => a.numero - b.numero)
+                .map(d => ({ texto: d.texto, ejemplo: d.ejemplo || '' })),
+            sinonimos: (p.sinonimos || []).map(s => s.sinonimo)
+        }));
+
+        renderTabla();
+        document.getElementById('totalCount').textContent = todasLasPalabras.length;
+
+    } catch (error) {
+        console.error('Error cargando palabras:', error);
+        mostrarToast('Error al cargar las palabras', 'error');
+    }
+}
+
+// ============================================================
+// RENDER TABLA
+// ============================================================
+function renderTabla(filtro = '') {
+    const tbody = document.getElementById('tablaBody');
+    const q = filtro.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const filtradas = filtro
+        ? todasLasPalabras.filter(p => {
+            const campos = [p.palabra, p.categoria, ...p.sinonimos, p.origen]
+                .map(c => c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+            return campos.some(c => c.includes(q));
+        })
+        : todasLasPalabras;
+
+    if (filtradas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="admin-table-empty">${
+            filtro ? 'No se encontraron resultados' : 'No hay palabras cargadas'
+        }</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtradas.map(p => `
+        <tr data-id="${p.id}">
+            <td class="admin-td-palabra">${escaparHTML(p.palabra)}</td>
+            <td><span class="admin-td-categoria cat-${p.categoria}">${p.categoria}</span></td>
+            <td class="admin-td-count">${escaparHTML(p.silabas) || '—'}</td>
+            <td class="admin-td-count">${p.definiciones.length}</td>
+            <td class="admin-td-sinonimos" title="${escaparHTML(p.sinonimos.join(', '))}">${escaparHTML(p.sinonimos.join(', ')) || '—'}</td>
+            <td class="admin-td-actions">
+                <button class="admin-btn admin-btn-icon edit" onclick="editarPalabra(${p.id})" title="Editar">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class="admin-btn admin-btn-icon delete" onclick="confirmarEliminar(${p.id})" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function escaparHTML(texto) {
+    const div = document.createElement('div');
+    div.textContent = texto;
+    return div.innerHTML;
+}
+
+// ============================================================
+// CRUD: CREAR / EDITAR
+// ============================================================
+async function guardarPalabra(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('formPalabraId').value;
+    const palabra = document.getElementById('formPalabraTexto').value.trim();
+    const categoria = document.getElementById('formCategoria').value;
+    const silabas = document.getElementById('formSilabas').value.trim();
+    const pronunciacion = document.getElementById('formPronunciacion').value.trim();
+    const origen = document.getElementById('formOrigen').value.trim();
+    const sinonimosRaw = document.getElementById('formSinonimos').value.trim();
+
+    // Recoger definiciones del form
+    const definiciones = [];
+    document.querySelectorAll('.def-item').forEach((item, i) => {
+        const texto = item.querySelector('.def-texto').value.trim();
+        const ejemplo = item.querySelector('.def-ejemplo').value.trim();
+        if (texto) {
+            definiciones.push({ numero: i + 1, texto, ejemplo });
+        }
+    });
+
+    if (!palabra || !categoria || definiciones.length === 0) {
+        mostrarToast('Completá los campos obligatorios: palabra, categoría y al menos una definición', 'error');
+        return;
+    }
+
+    const sinonimos = sinonimosRaw
+        ? sinonimosRaw.split(',').map(s => s.trim()).filter(s => s)
+        : [];
+
+    try {
+        if (id) {
+            // ACTUALIZAR
+            const { error: errPal } = await supabaseClient
+                .from('palabras')
+                .update({ palabra, categoria, silabas, pronunciacion, origen })
+                .eq('id', id);
+            if (errPal) throw errPal;
+
+            // Borrar definiciones y sinónimos anteriores
+            await supabaseClient.from('definiciones').delete().eq('palabra_id', id);
+            await supabaseClient.from('sinonimos').delete().eq('palabra_id', id);
+
+            // Insertar nuevas definiciones
+            if (definiciones.length > 0) {
+                const { error: errDef } = await supabaseClient
+                    .from('definiciones')
+                    .insert(definiciones.map(d => ({ palabra_id: id, ...d })));
+                if (errDef) throw errDef;
+            }
+
+            // Insertar nuevos sinónimos
+            if (sinonimos.length > 0) {
+                const { error: errSin } = await supabaseClient
+                    .from('sinonimos')
+                    .insert(sinonimos.map(s => ({ palabra_id: id, sinonimo: s })));
+                if (errSin) throw errSin;
+            }
+
+            mostrarToast(`"${palabra}" actualizada correctamente`, 'success');
+
+        } else {
+            // CREAR
+            const { data: nueva, error: errPal } = await supabaseClient
+                .from('palabras')
+                .insert({ palabra, categoria, silabas, pronunciacion, origen })
+                .select()
+                .single();
+            if (errPal) throw errPal;
+
+            const nuevoId = nueva.id;
+
+            // Insertar definiciones
+            if (definiciones.length > 0) {
+                const { error: errDef } = await supabaseClient
+                    .from('definiciones')
+                    .insert(definiciones.map(d => ({ palabra_id: nuevoId, ...d })));
+                if (errDef) throw errDef;
+            }
+
+            // Insertar sinónimos
+            if (sinonimos.length > 0) {
+                const { error: errSin } = await supabaseClient
+                    .from('sinonimos')
+                    .insert(sinonimos.map(s => ({ palabra_id: nuevoId, sinonimo: s })));
+                if (errSin) throw errSin;
+            }
+
+            mostrarToast(`"${palabra}" creada correctamente`, 'success');
+        }
+
+        cerrarModal();
+        await cargarPalabras();
+
+    } catch (error) {
+        console.error('Error guardando:', error);
+        mostrarToast('Error al guardar: ' + (error.message || 'Error desconocido'), 'error');
+    }
+}
+
+// ============================================================
+// CRUD: ELIMINAR
+// ============================================================
+function confirmarEliminar(id) {
+    palabraAEliminar = id;
+    const p = todasLasPalabras.find(x => x.id === id);
+    document.getElementById('confirmText').innerHTML =
+        `¿Estás seguro de que querés eliminar <strong>"${escaparHTML(p.palabra)}"</strong>? Esta acción no se puede deshacer.`;
+    document.getElementById('modalConfirmar').classList.add('open');
+}
+
+async function eliminarPalabra() {
+    if (!palabraAEliminar) return;
+
+    try {
+        // Las definiciones y sinónimos se eliminan en cascada (ON DELETE CASCADE)
+        const { error } = await supabaseClient
+            .from('palabras')
+            .delete()
+            .eq('id', palabraAEliminar);
+
+        if (error) throw error;
+
+        mostrarToast('Palabra eliminada correctamente', 'success');
+        palabraAEliminar = null;
+        document.getElementById('modalConfirmar').classList.remove('open');
+        await cargarPalabras();
+
+    } catch (error) {
+        console.error('Error eliminando:', error);
+        mostrarToast('Error al eliminar', 'error');
+    }
+}
+
+// ============================================================
+// EDITAR: Cargar datos en el form
+// ============================================================
+function editarPalabra(id) {
+    const p = todasLasPalabras.find(x => x.id === id);
+    if (!p) return;
+
+    palabraEnEdicion = id;
+    document.getElementById('formPalabraId').value = id;
+    document.getElementById('formPalabraTexto').value = p.palabra;
+    document.getElementById('formCategoria').value = p.categoria;
+    document.getElementById('formSilabas').value = p.silabas;
+    document.getElementById('formPronunciacion').value = p.pronunciacion;
+    document.getElementById('formOrigen').value = p.origen;
+    document.getElementById('formSinonimos').value = p.sinonimos.join(', ');
+
+    // Cargar definiciones
+    const container = document.getElementById('definicionesContainer');
+    container.innerHTML = '';
+    p.definiciones.forEach((d, i) => agregarDefBlock(i + 1, d.texto, d.ejemplo));
+
+    document.getElementById('modalTitulo').textContent = `Editar: ${p.palabra}`;
+    document.getElementById('modalPalabra').classList.add('open');
+}
+
+// ============================================================
+// MODAL: NUEVA PALABRA
+// ============================================================
+function nuevaPalabra() {
+    palabraEnEdicion = null;
+    document.getElementById('formPalabra').reset();
+    document.getElementById('formPalabraId').value = '';
+    document.getElementById('definicionesContainer').innerHTML = '';
+    agregarDefBlock(1);
+    document.getElementById('modalTitulo').textContent = 'Nueva palabra';
+    document.getElementById('modalPalabra').classList.add('open');
+}
+
+// ============================================================
+// DEFINICIONES DINÁMICAS
+// ============================================================
+function agregarDefBlock(numero, texto = '', ejemplo = '') {
+    const container = document.getElementById('definicionesContainer');
+    const div = document.createElement('div');
+    div.className = 'def-item';
+    div.innerHTML = `
+        <div class="def-item-header">
+            <span class="def-item-num">Definición ${numero}</span>
+            <button type="button" class="def-item-remove" onclick="this.closest('.def-item').remove(); renumerarDefs()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="admin-form-group">
+            <input type="text" class="def-texto" value="${escaparHTML(texto)}" placeholder="Texto de la definición" required>
+        </div>
+        <div class="admin-form-group">
+            <input type="text" class="def-ejemplo" value="${escaparHTML(ejemplo)}" placeholder="Ejemplo de uso (opcional)">
+        </div>
+    `;
+    container.appendChild(div);
+}
+
+function renumerarDefs() {
+    document.querySelectorAll('.def-item').forEach((item, i) => {
+        item.querySelector('.def-item-num').textContent = `Definición ${i + 1}`;
+    });
+}
+
+// ============================================================
+// MODAL: ABRIR / CERRAR
+// ============================================================
+function cerrarModal() {
+    document.getElementById('modalPalabra').classList.remove('open');
+    palabraEnEdicion = null;
+}
+
+// ============================================================
+// IMPORT / EXPORT: JSON
+// ============================================================
+async function importarJSON(file) {
+    try {
+        const text = await file.text();
+        const datos = JSON.parse(text);
+
+        if (!Array.isArray(datos)) {
+            mostrarToast('El JSON debe ser un array de palabras', 'error');
+            return;
+        }
+
+        let importadas = 0;
+        let errores = 0;
+
+        for (const p of datos) {
+            try {
+                if (!p.palabra || !p.categoria || !p.definiciones || p.definiciones.length === 0) {
+                    errores++;
+                    continue;
+                }
+
+                // Crear palabra
+                const { data: nueva, error: errPal } = await supabaseClient
+                    .from('palabras')
+                    .insert({
+                        palabra: p.palabra,
+                        categoria: p.categoria,
+                        silabas: p.silabas || '',
+                        pronunciacion: p.pronunciacion || '',
+                        origen: p.origen || ''
+                    })
+                    .select()
+                    .single();
+
+                if (errPal) {
+                    if (errPal.code === '23505') {
+                        // Palabra duplicada, saltar
+                        continue;
+                    }
+                    throw errPal;
+                }
+
+                // Insertar definiciones
+                const defs = p.definiciones.map((d, i) => ({
+                    palabra_id: nueva.id,
+                    numero: i + 1,
+                    texto: d.texto,
+                    ejemplo: d.ejemplo || ''
+                }));
+                await supabaseClient.from('definiciones').insert(defs);
+
+                // Insertar sinónimos
+                if (p.sinonimos && p.sinonimos.length > 0) {
+                    const sins = p.sinonimos.map(s => ({
+                        palabra_id: nueva.id,
+                        sinonimo: s
+                    }));
+                    await supabaseClient.from('sinonimos').insert(sins);
+                }
+
+                importadas++;
+            } catch (e) {
+                errores++;
+                console.error('Error importando palabra:', p.palabra, e);
+            }
+        }
+
+        mostrarToast(`Importación completa: ${importadas} palabras importadas${errores > 0 ? `, ${errores} errores` : ''}`, importadas > 0 ? 'success' : 'error');
+        await cargarPalabras();
+
+    } catch (error) {
+        console.error('Error parseando JSON:', error);
+        mostrarToast('Error al leer el archivo JSON', 'error');
+    }
+}
+
+async function exportarJSON() {
+    const datos = todasLasPalabras.map(p => ({
+        palabra: p.palabra,
+        categoria: p.categoria,
+        silabas: p.silabas,
+        pronunciacion: p.pronunciacion,
+        origen: p.origen,
+        definiciones: p.definiciones,
+        sinonimos: p.sinonimos
+    }));
+
+    const blob = new Blob([JSON.stringify(datos, null, 4)], { type: 'application/json' });
+    descargarArchivo(blob, `dicciopeques_${fechaArchivo()}.json`);
+    mostrarToast('JSON exportado correctamente', 'success');
+}
+
+function descargarTemplateJSON() {
+    const template = [{
+        palabra: "",
+        categoria: "sustantivo",
+        silabas: "",
+        pronunciacion: "",
+        origen: "",
+        definiciones: [
+            { texto: "", ejemplo: "" }
+        ],
+        sinonimos: [""]
+    }];
+
+    const blob = new Blob([JSON.stringify(template, null, 4)], { type: 'application/json' });
+    descargarArchivo(blob, 'dicciopeques_template.json');
+    mostrarToast('Template JSON descargado', 'success');
+}
+
+// ============================================================
+// IMPORT / EXPORT: XLSX
+// ============================================================
+async function importarXLSX(file) {
+    if (typeof XLSX === 'undefined') {
+        mostrarToast('Error: Librería XLSX no cargada', 'error');
+        return;
+    }
+
+    try {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet);
+
+        let importadas = 0;
+        let errores = 0;
+
+        for (const row of rows) {
+            try {
+                const palabra = (row.palabra || '').trim();
+                const categoria = (row.categoria || '').trim().toLowerCase();
+                if (!palabra || !categoria) { errores++; continue; }
+
+                // Crear palabra
+                const { data: nueva, error: errPal } = await supabaseClient
+                    .from('palabras')
+                    .insert({
+                        palabra,
+                        categoria,
+                        silabas: (row.silabas || '').trim(),
+                        pronunciacion: (row.pronunciacion || '').trim(),
+                        origen: (row.origen || '').trim()
+                    })
+                    .select()
+                    .single();
+
+                if (errPal) {
+                    if (errPal.code === '23505') continue;
+                    throw errPal;
+                }
+
+                // Definiciones: columna "def1_texto", "def1_ejemplo", "def2_texto", etc.
+                let defNum = 1;
+                while (row[`def${defNum}_texto`]) {
+                    const texto = (row[`def${defNum}_texto`] || '').trim();
+                    const ejemplo = (row[`def${defNum}_ejemplo`] || '').trim();
+                    if (texto) {
+                        await supabaseClient.from('definiciones').insert({
+                            palabra_id: nueva.id,
+                            numero: defNum,
+                            texto,
+                            ejemplo
+                        });
+                    }
+                    defNum++;
+                }
+
+                // Sinónimos: columna "sinonimos" separados por coma, o "sinonimo1", "sinonimo2", etc.
+                let sinonimos = [];
+                if (row.sinonimos) {
+                    sinonimos = row.sinonimos.split(',').map(s => s.trim()).filter(s => s);
+                } else {
+                    let sinNum = 1;
+                    while (row[`sinonimo${sinNum}`]) {
+                        const s = (row[`sinonimo${sinNum}`] || '').trim();
+                        if (s) sinonimos.push(s);
+                        sinNum++;
+                    }
+                }
+
+                if (sinonimos.length > 0) {
+                    await supabaseClient.from('sinonimos').insert(
+                        sinonimos.map(s => ({ palabra_id: nueva.id, sinonimo: s }))
+                    );
+                }
+
+                importadas++;
+            } catch (e) {
+                errores++;
+                console.error('Error importando fila:', e);
+            }
+        }
+
+        mostrarToast(`Importación XLSX: ${importadas} palabras${errores > 0 ? `, ${errores} errores` : ''}`, importadas > 0 ? 'success' : 'error');
+        await cargarPalabras();
+
+    } catch (error) {
+        console.error('Error leyendo XLSX:', error);
+        mostrarToast('Error al leer el archivo XLSX', 'error');
+    }
+}
+
+function exportarXLSX() {
+    if (typeof XLSX === 'undefined') {
+        mostrarToast('Error: Librería XLSX no cargada', 'error');
+        return;
+    }
+
+    const rows = todasLasPalabras.map(p => {
+        const row = {
+            palabra: p.palabra,
+            categoria: p.categoria,
+            silabas: p.silabas,
+            pronunciacion: p.pronunciacion,
+            origen: p.origen
+        };
+
+        p.definiciones.forEach((d, i) => {
+            row[`def${i + 1}_texto`] = d.texto;
+            row[`def${i + 1}_ejemplo`] = d.ejemplo;
+        });
+
+        p.sinonimos.forEach((s, i) => {
+            row[`sinonimo${i + 1}`] = s;
+        });
+
+        return row;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Palabras');
+    XLSX.writeFile(wb, `dicciopeques_${fechaArchivo()}.xlsx`);
+    mostrarToast('XLSX exportado correctamente', 'success');
+}
+
+function descargarTemplateXLSX() {
+    if (typeof XLSX === 'undefined') {
+        mostrarToast('Error: Librería XLSX no cargada', 'error');
+        return;
+    }
+
+    const template = [{
+        palabra: 'ejemplo',
+        categoria: 'sustantivo',
+        silabas: 'ejem-plo',
+        pronunciacion: '/eˈxem.plo/',
+        origen: 'Del latín exemplum',
+        def1_texto: 'Texto de la primera definición',
+        def1_ejemplo: 'Ejemplo de uso',
+        def2_texto: 'Texto de la segunda definición (opcional)',
+        def2_ejemplo: 'Segundo ejemplo (opcional)',
+        sinonimo1: 'modelo',
+        sinonimo2: 'patrón'
+    }];
+
+    const ws = XLSX.utils.json_to_sheet(template);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template');
+    XLSX.writeFile(wb, 'dicciopeques_template.xlsx');
+    mostrarToast('Template XLSX descargado', 'success');
+}
+
+// ============================================================
+// UTILIDADES
+// ============================================================
+function descargarArchivo(blob, nombre) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombre;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function fechaArchivo() {
+    const d = new Date();
+    return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function mostrarToast(mensaje, tipo = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `admin-toast ${tipo}`;
+
+    const icono = tipo === 'success' ? 'fa-check-circle'
+        : tipo === 'error' ? 'fa-exclamation-circle'
+        : 'fa-info-circle';
+
+    toast.innerHTML = `<i class="fas ${icono}"></i> ${mensaje}`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+function initEventListeners() {
+    // Nueva palabra
+    document.getElementById('btnNueva').addEventListener('click', nuevaPalabra);
+
+    // Guardar
+    document.getElementById('formPalabra').addEventListener('submit', guardarPalabra);
+
+    // Cancelar / cerrar modal
+    document.getElementById('btnCancelar').addEventListener('click', cerrarModal);
+    document.getElementById('modalClose').addEventListener('click', cerrarModal);
+    document.getElementById('modalPalabra').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) cerrarModal();
+    });
+
+    // Agregar definición
+    document.getElementById('btnAgregarDef').addEventListener('click', () => {
+        const count = document.querySelectorAll('.def-item').length;
+        agregarDefBlock(count + 1);
+    });
+
+    // Buscador
+    document.getElementById('adminSearch').addEventListener('input', (e) => {
+        renderTabla(e.target.value.trim());
+    });
+
+    // Eliminar
+    document.getElementById('btnConfirmEliminar').addEventListener('click', eliminarPalabra);
+    document.getElementById('btnConfirmCancelar').addEventListener('click', () => {
+        palabraAEliminar = null;
+        document.getElementById('modalConfirmar').classList.remove('open');
+    });
+    document.getElementById('confirmClose').addEventListener('click', () => {
+        palabraAEliminar = null;
+        document.getElementById('modalConfirmar').classList.remove('open');
+    });
+    document.getElementById('modalConfirmar').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            palabraAEliminar = null;
+            e.currentTarget.classList.remove('open');
+        }
+    });
+
+    // Dropdowns
+    document.getElementById('btnImportar').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('importMenu').parentElement.classList.toggle('open');
+        document.getElementById('exportMenu').parentElement.classList.remove('open');
+    });
+    document.getElementById('btnExportar').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('exportMenu').parentElement.classList.toggle('open');
+        document.getElementById('importMenu').parentElement.classList.remove('open');
+    });
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.admin-dropdown').forEach(d => d.classList.remove('open'));
+    });
+
+    // Import JSON
+    document.getElementById('btnImportJSON').addEventListener('click', () => {
+        document.getElementById('fileInputJSON').click();
+    });
+    document.getElementById('fileInputJSON').addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            importarJSON(e.target.files[0]);
+            e.target.value = '';
+        }
+    });
+
+    // Import XLSX
+    document.getElementById('btnImportXLSX').addEventListener('click', () => {
+        document.getElementById('fileInputXLSX').click();
+    });
+    document.getElementById('fileInputXLSX').addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            importarXLSX(e.target.files[0]);
+            e.target.value = '';
+        }
+    });
+
+    // Export JSON
+    document.getElementById('btnExportJSON').addEventListener('click', exportarJSON);
+
+    // Export XLSX
+    document.getElementById('btnExportXLSX').addEventListener('click', exportarXLSX);
+
+    // Download templates
+    document.getElementById('btnDownloadTemplateJSON').addEventListener('click', descargarTemplateJSON);
+    document.getElementById('btnDownloadTemplateXLSX').addEventListener('click', descargarTemplateXLSX);
+
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            cerrarModal();
+            palabraAEliminar = null;
+            document.getElementById('modalConfirmar').classList.remove('open');
+        }
+    });
+}
