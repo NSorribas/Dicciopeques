@@ -1,5 +1,25 @@
 [
     {
+        "palabra": "Acendrado",
+        "categoria": "adjetivo",
+        "silabas": "A-cen-dra-do",
+        "pronunciacion": "/asenˈdɾaðo/",
+        "origen": "Del latín cinis (\"ceniza\")",
+        "definiciones": [
+            {
+                "texto": "Que es puro, sin mancha, ni defecto. Se utiliza frecuentemente para calificar sentimientos, virtudes o cualidades ideales.",
+                "ejemplo": "La joven mantenía una fe acendrada en sus ideales, a pesar de todas las dificultades que tuvo que enfrentar"
+            }
+        ],
+        "sinonimos": [
+            "Puro",
+            "purificado",
+            "refinado",
+            "casto",
+            "impecable"
+        ]
+    },
+    {
         "palabra": "alboroto",
         "categoria": "sustantivo",
         "silabas": "al-bo-ro-to",
@@ -24,712 +44,23 @@
         ]
     },
     {
-        "palabra": "atardecer",
-        "categoria": "verbo",
-        "silabas": "ar-ta-rde-cer",
-        "pronunciacion": "/aɾ.taɾ.ðeˈθeɾ/",
-        "origen": "Del latín ad tardescere, 'hacerse tarde'",
-        "definiciones": [
-            {
-                "texto": "Dicho del día: ir acabándose, ir cayendo la tarde.",
-                "ejemplo": "Nos sentamos en la terraza a atardecer."
-            },
-            {
-                "texto": "Llegar la tarde o el ocaso.",
-                "ejemplo": "Atardecía cuando por fin llegamos al pueblo."
-            }
-        ],
-        "sinonimos": [
-            "ocasentar",
-            "anochecer",
-            "caer la tarde"
-        ]
-    },
-    {
-        "palabra": "melancolía",
-        "categoria": "sustantivo",
-        "silabas": "me-lan-co-lí-a",
-        "pronunciacion": "/me.laŋ.koˈli.a/",
-        "origen": "Del griego melancholía, 'bilis negra'",
-        "definiciones": [
-            {
-                "texto": "Tristeza vaga, profunda y permanente, que no tiene causa concreta.",
-                "ejemplo": "Una melancolía dulce la invadía al escuchar esa canción."
-            },
-            {
-                "texto": "En medicina antigua, uno de los cuatro humores del cuerpo.",
-                "ejemplo": "La melancolía era considerada un exceso de bilis negra."
-            }
-        ],
-        "sinonimos": [
-            "tristeza",
-            "nostalgia",
-            "pena",
-            "desconsuelo",
-            "abatimiento"
-        ]
-    },
-    {
-        "palabra": "efímero",
+        "palabra": "Apoteósico",
         "categoria": "adjetivo",
-        "silabas": "e-fí-me-ro",
-        "pronunciacion": "/eˈfi.me.ɾo/",
-        "origen": "Del griego ephemeros, 'que dura un día'",
+        "silabas": "A-po-te-ó-si-co",
+        "pronunciacion": "/apoteˈosiko/",
+        "origen": "Del griego apothéōsis (deificación)",
         "definiciones": [
             {
-                "texto": "Que dura muy poco tiempo, pasajero, transitorio.",
-                "ejemplo": "La fama es efímera si no se cultiva con trabajo."
-            },
-            {
-                "texto": "En biología, dicho de un organismo: que vive muy poco tiempo.",
-                "ejemplo": "Las efímeras son insectos cuya vida adulta dura apenas horas."
+                "texto": "Que causa admiración o entusiasmo extremo; que tiene la magnificencia, el esplendor o la grandiosidad propia de una apoteosis.",
+                "ejemplo": "El concierto final tuvo un cierre apoteósico con fuegos artificiales y una ovación que duró más de diez minutos."
             }
         ],
         "sinonimos": [
-            "pasajero",
-            "transitorio",
-            "fugaz",
-            "breve",
-            "temporal"
-        ]
-    },
-    {
-        "palabra": "vehemencia",
-        "categoria": "sustantivo",
-        "silabas": "ve-he-men-cia",
-        "pronunciacion": "/be.eˈmen.θja/",
-        "origen": "Del latín vehementia",
-        "definiciones": [
-            {
-                "texto": "Cualidad de vehemente; impetuosidad, furor, violencia en el modo de actuar o hablar.",
-                "ejemplo": "Defendió sus ideas con vehemencia ante el tribunal."
-            },
-            {
-                "texto": "Intensidad grande de un sentimiento o pasión.",
-                "ejemplo": "La vehemencia de su amor la conducía a decisiones temerarias."
-            }
-        ],
-        "sinonimos": [
-            "impetuosidad",
-            "furia",
-            "ardor",
-            "pasión",
-            "ímpetu"
-        ]
-    },
-    {
-        "palabra": "desvelar",
-        "categoria": "verbo",
-        "silabas": "des-ve-lar",
-        "pronunciacion": "/des.beˈlaɾ/",
-        "origen": "Del prefijo des- + velar, del latín vigilare",
-        "definiciones": [
-            {
-                "texto": "Quitar el sueño, impedir que alguien duerma.",
-                "ejemplo": "La preocupación por el examen le desveló toda la noche."
-            },
-            {
-                "texto": "Descubrir o revelar algo oculto o secreto.",
-                "ejemplo": "El informe desveló datos alarmantes sobre la contaminación."
-            }
-        ],
-        "sinonimos": [
-            "insomniar",
-            "revelar",
-            "descubrir",
-            "destapar"
-        ]
-    },
-    {
-        "palabra": "serendipia",
-        "categoria": "sustantivo",
-        "silabas": "se-ren-di-pia",
-        "pronunciacion": "/se.ɾenˈdi.pja/",
-        "origen": "Del inglés serendipity, acuñado por Horace Walpole en 1754, inspirado en un cuento persa",
-        "definiciones": [
-            {
-                "texto": "Hallazgo valioso que se produce de manera accidental o inesperada, mientras se buscaba otra cosa.",
-                "ejemplo": "El descubrimiento de la penicilina fue una serendipia científica."
-            },
-            {
-                "texto": "Cualidad de hacer descubrimientos por accidente y sagacidad.",
-                "ejemplo": "Su serendipia le llevó a encontrar la solución mientras paseaba."
-            }
-        ],
-        "sinonimos": [
-            "hallazgo",
-            "descubrimiento casual",
-            "casualidad afortunada"
-        ]
-    },
-    {
-        "palabra": "susurrar",
-        "categoria": "verbo",
-        "silabas": "su-su-rrar",
-        "pronunciacion": "/su.suˈɾaɾ/",
-        "origen": "Del latín susurrare, onomatopéyico",
-        "definiciones": [
-            {
-                "texto": "Hablar en voz muy baja, de modo que solo se oiga un sonido suave y confuso.",
-                "ejemplo": "Le susurró al oído que la amaba."
-            },
-            {
-                "texto": "Producir un sonido suave y continuado, como el viento entre las hojas.",
-                "ejemplo": "La brisa susurraba entre los álamos del parque."
-            }
-        ],
-        "sinonimos": [
-            "cuchichear",
-            "murmurar",
-            "murmullar"
-        ]
-    },
-    {
-        "palabra": "petricor",
-        "categoria": "sustantivo",
-        "silabas": "pe-tri-cor",
-        "pronunciacion": "/pe.tɾiˈkoɾ/",
-        "origen": "Del griego petra (piedra) + ichor (líquido que fluía por las venas de los dioses), acuñado en 1964",
-        "definiciones": [
-            {
-                "texto": "Olor terroso y agradable que se produce cuando llueve sobre suelo seco.",
-                "ejemplo": "Tras la primera tormenta del otoño, el petricor inundó el jardín."
-            }
-        ],
-        "sinonimos": [
-            "olor a tierra mojada",
-            "aroma pluvial"
-        ]
-    },
-    {
-        "palabra": "inefable",
-        "categoria": "adjetivo",
-        "silabas": "i-ne-fa-ble",
-        "pronunciacion": "/i.neˈfa.βle/",
-        "origen": "Del latín ineffabilis, 'que no se puede expresar con palabras'",
-        "definiciones": [
-            {
-                "texto": "Que no se puede explicar o describir con palabras por su intensidad o naturaleza.",
-                "ejemplo": "Sintió un gozo inefable al ver a su hija después de tantos años."
-            },
-            {
-                "texto": "Que debe guardarse en silencio, por respeto o misterio.",
-                "ejemplo": "El nombre de Dios era considerado inefable en la tradición hebrea."
-            }
-        ],
-        "sinonimos": [
-            "inexpresable",
-            "indescriptible",
-            "indecible"
-        ]
-    },
-    {
-        "palabra": "luminiscencia",
-        "categoria": "sustantivo",
-        "silabas": "lu-mi-nis-cen-cia",
-        "pronunciacion": "/lu.mi.nisˈθen.θja/",
-        "origen": "Del latín lumen (luz) + -escencia",
-        "definiciones": [
-            {
-                "texto": "Emisión de luz por un cuerpo que no está incandescente, producida por causas distintas a la temperatura elevada.",
-                "ejemplo": "La luminiscencia de las luciérnagas ilumina el campo en verano."
-            },
-            {
-                "texto": "En sentido figurado, cualidad de brillar o destacar de forma especial.",
-                "ejemplo": "La luminiscencia de su talento era evidente en cada obra."
-            }
-        ],
-        "sinonimos": [
-            "fosforescencia",
-            "fluorescencia",
-            "resplandor",
-            "brillo"
-        ]
-    },
-    {
-        "palabra": "amanecer",
-        "categoria": "verbo",
-        "silabas": "a-ma-ne-cer",
-        "pronunciacion": "/a.ma.neˈθeɾ/",
-        "origen": "Del latín ad manescere, 'hacerse mañana'",
-        "definiciones": [
-            {
-                "texto": "Llegar la mañana, empezar a aparecer la luz del sol.",
-                "ejemplo": "Amaneció nublado pero luego salió el sol."
-            },
-            {
-                "texto": "Encontrarse en determinado estado al llegar la mañana.",
-                "ejemplo": "Amaneció con fiebre y tuvo que quedarse en cama."
-            }
-        ],
-        "sinonimos": [
-            "alborear",
-            "rayar el alba",
-            "despuntar el día"
-        ]
-    },
-    {
-        "palabra": "recóndito",
-        "categoria": "adjetivo",
-        "silabas": "re-cón-di-to",
-        "pronunciacion": "/reˈkon.di.to/",
-        "origen": "Del latín reconditus, 'escondido, oculto'",
-        "definiciones": [
-            {
-                "texto": "Muy escondido, oculto o difícil de alcanzar.",
-                "ejemplo": "En un rincón recóndito del bosque encontraron la cueva."
-            },
-            {
-                "texto": "Profundo, en sentido figurado, referido a pensamientos o sentimientos.",
-                "ejemplo": "Guardaba en lo más recóndito de su memoria aquel verano."
-            }
-        ],
-        "sinonimos": [
-            "oculto",
-            "escondido",
-            "arcano",
-            "profundo",
-            "ignoto"
-        ]
-    },
-    {
-        "palabra": "ondular",
-        "categoria": "verbo",
-        "silabas": "on-du-lar",
-        "pronunciacion": "/on.duˈlaɾ/",
-        "origen": "Del latín undulare, derivado de unda (ola)",
-        "definiciones": [
-            {
-                "texto": "Moverse formando ondulaciones, con movimiento semejante al de las olas.",
-                "ejemplo": "La bandera ondulaba con el viento de la montaña."
-            },
-            {
-                "texto": "Dar forma de onda a algo.",
-                "ejemplo": "El peluquero le onduló el cabello con tenacillas."
-            }
-        ],
-        "sinonimos": [
-            "ondear",
-            "flamear",
-            "culebrear",
-            "serpentear"
-        ]
-    },
-    {
-        "palabra": "perenne",
-        "categoria": "adjetivo",
-        "silabas": "pe-ren-ne",
-        "pronunciacion": "/peˈren.ne/",
-        "origen": "Del latín perennis, 'que dura todo el año'",
-        "definiciones": [
-            {
-                "texto": "Que dura para siempre o por mucho tiempo, continuo, incesante.",
-                "ejemplo": "El perenne debate entre la razón y la emoción."
-            },
-            {
-                "texto": "En botánica, dicho de una planta: que vive más de dos años.",
-                "ejemplo": "Los robles son árboles perennes que pueden vivir siglos."
-            }
-        ],
-        "sinonimos": [
-            "eterno",
-            "constante",
-            "continuo",
-            "imperecedero",
-            "inagotable"
-        ]
-    },
-    {
-        "palabra": "madrugar",
-        "categoria": "verbo",
-        "silabas": "ma-dru-gar",
-        "pronunciacion": "/ma.ðɾuˈɣaɾ/",
-        "origen": "De madrugada, del latín matutinus, 'relativo a la mañana'",
-        "definiciones": [
-            {
-                "texto": "Levantarse muy de mañana, antes de lo acostumbrado.",
-                "ejemplo": "Madruga y verás el amanecer más hermoso del año."
-            },
-            {
-                "texto": "Llegar antes que otros a algo, anticiparse.",
-                "ejemplo": "Madrugó en la fila para conseguir las entradas."
-            }
-        ],
-        "sinonimos": [
-            "levantarse temprano",
-            "madronear",
-            "anticiparse"
-        ]
-    },
-    {
-        "palabra": "azabache",
-        "categoria": "sustantivo",
-        "silabas": "a-za-ba-che",
-        "pronunciacion": "/a.θaˈβa.tʃe/",
-        "origen": "Del árabe as-sabach, 'piedra negra'",
-        "definiciones": [
-            {
-                "texto": "Variedad de lignito negra, muy compacta y ligera, que admite buen pulimento. Se usa en joyería.",
-                "ejemplo": "Llevaba un colgante de azabache heredado de su abuela."
-            },
-            {
-                "texto": "De color negro intenso y brillante.",
-                "ejemplo": "Sus ojos eran de un azabache profundo e insondable."
-            }
-        ],
-        "sinonimos": [
-            "lignito",
-            "jet",
-            "negro intenso",
-            "ébano"
-        ]
-    },
-    {
-        "palabra": "sobremesa",
-        "categoria": "sustantivo",
-        "silabas": "so-bre-me-sa",
-        "pronunciacion": "/so.βɾeˈme.sa/",
-        "origen": "De sobre + mesa",
-        "definiciones": [
-            {
-                "texto": "Tiempo que se está a la mesa después de haber comido, conversando.",
-                "ejemplo": "La sobremesa se alargó con café y historias de la infancia."
-            },
-            {
-                "texto": "Mueble que se coloca sobre la mesa para adornarla o protegerla.",
-                "ejemplo": "Compró una sobremesa de tela bordada para el comedor."
-            }
-        ],
-        "sinonimos": [
-            "sobremesa",
-            "tertulia",
-            "poscomida",
-            "conversación"
-        ]
-    },
-    {
-        "palabra": "quirúrgico",
-        "categoria": "adjetivo",
-        "silabas": "qui-rúr-gi-co",
-        "pronunciacion": "/kiˈɾuɾ.xi.ko/",
-        "origen": "Del griego cheirurgiké, 'relativo a la cirugía'",
-        "definiciones": [
-            {
-                "texto": "Perteneciente o relativo a la cirugía.",
-                "ejemplo": "El equipo quirúrgico estaba preparado para la intervención."
-            },
-            {
-                "texto": "En sentido figurado, preciso, exacto, sin margen de error.",
-                "ejemplo": "Hizo un análisis quirúrgico del problema, sin dejar cabo suelto."
-            }
-        ],
-        "sinonimos": [
-            "operatorio",
-            "preciso",
-            "exacto",
-            "clínico"
-        ]
-    },
-    {
-        "palabra": "deshacer",
-        "categoria": "verbo",
-        "silabas": "des-ha-cer",
-        "pronunciacion": "/des.aˈθeɾ/",
-        "origen": "Del latín disfacere, 'deshacer, desbaratar'",
-        "definiciones": [
-            {
-                "texto": "Destruir, desbaratar o descomponer algo hecho.",
-                "ejemplo": "Tuvo que deshacer el nudo con paciencia."
-            },
-            {
-                "texto": "Anular, revocar lo mandado o resuelto.",
-                "ejemplo": "El juez decidió deshacer el contrato por falta de pruebas."
-            },
-            {
-                "texto": "Derretir o disolver algo sólido.",
-                "ejemplo": "Deshizo el chocolate al baño maría para la tarta."
-            }
-        ],
-        "sinonimos": [
-            "desbaratar",
-            "anular",
-            "derretir",
-            "desatar",
-            "disolver"
-        ]
-    },
-    {
-        "palabra": "aurora",
-        "categoria": "sustantivo",
-        "silabas": "au-ro-ra",
-        "pronunciacion": "/auˈɾo.ɾa/",
-        "origen": "Del latín aurora, 'amanecer', diosa romana del alba",
-        "definiciones": [
-            {
-                "texto": "Luz que aparece en el horizonte antes de salir el sol.",
-                "ejemplo": "La aurora pintaba el cielo de rosa y dorado."
-            },
-            {
-                "texto": "Principio u origen de algo.",
-                "ejemplo": "Aquel encuentro marcó el aurora de una larga amistad."
-            }
-        ],
-        "sinonimos": [
-            "alba",
-            "amanecer",
-            "alborada",
-            "despertar"
-        ]
-    },
-    {
-        "palabra": "obstante",
-        "categoria": "adverbio",
-        "silabas": "obs-tan-te",
-        "pronunciacion": "/obˈstan.te/",
-        "origen": "Del latín obstantem, 'que se opone'",
-        "definiciones": [
-            {
-                "texto": "Sin embargo, no obstante, con todo. Indica oposición o contraste respecto de lo dicho antes.",
-                "ejemplo": "Hacía frío; obstante, salieron a caminar por la sierra."
-            }
-        ],
-        "sinonimos": [
-            "sin embargo",
-            "no obstante",
-            "con todo",
-            "empero"
-        ]
-    },
-    {
-        "palabra": "pandereta",
-        "categoria": "sustantivo",
-        "silabas": "pan-de-re-ta",
-        "pronunciacion": "/pan.deˈɾe.ta/",
-        "origen": "Del latín pandorium, instrumento musical",
-        "definiciones": [
-            {
-                "texto": "Instrumento musical de percusión, semejante a la pandereta pero con sonajas de metal.",
-                "ejemplo": "En la fiesta gallega tocaban la pandereta y la gaita."
-            },
-            {
-                "texto": "En sentido figurado, cosa intrascendente o de poca importancia.",
-                "ejemplo": "No me vengas con panderetas, quiero resultados serios."
-            }
-        ],
-        "sinonimos": [
-            "pandero",
-            "tamboril",
-            "instrumento de percusión"
-        ]
-    },
-    {
-        "palabra": "etéreos",
-        "categoria": "adjetivo",
-        "silabas": "e-té-re-os",
-        "pronunciacion": "/eˈte.ɾe.os/",
-        "origen": "Del latín aetherius, 'del éter, celeste'",
-        "definiciones": [
-            {
-                "texto": "Muy sutil, delicado o ligero, como si no perteneciera al mundo material.",
-                "ejemplo": "Las nubes formaban figuras etéreas en el cielo del atardecer."
-            },
-            {
-                "texto": "Perteneciente o relativo al éter, al cielo o a las regiones superiores del aire.",
-                "ejemplo": "Los poetas románticos buscaban lo etéreo en sus versos."
-            }
-        ],
-        "sinonimos": [
-            "sutil",
-            "aéreo",
-            "incorpóreo",
-            "celestial",
-            "evanescente"
-        ]
-    },
-    {
-        "palabra": "encandilar",
-        "categoria": "verbo",
-        "silabas": "en-can-di-lar",
-        "pronunciacion": "/eŋ.kan.diˈlaɾ/",
-        "origen": "De en- + cándila (vela, candil)",
-        "definiciones": [
-            {
-                "texto": "Deslumbrar con luz excesiva, cegar momentáneamente.",
-                "ejemplo": "El sol le encandiló al salir del túnel."
-            },
-            {
-                "texto": "Enamorar o fascinar a alguien, hechizar.",
-                "ejemplo": "La encandiló con sus palabras y su elegancia."
-            }
-        ],
-        "sinonimos": [
-            "deslumbrar",
-            "cegar",
-            "fascinar",
-            "hechizar",
-            "enamorar"
-        ]
-    },
-    {
-        "palabra": "noctámbulo",
-        "categoria": "adjetivo",
-        "silabas": "noc-tám-bu-lo",
-        "pronunciacion": "/nokˈtam.bu.lo/",
-        "origen": "Del latín nocte + ambulare, 'caminar de noche'",
-        "definiciones": [
-            {
-                "texto": "Que tiene costumbre de velar o pasear de noche.",
-                "ejemplo": "Era un noctámbulo empedernido: su mejor inspiración llegaba pasadas las dos."
-            },
-            {
-                "texto": "Dicho de un animal: activo durante la noche.",
-                "ejemplo": "Los búhos son aves noctámbulas por excelencia."
-            }
-        ],
-        "sinonimos": [
-            "trasnochador",
-            "nocturno",
-            "velador",
-            "ruiseñor"
-        ]
-    },
-    {
-        "palabra": "desasosiego",
-        "categoria": "sustantivo",
-        "silabas": "de-sa-so-sie-go",
-        "pronunciacion": "/des.a.soˈsje.ɣo/",
-        "origen": "De des- + sosiego",
-        "definiciones": [
-            {
-                "texto": "Falta de sosiego, inquietud, desazón.",
-                "ejemplo": "Un profundo desasosiego se apoderó de ella al leer la carta."
-            },
-            {
-                "texto": "Estado de intranquilidad o perturbación del ánimo.",
-                "ejemplo": "El desasosiego ciudadano crecía con cada nueva medida."
-            }
-        ],
-        "sinonimos": [
-            "inquietud",
-            "desazón",
-            "ansiedad",
-            "desconcierto",
-            "intranquilidad"
-        ]
-    },
-    {
-        "palabra": "ojalá",
-        "categoria": "expresion",
-        "silabas": "o-ja-lá",
-        "pronunciacion": "/o.xaˈla/",
-        "origen": "Del árabe andalusí law šá lláh, 'si Dios quiere'",
-        "definiciones": [
-            {
-                "texto": "Expresión que denota vivo deseo de que algo suceda o no suceda.",
-                "ejemplo": "Ojalá llueva mañana y se llenen los embalses."
-            },
-            {
-                "texto": "Con subjuntivo: indica deseo irrealizable o improbable.",
-                "ejemplo": "Ojalá pudiera volver atrás y cambiar esa decisión."
-            }
-        ],
-        "sinonimos": [
-            "Dios quiera",
-            "ojalá que",
-            "quién pudiera"
-        ]
-    },
-    {
-        "palabra": "traslúcida",
-        "categoria": "adjetivo",
-        "silabas": "tras-lú-ci-da",
-        "pronunciacion": "/tɾasˈlu.θi.ða/",
-        "origen": "Del latín translucere, 'traspasar la luz'",
-        "definiciones": [
-            {
-                "texto": "Que deja pasar la luz de forma difusa, sin permitir ver con claridad los objetos al otro lado.",
-                "ejemplo": "La cortina traslúcida dejaba entrar una luz suave y difusa."
-            },
-            {
-                "texto": "En sentido figurado, claro, evidente, fácil de percibir.",
-                "ejemplo": "Sus intenciones eran traslúcidas para todos menos para él."
-            }
-        ],
-        "sinonimos": [
-            "translúcida",
-            "semitransparente",
-            "nítida",
-            "diáfana"
-        ]
-    },
-    {
-        "palabra": "albahaca",
-        "categoria": "sustantivo",
-        "silabas": "al-ba-ha-ca",
-        "pronunciacion": "/al.baˈa.ka/",
-        "origen": "Del árabe al-habaqa, 'la albahaca'",
-        "definiciones": [
-            {
-                "texto": "Planta aromática anual de la familia de las labiadas, con hojas de suave perfume, usada en cocina y perfumería.",
-                "ejemplo": "Preparó una salsa pesto con albahaca fresca del huerto."
-            },
-            {
-                "texto": "En algunas culturas, símbolo de amor y protección.",
-                "ejemplo": "En la ventana siempre había una maceta de albahaca contra el mal de ojo."
-            }
-        ],
-        "sinonimos": [
-            "basílico",
-            "hierba real",
-            "hierba santa"
-        ]
-    },
-    {
-        "palabra": "menguar",
-        "categoria": "verbo",
-        "silabas": "men-guar",
-        "pronunciacion": "/menˈɣwaɾ/",
-        "origen": "Del latín minuere, 'disminuir'",
-        "definiciones": [
-            {
-                "texto": "Ir disminuyendo o reduciéndose algo, ir perdiendo intensidad o cantidad.",
-                "ejemplo": "La luna comenzó a menguar tras la noche de plenilunio."
-            },
-            {
-                "texto": "Disminuir, mermar, hacer menor algo.",
-                "ejemplo": "Nada podía menguar su entusiasmo por la música."
-            }
-        ],
-        "sinonimos": [
-            "disminuir",
-            "decrecer",
-            "mermar",
-            "decaer",
-            "achicarse"
-        ]
-    },
-    {
-        "palabra": "hondonada",
-        "categoria": "sustantivo",
-        "silabas": "hon-do-na-da",
-        "pronunciacion": "/on.doˈna.ða/",
-        "origen": "De hondo + -ada",
-        "definiciones": [
-            {
-                "texto": "Depresión del terreno, valle profundo entre montañas o colinas.",
-                "ejemplo": "El pueblo se escondía en una hondonada verde y fértil."
-            },
-            {
-                "texto": "En sentido figurado, situación baja o desfavorable.",
-                "ejemplo": "Tras la hondonada de la crisis, llegó la recuperación."
-            }
-        ],
-        "sinonimos": [
-            "valle",
-            "depresión",
-            "hoyada",
-            "cañada",
-            "cuenca"
+            "Espléndido",
+            "grandioso",
+            "triunfal",
+            "magnífico",
+            "memorable"
         ]
     },
     {
@@ -757,97 +88,228 @@
         ]
     },
     {
-        "palabra": "madrugada",
+        "palabra": "Ataraxia",
         "categoria": "sustantivo",
-        "silabas": "ma-dru-ga-da",
-        "pronunciacion": "/ma.ðɾuˈɣa.ða/",
-        "origen": "De madrugar, del latín matutinus",
+        "silabas": "A-ta-ra-xia",
+        "pronunciacion": "/ataˈɾaksja/",
+        "origen": "Del griego ataraxía (ἀταραξία)",
         "definiciones": [
             {
-                "texto": "Primeras horas del día, desde que empieza a amanecer hasta que sale el sol.",
-                "ejemplo": "Se levantó de madrugada para no perder el tren."
+                "texto": "Estado de serenidad, tranquilidad absoluta o imperturbabilidad del ánimo. En la filosofía helenística (especialmente en el epicureísmo, el estoicismo y el escepticismo), era considerada la meta final de la vida, alcanzada al liberarse de los temores y las preocupaciones que agitan el alma.",
+                "ejemplo": "Tras años de intensa búsqueda espiritual, finalmente alcanzó esa ataraxia que le permitía ver los problemas diarios con una calma imperturbable."
+            }
+        ],
+        "sinonimos": [
+            "Serenidad",
+            "imperturbabilidad",
+            "imperturbación",
+            "paz",
+            "sosiego",
+            "tranquilidad"
+        ]
+    },
+    {
+        "palabra": "aurora",
+        "categoria": "sustantivo",
+        "silabas": "au-ro-ra",
+        "pronunciacion": "/auˈɾo.ɾa/",
+        "origen": "Del latín aurora, 'amanecer', diosa romana del alba",
+        "definiciones": [
+            {
+                "texto": "Luz que aparece en el horizonte antes de salir el sol.",
+                "ejemplo": "La aurora pintaba el cielo de rosa y dorado."
             },
             {
-                "texto": "Tiempo que transcurre desde la medianoche hasta el amanecer.",
-                "ejemplo": "La madrugada es el momento más silencioso de la ciudad."
+                "texto": "Principio u origen de algo.",
+                "ejemplo": "Aquel encuentro marcó el aurora de una larga amistad."
             }
         ],
         "sinonimos": [
             "alba",
             "amanecer",
-            "primeras horas",
-            "alborada"
+            "alborada",
+            "despertar"
         ]
     },
     {
-        "palabra": "dichoso",
-        "categoria": "adjetivo",
-        "silabas": "di-cho-so",
-        "pronunciacion": "/diˈtʃo.so/",
-        "origen": "Del latín dictiosus, 'feliz, afortunado'",
-        "definiciones": [
-            {
-                "texto": "Feliz, afortunado, que tiene dicha.",
-                "ejemplo": "Era un dichoso que siempre encontraba motivos para sonreír."
-            },
-            {
-                "texto": "Irónicamente, molesto, fastidioso, maldito.",
-                "ejemplo": "El dichoso coche se volvió a averiar en el peor momento."
-            }
-        ],
-        "sinonimos": [
-            "feliz",
-            "afortunado",
-            "bienaventurado",
-            "maldito (irónico)"
-        ]
-    },
-    {
-        "palabra": "esparcir",
-        "categoria": "verbo",
-        "silabas": "es-par-cir",
-        "pronunciacion": "/es.paɾˈθiɾ/",
-        "origen": "Del latín spargere, 'esparcir, derramar'",
-        "definiciones": [
-            {
-                "texto": "Derramar, extender o distribuir algo por diversas partes.",
-                "ejemplo": "El viento esparció las semillas por todo el prado."
-            },
-            {
-                "texto": "Divertirse, recrearse, distraerse.",
-                "ejemplo": "Los niños se esparcieron por el parque riendo y corriendo."
-            }
-        ],
-        "sinonimos": [
-            "derramar",
-            "diseminar",
-            "desparramar",
-            "repartir",
-            "expandir"
-        ]
-    },
-    {
-        "palabra": "candil",
+        "palabra": "azabache",
         "categoria": "sustantivo",
-        "silabas": "can-dil",
-        "pronunciacion": "/kanˈdil/",
-        "origen": "Del árabe qandīl, 'lámpara', del griego kandēlē",
+        "silabas": "a-za-ba-che",
+        "pronunciacion": "/a.θaˈβa.tʃe/",
+        "origen": "Del árabe as-sabach, 'piedra negra'",
         "definiciones": [
             {
-                "texto": "Lámpara portátil con aceite y mecha, usada antiguamente para alumbrar.",
-                "ejemplo": "El anciano bajó al sótano con un candil tembloroso."
+                "texto": "Variedad de lignito negra, muy compacta y ligera, que admite buen pulimento. Se usa en joyería.",
+                "ejemplo": "Llevaba un colgante de azabache heredado de su abuela."
             },
             {
-                "texto": "En sentido figurado, persona o cosa que sirve de guía o luz.",
-                "ejemplo": "Fue el candil que iluminó el camino de sus discípulos."
+                "texto": "De color negro intenso y brillante.",
+                "ejemplo": "Sus ojos eran de un azabache profundo e insondable."
             }
         ],
         "sinonimos": [
-            "lámpara",
-            "linterna",
-            "vela",
-            "farol",
-            "mechero"
+            "lignito",
+            "jet",
+            "negro intenso",
+            "ébano"
+        ]
+    },
+    {
+        "palabra": "Badulaque",
+        "categoria": "adjetivo",
+        "silabas": "Ba-du-laq-ue",
+        "pronunciacion": "/baduˈlake/",
+        "origen": "De origen incierto; se cree que podría provenir del árabe hispánico baṭa l-aḥmaq (\"el necio\" o \"el tonto\").",
+        "definiciones": [
+            {
+                "texto": "Persona necia, insustancial, atolondrada o de poco juicio. También se utiliza en algunos contextos para referirse a un conjunto de cosas inútiles o sin valor.",
+                "ejemplo": "No le hagas caso a ese badulaque; siempre está presumiendo de negocios que no existen."
+            }
+        ],
+        "sinonimos": [
+            "Necio",
+            "atolondrado",
+            "memo",
+            "insensato",
+            "tontolaba"
+        ]
+    },
+    {
+        "palabra": "Baladí",
+        "categoria": "adjetivo",
+        "silabas": "Ba-la-dí",
+        "pronunciacion": "/balaˈði/",
+        "origen": "Del árabe hispánico baladí, que significa \"del país\" o \"propio del país\"",
+        "definiciones": [
+            {
+                "texto": "Que es de poca importancia, trivial o insignificante.",
+                "ejemplo": "Se enojó por una cuestión baladí que pudo haberse resuelto con una simple conversación"
+            }
+        ],
+        "sinonimos": [
+            "Trivial",
+            "insignificante",
+            "irrelevante",
+            "fútil",
+            "nimio"
+        ]
+    },
+    {
+        "palabra": "Baluarte",
+        "categoria": "sustantivo",
+        "silabas": "Ba-luar-te",
+        "pronunciacion": "/ba-lwar-te/",
+        "origen": "Del francés boulevart, y este del neerlandés bolwerk.",
+        "definiciones": [
+            {
+                "texto": "Muro exterior de una fortaleza, que por lo común está a nivel del foso.",
+                "ejemplo": "Las tropas se resguardaron tras el viejo baluarte de piedra."
+            },
+            {
+                "texto": "Lugar, persona o cosa que defiende o protege algo.",
+                "ejemplo": "La anciana se convirtió en el baluarte de la familia durante la crisis económica."
+            }
+        ],
+        "sinonimos": [
+            "Fortaleza",
+            "bastión",
+            "defensa",
+            "amparo."
+        ]
+    },
+    {
+        "palabra": "Beldad",
+        "categoria": "sustantivo",
+        "silabas": "Bel-dad",
+        "pronunciacion": "/bel-dad/",
+        "origen": "Del latín bellitatem",
+        "definiciones": [
+            {
+                "texto": "Belleza extrema, hermosura (término literario o poético).",
+                "ejemplo": "La beldad de la princesa deslumbraba a todos los cortesanos del reino."
+            }
+        ],
+        "sinonimos": [
+            "Hermosura",
+            "belleza",
+            "lozanía",
+            "apostura."
+        ]
+    },
+    {
+        "palabra": "Bisoño",
+        "categoria": "adjetivo",
+        "silabas": "Bi-so-ño",
+        "pronunciacion": "/bi-so-ɲo/",
+        "origen": "De origen incierto, posiblemente del latín bisonus (de dos años), o de raíces vascas.",
+        "definiciones": [
+            {
+                "texto": "Novicio, inexperto, que acaba de entrar en un oficio, estado o cargo.",
+                "ejemplo": "El bisoño soldado temblaba durante su primera noche de guardia."
+            }
+        ],
+        "sinonimos": [
+            "Novel",
+            "principiante",
+            "novato",
+            "aprendiz."
+        ]
+    },
+    {
+        "palabra": "Bonhomía",
+        "categoria": "sustantivo",
+        "silabas": "Bon-ho-mí-a",
+        "pronunciacion": "/bonoˈmia/",
+        "origen": "Del francés bonhomie, derivado de bonhomme (\"buen hombre\")",
+        "definiciones": [
+            {
+                "texto": "Afabilidad, sencillez, bondad y honradez en el carácter y en el comportamiento.",
+                "ejemplo": "Todo el pueblo le tenía gran aprecio por su natural bonhomía y su disposición constante a ayudar al prójimo."
+            }
+        ],
+        "sinonimos": [
+            "Afabilidad",
+            "bondad",
+            "sencillez",
+            "amabilidad",
+            "rectitud"
+        ]
+    },
+    {
+        "palabra": "Cafuné",
+        "categoria": "sustantivo",
+        "silabas": "Ca-fu-né",
+        "pronunciacion": "/kafuˈne/",
+        "origen": "Proviene del portugués brasileño cafuné, el cual tiene su origen en el idioma kimbundu",
+        "definiciones": [
+            {
+                "texto": "Acción de pasar los dedos suavemente por el cabello o la cabeza de alguien, generalmente como una muestra de afecto, cariño o para ayudar a relajar a la persona.",
+                "ejemplo": "Después de un largo día de trabajo, lo único que ella quería era un poco de paz y un suave cafuné mientras descansaba en el sofá."
+            }
+        ],
+        "sinonimos": [
+            "Acariciamiento",
+            "caricia (específicamente en la cabeza)"
+        ]
+    },
+    {
+        "palabra": "Cavilación",
+        "categoria": "sustantivo",
+        "silabas": "Ca-vi-la-ción",
+        "pronunciacion": "/kaβilaˈsjon/",
+        "origen": "Del latín cavillatio, que significa \"burla\" o \"sarcasmo\", pero que evolucionó en el uso del castellano hacia el sentido de \"reflexión profunda\" o \"discurrir sobre algo\"",
+        "definiciones": [
+            {
+                "texto": "Acción de pensar profunda o detenidamente en algo, a menudo con preocupación, duda o inquietud.",
+                "ejemplo": "Tras horas de cavilación, decidió que lo mejor para su carrera era aceptar la oferta de trabajo en el extranjero."
+            }
+        ],
+        "sinonimos": [
+            "Reflexión",
+            "meditación",
+            "lucubración",
+            "elucubración",
+            "pensamiento"
         ]
     },
     {
@@ -875,6 +337,43 @@
         ]
     },
     {
+        "palabra": "Circunspecto",
+        "categoria": "adjetivo",
+        "silabas": "Cir-cuns-pec-to",
+        "pronunciacion": "/sirkunsˈpekto/",
+        "origen": "Del latín circumspectus, participio de circumspicere (\"mirar alrededor\")",
+        "definiciones": [
+            {
+                "texto": "Que muestra prudencia, reserva o moderación al hablar o actuar, especialmente por reflexión o temor a las consecuencias.",
+                "ejemplo": "Ante la inesperada pregunta de los periodistas, el diplomático se mantuvo circunspecto y evitó dar una respuesta apresurada."
+            }
+        ],
+        "sinonimos": [
+            "Prudente",
+            "cauto",
+            "reservado",
+            "mesurado",
+            "discreto."
+        ]
+    },
+    {
+        "palabra": "Clinomania",
+        "categoria": "sustantivo",
+        "silabas": "cli-no-ma-ní-a",
+        "pronunciacion": "/klinomanía/",
+        "origen": "Del griego Kline y manía",
+        "definiciones": [
+            {
+                "texto": "trastorno de ansiedad y del estado de ánimo caracterizado por un deseo incontrolable y obsesivo de permanecer acostado en la cama",
+                "ejemplo": "El psicólogo sugirió que su constante necesidad de no levantarse de la cama podría tratarse de un cuadro de clinomanía"
+            }
+        ],
+        "sinonimos": [
+            "Clinofilia",
+            "Disania"
+        ]
+    },
+    {
         "palabra": "conque",
         "categoria": "conjugacion",
         "silabas": "con-que",
@@ -895,6 +394,719 @@
             "por tanto",
             "de modo que",
             "luego"
+        ]
+    },
+    {
+        "palabra": "Contumaz",
+        "categoria": "adjetivo",
+        "silabas": "Con-tu-maz",
+        "pronunciacion": "/kon.tu.ˈmas/",
+        "origen": "Del latín contumax, contumācis",
+        "definiciones": [
+            {
+                "texto": "Persona que se mantiene firme o persistente en un error, actitud u opinión a pesar de las advertencias",
+                "ejemplo": "A pesar de las múltiples advertencias de los médicos, el paciente se mostró contumaz y se negó a abandonar sus malos hábitos"
+            },
+            {
+                "texto": "se refiere al acusado que se niega a comparecer ante el tribunal o a cumplir una orden judicial (declarado en rebeldía)",
+                "ejemplo": ""
+            }
+        ],
+        "sinonimos": [
+            "Porfiado",
+            "terco",
+            "obstinado",
+            "pertinaz",
+            "rebelde"
+        ]
+    },
+    {
+        "palabra": "Crepúsculo",
+        "categoria": "sustantivo",
+        "silabas": "Cre-pús-cu-lo",
+        "pronunciacion": "/krep-us-ku-lo/",
+        "origen": "Del latín crepusculum",
+        "definiciones": [
+            {
+                "texto": "Luz que hay después de puesto el sol, antes de que oscurezca del todo.",
+                "ejemplo": "Paseamos tomados de la mano bajo el crepúsculo vespertino."
+            }
+        ],
+        "sinonimos": [
+            "Albor",
+            "ocaso",
+            "atardecer."
+        ]
+    },
+    {
+        "palabra": "desasosiego",
+        "categoria": "sustantivo",
+        "silabas": "de-sa-so-sie-go",
+        "pronunciacion": "/des.a.soˈsje.ɣo/",
+        "origen": "De des- + sosiego",
+        "definiciones": [
+            {
+                "texto": "Falta de sosiego, inquietud, desazón.",
+                "ejemplo": "Un profundo desasosiego se apoderó de ella al leer la carta."
+            },
+            {
+                "texto": "Estado de intranquilidad o perturbación del ánimo.",
+                "ejemplo": "El desasosiego ciudadano crecía con cada nueva medida."
+            }
+        ],
+        "sinonimos": [
+            "inquietud",
+            "desazón",
+            "ansiedad",
+            "desconcierto",
+            "intranquilidad"
+        ]
+    },
+    {
+        "palabra": "desvelar",
+        "categoria": "verbo",
+        "silabas": "des-ve-lar",
+        "pronunciacion": "/des.beˈlaɾ/",
+        "origen": "Del prefijo des- + velar, del latín vigilare",
+        "definiciones": [
+            {
+                "texto": "Quitar el sueño, impedir que alguien duerma.",
+                "ejemplo": "La preocupación por el examen le desveló toda la noche."
+            },
+            {
+                "texto": "Descubrir o revelar algo oculto o secreto.",
+                "ejemplo": "El informe desveló datos alarmantes sobre la contaminación."
+            }
+        ],
+        "sinonimos": [
+            "insomniar",
+            "revelar",
+            "descubrir",
+            "destapar"
+        ]
+    },
+    {
+        "palabra": "dichoso",
+        "categoria": "adjetivo",
+        "silabas": "di-cho-so",
+        "pronunciacion": "/diˈtʃo.so/",
+        "origen": "Del latín dictiosus, 'feliz, afortunado'",
+        "definiciones": [
+            {
+                "texto": "Feliz, afortunado, que tiene dicha.",
+                "ejemplo": "Era un dichoso que siempre encontraba motivos para sonreír."
+            },
+            {
+                "texto": "Irónicamente, molesto, fastidioso, maldito.",
+                "ejemplo": "El dichoso coche se volvió a averiar en el peor momento."
+            }
+        ],
+        "sinonimos": [
+            "feliz",
+            "afortunado",
+            "bienaventurado",
+            "maldito (irónico)"
+        ]
+    },
+    {
+        "palabra": "Diletante",
+        "categoria": "adjetivo",
+        "silabas": "Di-le-tan-te",
+        "pronunciacion": "/dileˈtante/",
+        "origen": "Del italiano dilettante, participio presente del verbo dilettare (\"deleitar\" o \"gozar\")",
+        "definiciones": [
+            {
+                "texto": "Persona que cultiva alguna rama del arte, la ciencia o los conocimientos por afición, placer o curiosidad, pero sin profundizar en ellos o sin tener una formación profesional técnica.",
+                "ejemplo": "Aunque nunca estudió música en el conservatorio, su diletante pasión por el piano le permitía interpretar piezas complejas con mucha sensibilidad"
+            }
+        ],
+        "sinonimos": [
+            "Aficionado",
+            "amateur",
+            "diletantista"
+        ]
+    },
+    {
+        "palabra": "Displicente",
+        "categoria": "adjetivo",
+        "silabas": "Dis-pli-cen-te",
+        "pronunciacion": "/displiˈsente/",
+        "origen": "Del latín displicens, displicentis",
+        "definiciones": [
+            {
+                "texto": "Que muestra falta de interés, entusiasmo, agrado o afecto en el trato con los demás. Se aplica a una persona que actúa con desgana, indiferencia o cierta actitud de desdén hacia el entorno o hacia lo que se le pide.",
+                "ejemplo": "El empleado atendió a los clientes con una actitud tan displicente que todos terminaron quejándose ante el gerente."
+            }
+        ],
+        "sinonimos": [
+            "Indiferente",
+            "apático",
+            "desganado",
+            "desatento",
+            "altivo",
+            "desdén"
+        ]
+    },
+    {
+        "palabra": "efímero",
+        "categoria": "adjetivo",
+        "silabas": "e-fí-me-ro",
+        "pronunciacion": "/eˈfi.me.ɾo/",
+        "origen": "Del griego ephemeros, 'que dura un día'",
+        "definiciones": [
+            {
+                "texto": "Que dura muy poco tiempo, pasajero, transitorio.",
+                "ejemplo": "La fama es efímera si no se cultiva con trabajo."
+            },
+            {
+                "texto": "En biología, dicho de un organismo: que vive muy poco tiempo.",
+                "ejemplo": "Las efímeras son insectos cuya vida adulta dura apenas horas."
+            }
+        ],
+        "sinonimos": [
+            "pasajero",
+            "transitorio",
+            "fugaz",
+            "breve",
+            "temporal"
+        ]
+    },
+    {
+        "palabra": "encandilar",
+        "categoria": "verbo",
+        "silabas": "en-can-di-lar",
+        "pronunciacion": "/eŋ.kan.diˈlaɾ/",
+        "origen": "De en- + cándila (vela, candil)",
+        "definiciones": [
+            {
+                "texto": "Deslumbrar con luz excesiva, cegar momentáneamente.",
+                "ejemplo": "El sol le encandiló al salir del túnel."
+            },
+            {
+                "texto": "Enamorar o fascinar a alguien, hechizar.",
+                "ejemplo": "La encandiló con sus palabras y su elegancia."
+            }
+        ],
+        "sinonimos": [
+            "deslumbrar",
+            "cegar",
+            "fascinar",
+            "hechizar",
+            "enamorar"
+        ]
+    },
+    {
+        "palabra": "Epifanía",
+        "categoria": "sustantivo",
+        "silabas": "E-pi-fa-ní-a",
+        "pronunciacion": "/e-pi-fa-nja/",
+        "origen": "Del griego epiphaneia",
+        "definiciones": [
+            {
+                "texto": "Manifestación repentina de una realidad o esencia oculta, a menudo de carácter espiritual o intelectual.",
+                "ejemplo": "Tuve una epifanía en la ducha y por fin resolví el problema matemático."
+            }
+        ],
+        "sinonimos": [
+            "Revelación",
+            "aparición",
+            "iluminación",
+            "chispa."
+        ]
+    },
+    {
+        "palabra": "Eremita",
+        "categoria": "adjetivo",
+        "silabas": "E-re-mi-ta",
+        "pronunciacion": "/e.ɾe.ˈmi.ta/",
+        "origen": "Del latín eremīta",
+        "definiciones": [
+            {
+                "texto": "Persona que vive en un lugar solitario, apartada de los vínculos sociales, para dedicarse a la oración, la meditación o la contemplación de la naturaleza",
+                "ejemplo": "El anciano decidió retirarse a una cabaña en las montañas para vivir como un eremita"
+            }
+        ],
+        "sinonimos": [
+            "Ermitaño",
+            "anacoreta",
+            "solitario",
+            "asceta"
+        ]
+    },
+    {
+        "palabra": "esparcir",
+        "categoria": "verbo",
+        "silabas": "es-par-cir",
+        "pronunciacion": "/es.paɾˈθiɾ/",
+        "origen": "Del latín spargere, 'esparcir, derramar'",
+        "definiciones": [
+            {
+                "texto": "Derramar, extender o distribuir algo por diversas partes.",
+                "ejemplo": "El viento esparció las semillas por todo el prado."
+            },
+            {
+                "texto": "Divertirse, recrearse, distraerse.",
+                "ejemplo": "Los niños se esparcieron por el parque riendo y corriendo."
+            }
+        ],
+        "sinonimos": [
+            "derramar",
+            "diseminar",
+            "desparramar",
+            "repartir",
+            "expandir"
+        ]
+    },
+    {
+        "palabra": "Estocástico",
+        "categoria": "adjetivo",
+        "silabas": "Es-to-cás-ti-co",
+        "pronunciacion": "/es.to.ˈkas.ti.ko/",
+        "origen": "Del griego stochastikós",
+        "definiciones": [
+            {
+                "texto": "Que está sometido al azar, que es aleatorio o que sigue un comportamiento que solo se puede predecir en términos de probabilidad.",
+                "ejemplo": "El clima de una región se analiza mediante un modelo estocástico, ya que intervienen variables impredecibles"
+            }
+        ],
+        "sinonimos": [
+            "Aleatorio",
+            "azaroso",
+            "probabilístico",
+            "fortuito",
+            "contingente"
+        ]
+    },
+    {
+        "palabra": "etéreos",
+        "categoria": "adjetivo",
+        "silabas": "e-té-re-os",
+        "pronunciacion": "/eˈte.ɾe.os/",
+        "origen": "Del latín aetherius, 'del éter, celeste'",
+        "definiciones": [
+            {
+                "texto": "Muy sutil, delicado o ligero, como si no perteneciera al mundo material.",
+                "ejemplo": "Las nubes formaban figuras etéreas en el cielo del atardecer."
+            },
+            {
+                "texto": "Perteneciente o relativo al éter, al cielo o a las regiones superiores del aire.",
+                "ejemplo": "Los poetas románticos buscaban lo etéreo en sus versos."
+            }
+        ],
+        "sinonimos": [
+            "sutil",
+            "aéreo",
+            "incorpóreo",
+            "celestial",
+            "evanescente"
+        ]
+    },
+    {
+        "palabra": "Filocalista",
+        "categoria": "sustantivo",
+        "silabas": "Fi-lo-ca-lis-ta",
+        "pronunciacion": "/filokaˈlista/",
+        "origen": "Del griego phílos (amor o amante) y kállos (belleza), con el sufijo -ista (partidario de).",
+        "definiciones": [
+            {
+                "texto": "Persona que siente un amor especial o una inclinación apasionada por la belleza o las cosas bellas.",
+                "ejemplo": "Como una verdadera filocalista, dedicó toda su vida a coleccionar objetos de arte y a rodearse de paisajes estéticamente armoniosos."
+            }
+        ],
+        "sinonimos": [
+            "Amante de la belleza",
+            "esteta."
+        ]
+    },
+    {
+        "palabra": "Fulgor",
+        "categoria": "sustantivo",
+        "silabas": "Ful-gor",
+        "pronunciacion": "/ful-ɣor/",
+        "origen": "Del latín fulgur",
+        "definiciones": [
+            {
+                "texto": "Resplandor vivo e intenso de la luz.",
+                "ejemplo": "El fulgor del sol del mediodía impedía mirar hacia el horizonte."
+            },
+            {
+                "texto": "Cualidad de lo que sobresale o destaca de manera admirable.",
+                "ejemplo": "La joven actriz irrumpió en el cine con un fulgor inusitado."
+            }
+        ],
+        "sinonimos": [
+            "Brillo",
+            "resplandor",
+            "esplendor",
+            "luminosidad."
+        ]
+    },
+    {
+        "palabra": "Gélido",
+        "categoria": "adjetivo",
+        "silabas": "Gé-li-do",
+        "pronunciacion": "/xe-li-do/",
+        "origen": "Del latín gelidus",
+        "definiciones": [
+            {
+                "texto": "Extremadamente frío.",
+                "ejemplo": "El viento gélido del invierno calaba los huesos de los caminantes."
+            }
+        ],
+        "sinonimos": [
+            "Helado",
+            "glacial",
+            "polar",
+            "frígido."
+        ]
+    },
+    {
+        "palabra": "Greguería",
+        "categoria": "sustantivo",
+        "silabas": "Greg-ue-rí-a",
+        "pronunciacion": "/gre-ɣe-rja/",
+        "origen": "De greguerío (chusma, muchedumbre), derivado de grega, y este del latín grex (grey)",
+        "definiciones": [
+            {
+                "texto": "Dicho agudo, ingenioso y humorístico, de carácter inesperado y rápido.",
+                "ejemplo": "\"El reloj es un aburrido que da la hora\" es una famosa greguería de Ramón."
+            }
+        ],
+        "sinonimos": [
+            "Agudeza",
+            "ocurrencia",
+            "chiste",
+            "pensamiento ingenioso."
+        ]
+    },
+    {
+        "palabra": "Grima",
+        "categoria": "sustantivo",
+        "silabas": "Gri-ma",
+        "pronunciacion": "/gri-ma/",
+        "origen": "Se cree que proviene del gótico grimmis (máscara, horror o terror), lo cual explica su asociación histórica con sentimientos de espanto o rechazo.",
+        "definiciones": [
+            {
+                "texto": "Escalofrío, temblor o espasmo que se padece en el cuerpo, especialmente en la cara, por frío o miedo.",
+                "ejemplo": "Un escalofrío y grima recorrió su espalda al oír el crujido en la oscuridad."
+            },
+            {
+                "texto": "Desagrado, repugnancia o horror intenso que causa algo o alguien.",
+                "ejemplo": "Me da muchísima grima ver cómo maltratan a los animales en ese video."
+            }
+        ],
+        "sinonimos": [
+            "Escalofrío",
+            "espasmo",
+            "repugnancia",
+            "asco",
+            "horror",
+            "repelús"
+        ]
+    },
+    {
+        "palabra": "hondonada",
+        "categoria": "sustantivo",
+        "silabas": "hon-do-na-da",
+        "pronunciacion": "/on.doˈna.ða/",
+        "origen": "De hondo + -ada",
+        "definiciones": [
+            {
+                "texto": "Depresión del terreno, valle profundo entre montañas o colinas.",
+                "ejemplo": "El pueblo se escondía en una hondonada verde y fértil."
+            },
+            {
+                "texto": "En sentido figurado, situación baja o desfavorable.",
+                "ejemplo": "Tras la hondonada de la crisis, llegó la recuperación."
+            }
+        ],
+        "sinonimos": [
+            "valle",
+            "depresión",
+            "hoyada",
+            "cañada",
+            "cuenca"
+        ]
+    },
+    {
+        "palabra": "Ignívomo",
+        "categoria": "adjetivo",
+        "silabas": "Ig-ní-vo-mo",
+        "pronunciacion": "/i-gni-βo-mo/",
+        "origen": "Del latín ignis (fuego) y vomere (vomitar)",
+        "definiciones": [
+            {
+                "texto": "Que vomita o arroja fuego",
+                "ejemplo": "El dragón ignívomo custodiaba celosamente las puertas de la fortaleza."
+            }
+        ],
+        "sinonimos": [
+            "Vomitafuego",
+            "ígneo",
+            "flamígero."
+        ]
+    },
+    {
+        "palabra": "Impertérrito",
+        "categoria": "adjetivo",
+        "silabas": "Im-per-té-rri-to",
+        "pronunciacion": "/impeɾˈtɛrito/",
+        "origen": "Del latín imperterritus",
+        "definiciones": [
+            {
+                "texto": "Que no se altera, perturba, ni muestra temor ante situaciones difíciles, peligrosas o sorprendentes.",
+                "ejemplo": "A pesar de la intensidad de la tormenta y el fuerte viento, el capitán permaneció impertérrito en el puente de mando."
+            }
+        ],
+        "sinonimos": [
+            "Impávido",
+            "sereno",
+            "imperturbable",
+            "inalterable",
+            "imperturbado"
+        ]
+    },
+    {
+        "palabra": "Indómito",
+        "categoria": "adjetivo",
+        "silabas": "In-dó-mi-to",
+        "pronunciacion": "/inˈdomito/",
+        "origen": "Del latín indomĭtus",
+        "definiciones": [
+            {
+                "texto": "Que no puede ser domado o que es difícil de controlar, vencer o someter. Se aplica frecuentemente a animales salvajes o a personas con un carácter fuerte, independiente y rebelde.",
+                "ejemplo": "El caballo indómito corría libre por las montañas, negándose a aceptar cualquier intento de ser montado."
+            }
+        ],
+        "sinonimos": [
+            "Salvaje",
+            "incontrolable",
+            "altivo",
+            "rebelde",
+            "intratable"
+        ]
+    },
+    {
+        "palabra": "inefable",
+        "categoria": "adjetivo",
+        "silabas": "i-ne-fa-ble",
+        "pronunciacion": "/i.neˈfa.βle/",
+        "origen": "Del latín ineffabilis, 'que no se puede expresar con palabras'",
+        "definiciones": [
+            {
+                "texto": "Que no se puede explicar o describir con palabras por su intensidad o naturaleza.",
+                "ejemplo": "Sintió un gozo inefable al ver a su hija después de tantos años."
+            },
+            {
+                "texto": "Que debe guardarse en silencio, por respeto o misterio.",
+                "ejemplo": "El nombre de Dios era considerado inefable en la tradición hebrea."
+            }
+        ],
+        "sinonimos": [
+            "inexpresable",
+            "indescriptible",
+            "indecible"
+        ]
+    },
+    {
+        "palabra": "Ineluctable",
+        "categoria": "adjetivo",
+        "silabas": "I-ne-luc-ta-ble",
+        "pronunciacion": "/i.ne.luk.ˈta.βle/",
+        "origen": "Del latín ineluctabilis",
+        "definiciones": [
+            {
+                "texto": "Que no se puede evitar, eludir, esquivar ni vencer por la fuerza o los argumentos; inevitable.",
+                "ejemplo": "A pesar de todos sus intentos por cambiar el rumbo del negocio, la quiebra parecía un destino ineluctable"
+            }
+        ],
+        "sinonimos": [
+            "Inevitable",
+            "fatal",
+            "ineludible",
+            "forzoso",
+            "irremediable"
+        ]
+    },
+    {
+        "palabra": "Inextricable",
+        "categoria": "adjetivo",
+        "silabas": "I-nex-tri-ca-ble",
+        "pronunciacion": "/inestɾiˈkable/",
+        "origen": "Del latín inextricabĭlis",
+        "definiciones": [
+            {
+                "texto": "Que no se puede desenredar, resolver, desatar o separar; algo que es extremadamente complejo, confuso o enredado.",
+                "ejemplo": "La trama de la novela es tan inextricable que requiere una lectura muy atenta para comprender todas las conexiones entre los personajes."
+            }
+        ],
+        "sinonimos": [
+            "Enredado",
+            "confuso",
+            "complejo",
+            "intrincado",
+            "indisoluble"
+        ]
+    },
+    {
+        "palabra": "Inmanente",
+        "categoria": "adjetivo",
+        "silabas": "In-ma-nen-te",
+        "pronunciacion": "/inmaˈnente/",
+        "origen": "Del latín immanens, immanentis",
+        "definiciones": [
+            {
+                "texto": "Que es propio y característico de una cosa y está unido a ella de forma inseparable, especialmente referido a cualidades, sentimientos o a la naturaleza de un ser. En contextos filosóficos, se refiere a algo que está contenido dentro de los límites de un ser o de un objeto, en oposición a lo trascendente.",
+                "ejemplo": "El miedo al fracaso parece ser una cualidad inmanente a su búsqueda constante por la perfección."
+            }
+        ],
+        "sinonimos": [
+            "Inherente",
+            "intrínseco",
+            "esencial",
+            "inseparable",
+            "propio"
+        ]
+    },
+    {
+        "palabra": "Inmarcesible",
+        "categoria": "adjetivo",
+        "silabas": "In-mar-ce-si-ble",
+        "pronunciacion": "/in.maɾ.se.ˈsi.βle/",
+        "origen": "Del latín immarcescibilis",
+        "definiciones": [
+            {
+                "texto": "Que no se puede marchitar, marchitarse o marchitar. En sentido figurado, que no pierde su vigor, frescura, belleza o esplendor con el paso del tiempo",
+                "ejemplo": "El amor que sentían el uno por el otro demostró ser un lazo inmarcesible a través de las décadas"
+            }
+        ],
+        "sinonimos": [
+            "Inmarchitable",
+            "perenne",
+            "imperecedero",
+            "inmortal",
+            "imborrable"
+        ]
+    },
+    {
+        "palabra": "Jácara",
+        "categoria": "sustantivo",
+        "silabas": "Já-ca-ra",
+        "pronunciacion": "/xa-ka-ra/",
+        "origen": "De origen incierto, posiblemente del caló chachar (charlar, hablar).",
+        "definiciones": [
+            {
+                "texto": "Género de poesía cómica y picaresca del Siglo de Oro español.",
+                "ejemplo": "Cervantes incluyó una jácara en uno de sus famosos entremeses."
+            },
+            {
+                "texto": "Cuento o chiste de carácter jocoso, a menudo exagerado.",
+                "ejemplo": "El abuelo nos entretenía en las cenas contando viejas jácaras de su juventud."
+            }
+        ],
+        "sinonimos": [
+            "Cuento chistoso",
+            "copla",
+            "chascarrillo",
+            "anécdota."
+        ]
+    },
+    {
+        "palabra": "Jayán",
+        "categoria": "sustantivo",
+        "silabas": "Ja-yán",
+        "pronunciacion": "/xa-ʝan/",
+        "origen": "Del turco yanik (arruinado, desecho) o del árabe.",
+        "definiciones": [
+            {
+                "texto": "Hombre de muy grande y desproporcionada estatura.",
+                "ejemplo": "Los niños se asustaban al ver al jayán que custodiaba la puerta del castillo."
+            },
+            {
+                "texto": "Hombre rudo, tosco y de poca inteligencia.",
+                "ejemplo": "No seas jayán y trata de entender el problema antes de golpear la máquina."
+            }
+        ],
+        "sinonimos": [
+            "Gigante",
+            "grandón",
+            "bruto"
+        ]
+    },
+    {
+        "palabra": "Kármico",
+        "categoria": "adjetivo",
+        "silabas": "Kár-mi-co",
+        "pronunciacion": "/kar-mi-ko/",
+        "origen": "Del sánscrito karman (acción, obra, acto).",
+        "definiciones": [
+            {
+                "texto": "Perteneciente o relativo al karma (fuerza generada por las acciones de los individuos que determina su futuro y renacimientos).",
+                "ejemplo": "Su inesperado reencuentro no fue casualidad, sino una conexión kármica."
+            }
+        ],
+        "sinonimos": []
+    },
+    {
+        "palabra": "Kitsch",
+        "categoria": "adjetivo",
+        "silabas": "Kitsch",
+        "pronunciacion": "/kitʃ/",
+        "origen": "Del alemán kitsch (chatarra, basura, objeto de mal gusto)",
+        "definiciones": [
+            {
+                "texto": "Obra artística o literaria de calidad inferior, con pretensiones estéticas pero resultando vulgar y hueca o algo que tiene este carácter (de mal gusto, pero a veces con cierta fascinación).",
+                "ejemplo": "La casa estaba decorada con estatuillas de yeso y plumas de avestruz que rozaban lo kitsch."
+            }
+        ],
+        "sinonimos": [
+            "Hortera",
+            "cutre",
+            "cursi",
+            "de mal gusto."
+        ]
+    },
+    {
+        "palabra": "Lacónico",
+        "categoria": "adjetivo",
+        "silabas": "La-có-ni-co",
+        "pronunciacion": "/laˈkoniko/",
+        "origen": "Del latín laconicus, y este del griego lakōnikós",
+        "definiciones": [
+            {
+                "texto": "Que es breve, preciso o conciso en el modo de expresarse o de hablar.",
+                "ejemplo": "Su respuesta fue tan lacónica que, con apenas una palabra, dejó claro que no tenía intención de continuar con la conversación."
+            }
+        ],
+        "sinonimos": [
+            "Conciso",
+            "breve",
+            "sucinto",
+            "escueto",
+            "parco"
+        ]
+    },
+    {
+        "palabra": "Lumbrera",
+        "categoria": "sustantivo",
+        "silabas": "Lum-bre-ra",
+        "pronunciacion": "/lum-βre-ra/",
+        "origen": "De lumbre y el sufijo -era.",
+        "definiciones": [
+            {
+                "texto": "Abertura o ventana en un techo para dar luz a una habitación.",
+                "ejemplo": "La luz del mediodía entraba por la lumbrera del ático iluminando el polvo en el aire."
+            },
+            {
+                "texto": "Persona muy ilustre y sabia en su materia o profesión.",
+                "ejemplo": "El científico fue considerado una lumbrera de la física moderna."
+            }
+        ],
+        "sinonimos": [
+            "Tragaluz",
+            "claraboya",
+            "eminencia",
+            "figura."
         ]
     },
     {
@@ -919,6 +1131,1008 @@
             "farol",
             "emérito",
             "genio"
+        ]
+    },
+    {
+        "palabra": "luminiscencia",
+        "categoria": "sustantivo",
+        "silabas": "lu-mi-nis-cen-cia",
+        "pronunciacion": "/lu.mi.nisˈθen.θja/",
+        "origen": "Del latín lumen (luz) + -escencia",
+        "definiciones": [
+            {
+                "texto": "Emisión de luz por un cuerpo que no está incandescente, producida por causas distintas a la temperatura elevada.",
+                "ejemplo": "La luminiscencia de las luciérnagas ilumina el campo en verano."
+            },
+            {
+                "texto": "En sentido figurado, cualidad de brillar o destacar de forma especial.",
+                "ejemplo": "La luminiscencia de su talento era evidente en cada obra."
+            }
+        ],
+        "sinonimos": [
+            "fosforescencia",
+            "fluorescencia",
+            "resplandor",
+            "brillo"
+        ]
+    },
+    {
+        "palabra": "madrugada",
+        "categoria": "sustantivo",
+        "silabas": "ma-dru-ga-da",
+        "pronunciacion": "/ma.ðɾuˈɣa.ða/",
+        "origen": "De madrugar, del latín matutinus",
+        "definiciones": [
+            {
+                "texto": "Primeras horas del día, desde que empieza a amanecer hasta que sale el sol.",
+                "ejemplo": "Se levantó de madrugada para no perder el tren."
+            },
+            {
+                "texto": "Tiempo que transcurre desde la medianoche hasta el amanecer.",
+                "ejemplo": "La madrugada es el momento más silencioso de la ciudad."
+            }
+        ],
+        "sinonimos": [
+            "alba",
+            "amanecer",
+            "primeras horas",
+            "alborada"
+        ]
+    },
+    {
+        "palabra": "madrugar",
+        "categoria": "verbo",
+        "silabas": "ma-dru-gar",
+        "pronunciacion": "/ma.ðɾuˈɣaɾ/",
+        "origen": "De madrugada, del latín matutinus, 'relativo a la mañana'",
+        "definiciones": [
+            {
+                "texto": "Levantarse muy de mañana, antes de lo acostumbrado.",
+                "ejemplo": "Madruga y verás el amanecer más hermoso del año."
+            },
+            {
+                "texto": "Llegar antes que otros a algo, anticiparse.",
+                "ejemplo": "Madrugó en la fila para conseguir las entradas."
+            }
+        ],
+        "sinonimos": [
+            "levantarse temprano",
+            "madronear",
+            "anticiparse"
+        ]
+    },
+    {
+        "palabra": "melancolía",
+        "categoria": "sustantivo",
+        "silabas": "me-lan-co-lí-a",
+        "pronunciacion": "/me.laŋ.koˈli.a/",
+        "origen": "Del griego melancholía, 'bilis negra'",
+        "definiciones": [
+            {
+                "texto": "Tristeza vaga, profunda y permanente, que no tiene causa concreta.",
+                "ejemplo": "Una melancolía dulce la invadía al escuchar esa canción."
+            },
+            {
+                "texto": "En medicina antigua, uno de los cuatro humores del cuerpo.",
+                "ejemplo": "La melancolía era considerada un exceso de bilis negra."
+            }
+        ],
+        "sinonimos": [
+            "tristeza",
+            "nostalgia",
+            "pena",
+            "desconsuelo",
+            "abatimiento"
+        ]
+    },
+    {
+        "palabra": "Melifluo",
+        "categoria": "adjetivo",
+        "silabas": "Me-li-fluo",
+        "pronunciacion": "/meˈliflwo/",
+        "origen": "Del latín mellifluus, compuesto por mel (\"miel\") y fluere (\"fluir\")",
+        "definiciones": [
+            {
+                "texto": "Un sonido, voz o música que es dulce, suave y delicado.",
+                "ejemplo": "Me quedé cautivado por el tono melifluo de su voz mientras recitaba aquel poema antiguo."
+            },
+            {
+                "texto": "Una persona que tiene un trato excesivamente amable, tierno o meloso, a veces llegando a resultar empalagoso.",
+                "ejemplo": ""
+            }
+        ],
+        "sinonimos": [
+            "Dulce",
+            "suave",
+            "meloso",
+            "melodioso",
+            "empalagoso",
+            "untuoso"
+        ]
+    },
+    {
+        "palabra": "menguar",
+        "categoria": "verbo",
+        "silabas": "men-guar",
+        "pronunciacion": "/menˈɣwaɾ/",
+        "origen": "Del latín minuere, 'disminuir'",
+        "definiciones": [
+            {
+                "texto": "Ir disminuyendo o reduciéndose algo, ir perdiendo intensidad o cantidad.",
+                "ejemplo": "La luna comenzó a menguar tras la noche de plenilunio."
+            },
+            {
+                "texto": "Disminuir, mermar, hacer menor algo.",
+                "ejemplo": "Nada podía menguar su entusiasmo por la música."
+            }
+        ],
+        "sinonimos": [
+            "disminuir",
+            "decrecer",
+            "mermar",
+            "decaer",
+            "achicarse"
+        ]
+    },
+    {
+        "palabra": "Metanóia",
+        "categoria": "sustantivo",
+        "silabas": "Me-ta-nóia",
+        "pronunciacion": "/metanoˈia/",
+        "origen": "Del griego metánoia (μετάνοια)",
+        "definiciones": [
+            {
+                "texto": "Es un proceso de transformación profunda en el pensamiento, la cosmovisión o la estructura mental de una persona. Suele implicar un giro radical en las creencias, valores o la forma en que un individuo percibe su realidad tras una reflexión profunda o una experiencia reveladora. En contextos teológicos, a menudo se asocia con el arrepentimiento genuino que conlleva una conversión o cambio de vida.",
+                "ejemplo": "Después de aquel viaje, experimentó una verdadera metanoia que le hizo cuestionar toda su escala de valores y comenzar de nuevo."
+            }
+        ],
+        "sinonimos": [
+            "Transformación",
+            "conversión",
+            "cambio de paradigma",
+            "transmutación",
+            "evolución"
+        ]
+    },
+    {
+        "palabra": "Morriña",
+        "categoria": "sustantivo",
+        "silabas": "Mor-ri-ña",
+        "pronunciacion": "/mo-ri-ɲa/",
+        "origen": "Del latin morinus",
+        "definiciones": [
+            {
+                "texto": "Tristeza, melancolía, especialmente la causada por la ausencia de la patria o de los seres queridos.",
+                "ejemplo": "El emigrante sentía una profunda morriña al escuchar la música tradicional de su tierra."
+            }
+        ],
+        "sinonimos": [
+            "Nostalgia",
+            "añoranza",
+            "tristeza",
+            "desconsuelo."
+        ]
+    },
+    {
+        "palabra": "Nefelibata",
+        "categoria": "adjetivo",
+        "silabas": "Ne-fe-li-ba-ta",
+        "pronunciacion": "/nefeliˈβata/",
+        "origen": "Del francés néphélibate, formado a partir de las raíces griegas nephélē (nube) y batēs (el que anda o camina). Literalmente, \"el que camina sobre las nubes\".",
+        "definiciones": [
+            {
+                "texto": "Persona soñadora que no se ajusta a las normas o convencionalismos sociales; alguien que vive en su propio mundo, ajeno a la realidad cotidiana.",
+                "ejemplo": "Siempre perdido en sus pensamientos y proyectos imaginarios, mis amigos dicen que soy un nefelibata."
+            }
+        ],
+        "sinonimos": [
+            "Soñador",
+            "visionario",
+            "fantasioso",
+            "idealista"
+        ]
+    },
+    {
+        "palabra": "noctámbulo",
+        "categoria": "adjetivo",
+        "silabas": "noc-tám-bu-lo",
+        "pronunciacion": "/nokˈtam.bu.lo/",
+        "origen": "Del latín nocte + ambulare, 'caminar de noche'",
+        "definiciones": [
+            {
+                "texto": "Que tiene costumbre de velar o pasear de noche.",
+                "ejemplo": "Era un noctámbulo empedernido: su mejor inspiración llegaba pasadas las dos."
+            },
+            {
+                "texto": "Dicho de un animal: activo durante la noche.",
+                "ejemplo": "Los búhos son aves noctámbulas por excelencia."
+            }
+        ],
+        "sinonimos": [
+            "trasnochador",
+            "nocturno",
+            "velador",
+            "ruiseñor"
+        ]
+    },
+    {
+        "palabra": "obstante",
+        "categoria": "adverbio",
+        "silabas": "obs-tan-te",
+        "pronunciacion": "/obˈstan.te/",
+        "origen": "Del latín obstantem, 'que se opone'",
+        "definiciones": [
+            {
+                "texto": "Sin embargo, no obstante, con todo. Indica oposición o contraste respecto de lo dicho antes.",
+                "ejemplo": "Hacía frío; obstante, salieron a caminar por la sierra."
+            }
+        ],
+        "sinonimos": [
+            "sin embargo",
+            "no obstante",
+            "con todo",
+            "empero"
+        ]
+    },
+    {
+        "palabra": "ojalá",
+        "categoria": "expresion",
+        "silabas": "o-ja-lá",
+        "pronunciacion": "/o.xaˈla/",
+        "origen": "Del árabe andalusí law šá lláh, 'si Dios quiere'",
+        "definiciones": [
+            {
+                "texto": "Expresión que denota vivo deseo de que algo suceda o no suceda.",
+                "ejemplo": "Ojalá llueva mañana y se llenen los embalses."
+            },
+            {
+                "texto": "Con subjuntivo: indica deseo irrealizable o improbable.",
+                "ejemplo": "Ojalá pudiera volver atrás y cambiar esa decisión."
+            }
+        ],
+        "sinonimos": [
+            "Dios quiera",
+            "ojalá que",
+            "quién pudiera"
+        ]
+    },
+    {
+        "palabra": "ondular",
+        "categoria": "verbo",
+        "silabas": "on-du-lar",
+        "pronunciacion": "/on.duˈlaɾ/",
+        "origen": "Del latín undulare, derivado de unda (ola)",
+        "definiciones": [
+            {
+                "texto": "Moverse formando ondulaciones, con movimiento semejante al de las olas.",
+                "ejemplo": "La bandera ondulaba con el viento de la montaña."
+            },
+            {
+                "texto": "Dar forma de onda a algo.",
+                "ejemplo": "El peluquero le onduló el cabello con tenacillas."
+            }
+        ],
+        "sinonimos": [
+            "ondear",
+            "flamear",
+            "culebrear",
+            "serpentear"
+        ]
+    },
+    {
+        "palabra": "pandereta",
+        "categoria": "sustantivo",
+        "silabas": "pan-de-re-ta",
+        "pronunciacion": "/pan.deˈɾe.ta/",
+        "origen": "Del latín pandorium, instrumento musical",
+        "definiciones": [
+            {
+                "texto": "Instrumento musical de percusión, semejante a la pandereta pero con sonajas de metal.",
+                "ejemplo": "En la fiesta gallega tocaban la pandereta y la gaita."
+            },
+            {
+                "texto": "En sentido figurado, cosa intrascendente o de poca importancia.",
+                "ejemplo": "No me vengas con panderetas, quiero resultados serios."
+            }
+        ],
+        "sinonimos": [
+            "pandero",
+            "tamboril",
+            "instrumento de percusión"
+        ]
+    },
+    {
+        "palabra": "Penumbra",
+        "categoria": "sustantivo",
+        "silabas": "Pe-num-bra",
+        "pronunciacion": "/pe-num-βra/",
+        "origen": "Del latín paene (casi) y umbra (sombra)",
+        "definiciones": [
+            {
+                "texto": "Zona de escasa claridad producida por la interposición de un cuerpo opaco entre la fuente de luz y el lugar iluminado.",
+                "ejemplo": "La luna creciente bañaba el jardín en una hermosa penumbra."
+            },
+            {
+                "texto": "Falta de claridad o de luz suave.",
+                "ejemplo": "Los detalles del contrato estaban ocultos en la penumbra de la letra pequeña."
+            }
+        ],
+        "sinonimos": [
+            "Sombra",
+            "media luz",
+            "grisura",
+            "oscuridad."
+        ]
+    },
+    {
+        "palabra": "perenne",
+        "categoria": "adjetivo",
+        "silabas": "pe-ren-ne",
+        "pronunciacion": "/peˈren.ne/",
+        "origen": "Del latín perennis, 'que dura todo el año'",
+        "definiciones": [
+            {
+                "texto": "Que dura para siempre o por mucho tiempo, continuo, incesante.",
+                "ejemplo": "El perenne debate entre la razón y la emoción."
+            },
+            {
+                "texto": "En botánica, dicho de una planta: que vive más de dos años.",
+                "ejemplo": "Los robles son árboles perennes que pueden vivir siglos."
+            }
+        ],
+        "sinonimos": [
+            "eterno",
+            "constante",
+            "continuo",
+            "imperecedero",
+            "inagotable"
+        ]
+    },
+    {
+        "palabra": "petricor",
+        "categoria": "sustantivo",
+        "silabas": "pe-tri-cor",
+        "pronunciacion": "/pe.tɾiˈkoɾ/",
+        "origen": "Del griego petra (piedra) + ichor (líquido que fluía por las venas de los dioses), acuñado en 1964",
+        "definiciones": [
+            {
+                "texto": "Olor terroso y agradable que se produce cuando llueve sobre suelo seco.",
+                "ejemplo": "Tras la primera tormenta del otoño, el petricor inundó el jardín."
+            }
+        ],
+        "sinonimos": [
+            "olor a tierra mojada",
+            "aroma pluvial"
+        ]
+    },
+    {
+        "palabra": "Pronoia",
+        "categoria": "sustantivo",
+        "silabas": "Pro-noi-a",
+        "pronunciacion": "/pɾo.ˈnoi̯.a/",
+        "origen": "Del griego pro y noia",
+        "definiciones": [
+            {
+                "texto": "creencia o estado psicológico de pensar que el universo, el mundo o las personas conspiran en secreto a favor de uno mismo",
+                "ejemplo": "A pesar de enfrentar constantes obstáculos en su nuevo proyecto, ella vivía en un estado de pronoia constante"
+            }
+        ],
+        "sinonimos": [
+            "Optimismo antropológico",
+            "Paranoia inversa"
+        ]
+    },
+    {
+        "palabra": "Quimera",
+        "categoria": "sustantivo",
+        "silabas": "Qui-me-ra",
+        "pronunciacion": "/kiˈmeɾa/",
+        "origen": "Del latín chimaera, y este del griego chímaira (que originalmente significaba \"cabra\")",
+        "definiciones": [
+            {
+                "texto": "Aquello que se propone a la imaginación como posible o verdadero, no siéndolo.",
+                "ejemplo": ""
+            },
+            {
+                "texto": "Sueño, ilusión o deseo que se persigue con tenacidad, pero que resulta ser inalcanzable o irrealizable.",
+                "ejemplo": "Durante años, el joven artista persiguió la quimera de la fama mundial, sin darse cuenta de que su verdadera felicidad estaba en los pequeños detalles."
+            },
+            {
+                "texto": "(Mitología) Monstruo fabuloso que, según las fábulas, vomitaba llamas y tenía cuerpo de león, cabeza de cabra y cola de dragón.",
+                "ejemplo": "En la mitología griega, la Quimera era un monstruo híbrido con partes de león, cabra y serpiente."
+            }
+        ],
+        "sinonimos": [
+            "Ilusión",
+            "fantasía",
+            "sueño",
+            "utopía",
+            "delirio",
+            "espejismo"
+        ]
+    },
+    {
+        "palabra": "quirúrgico",
+        "categoria": "adjetivo",
+        "silabas": "qui-rúr-gi-co",
+        "pronunciacion": "/kiˈɾuɾ.xi.ko/",
+        "origen": "Del griego cheirurgiké, 'relativo a la cirugía'",
+        "definiciones": [
+            {
+                "texto": "Perteneciente o relativo a la cirugía.",
+                "ejemplo": "El equipo quirúrgico estaba preparado para la intervención."
+            },
+            {
+                "texto": "En sentido figurado, preciso, exacto, sin margen de error.",
+                "ejemplo": "Hizo un análisis quirúrgico del problema, sin dejar cabo suelto."
+            }
+        ],
+        "sinonimos": [
+            "operatorio",
+            "preciso",
+            "exacto",
+            "clínico"
+        ]
+    },
+    {
+        "palabra": "recóndito",
+        "categoria": "adjetivo",
+        "silabas": "re-cón-di-to",
+        "pronunciacion": "/reˈkon.di.to/",
+        "origen": "Del latín reconditus, 'escondido, oculto'",
+        "definiciones": [
+            {
+                "texto": "Muy escondido, oculto o difícil de alcanzar.",
+                "ejemplo": "En un rincón recóndito del bosque encontraron la cueva."
+            },
+            {
+                "texto": "Profundo, en sentido figurado, referido a pensamientos o sentimientos.",
+                "ejemplo": "Guardaba en lo más recóndito de su memoria aquel verano."
+            }
+        ],
+        "sinonimos": [
+            "oculto",
+            "escondido",
+            "arcano",
+            "profundo",
+            "ignoto"
+        ]
+    },
+    {
+        "palabra": "Resquemor",
+        "categoria": "sustantivo",
+        "silabas": "Resq-ue-mor",
+        "pronunciacion": "/reskeˈmoɾ/",
+        "origen": "Deriva del verbo resquemar (que a su vez proviene de quemar)",
+        "definiciones": [
+            {
+                "texto": "Sentimiento de pesar, resentimiento o desconfianza que queda en el ánimo después de haber recibido una ofensa o algún tipo de daño.",
+                "ejemplo": "A pesar de que se disculparon, todavía siento cierto resquemor por la forma en que ignoraron mi opinión en la reunión."
+            },
+            {
+                "texto": "Sensación de inquietud, recelo o duda ante una situación que no termina de convencer o que causa molestia.",
+                "ejemplo": ""
+            }
+        ],
+        "sinonimos": [
+            "Recelo",
+            "resentimiento",
+            "desconfianza",
+            "escama",
+            "amargura",
+            "reticencia"
+        ]
+    },
+    {
+        "palabra": "Rocambolesco",
+        "categoria": "adjetivo",
+        "silabas": "Ro-cam-bo-les-co",
+        "pronunciacion": "/rokamboˈlesko/",
+        "origen": "Deriva del nombre del personaje literario Rocambole, creado por el escritor francés Pierre Alexis Ponson du Terrail",
+        "definiciones": [
+            {
+                "texto": "Se refiere a una situación, relato o evento que es extraordinario, fantástico, exagerado, lleno de peripecias complicadas o que resulta inverosímil por lo inusual y extravagante de los hechos.",
+                "ejemplo": "Para llegar a tiempo a la entrevista, el protagonista tuvo que vivir una serie de sucesos rocambolescos que incluyeron un tren averiado, un taxi perdido y una persecución accidental por el centro de la ciudad."
+            }
+        ],
+        "sinonimos": [
+            "Inverosímil",
+            "fantástico",
+            "extravagante",
+            "pintoresco",
+            "insólito",
+            "increíble",
+            "aparatoso"
+        ]
+    },
+    {
+        "palabra": "Rutilante",
+        "categoria": "adjetivo",
+        "silabas": "Ru-ti-lan-te",
+        "pronunciacion": "/rutiˈlante/",
+        "origen": "Del latín rutilans, rutilantis, participio presente de rutilare",
+        "definiciones": [
+            {
+                "texto": "Que brilla, resplandece o despide rayos de luz. También se utiliza en sentido figurado para referirse a algo o alguien que destaca notablemente por su brillantez, éxito o esplendor.",
+                "ejemplo": "La actriz hizo una entrada triunfal en la alfombra roja con un vestido rutilante que captaba todas las miradas."
+            }
+        ],
+        "sinonimos": [
+            "Brillante",
+            "resplandeciente",
+            "reluciente",
+            "centelleante",
+            "fulgurante."
+        ]
+    },
+    {
+        "palabra": "Selenita",
+        "categoria": "sustantivo",
+        "silabas": "Se-le-ni-ta",
+        "pronunciacion": "/se-le-ni-ta/",
+        "origen": "Del latín Selene (diosa griega de la luna)",
+        "definiciones": [
+            {
+                "texto": "Persona imaginaria que se supone habita en la Luna.",
+                "ejemplo": "Las novelas de ciencia ficción de los años 50 describían a los selenitas con cuerpos extraños."
+            },
+            {
+                "texto": "Variedad de yeso cristalizado, translúcido y de color blanco.",
+                "ejemplo": "Encendió la lámpara de selenita para dar un ambiente relajante al salón."
+            }
+        ],
+        "sinonimos": [
+            "Lunar",
+            "habitante de la luna",
+            "yeso cristalizado."
+        ]
+    },
+    {
+        "palabra": "Sempiterno",
+        "categoria": "adjetivo",
+        "silabas": "Sem-pi-ter-no",
+        "pronunciacion": "/sempiˈteɾno/",
+        "origen": "Del latín sempiternus",
+        "definiciones": [
+            {
+                "texto": "Que tiene principio, pero no tendrá fin; algo que es perpetuo, continuo o que dura siempre. A diferencia de lo \"eterno\", que no tiene ni principio ni fin, lo sempiterno subraya la duración prolongada o infinita a partir de su inicio.",
+                "ejemplo": "El sol parecía hundirse en un ciclo sempiterno, iluminando las mismas tierras día tras día sin falta."
+            }
+        ],
+        "sinonimos": [
+            "Perpetuo",
+            "eterno",
+            "perdurable",
+            "inacabable",
+            "constante"
+        ]
+    },
+    {
+        "palabra": "serendipia",
+        "categoria": "sustantivo",
+        "silabas": "se-ren-di-pia",
+        "pronunciacion": "/se.ɾenˈdi.pja/",
+        "origen": "Del inglés serendipity, acuñado por Horace Walpole en 1754, inspirado en un cuento persa",
+        "definiciones": [
+            {
+                "texto": "Hallazgo valioso que se produce de manera accidental o inesperada, mientras se buscaba otra cosa.",
+                "ejemplo": "El descubrimiento de la penicilina fue una serendipia científica."
+            },
+            {
+                "texto": "Cualidad de hacer descubrimientos por accidente y sagacidad.",
+                "ejemplo": "Su serendipia le llevó a encontrar la solución mientras paseaba."
+            }
+        ],
+        "sinonimos": [
+            "hallazgo",
+            "descubrimiento casual",
+            "casualidad afortunada"
+        ]
+    },
+    {
+        "palabra": "Sibilino",
+        "categoria": "adjetivo",
+        "silabas": "si-bi-li-no",
+        "pronunciacion": "",
+        "origen": "Del latín sibyllīnus",
+        "definiciones": [
+            {
+                "texto": "Misterioso, ambiguo o difícil de comprender",
+                "ejemplo": ""
+            },
+            {
+                "texto": "Misterioso u oscuro, a veces con apariencia de importante.",
+                "ejemplo": ""
+            }
+        ],
+        "sinonimos": [
+            "misterioso",
+            "oscuro",
+            "enigmático",
+            "ambiguo",
+            "críptico",
+            "confuso"
+        ]
+    },
+    {
+        "palabra": "sobremesa",
+        "categoria": "sustantivo",
+        "silabas": "so-bre-me-sa",
+        "pronunciacion": "/so.βɾeˈme.sa/",
+        "origen": "De sobre + mesa",
+        "definiciones": [
+            {
+                "texto": "Tiempo que se está a la mesa después de haber comido, conversando.",
+                "ejemplo": "La sobremesa se alargó con café y historias de la infancia."
+            },
+            {
+                "texto": "Mueble que se coloca sobre la mesa para adornarla o protegerla.",
+                "ejemplo": "Compró una sobremesa de tela bordada para el comedor."
+            }
+        ],
+        "sinonimos": [
+            "sobremesa",
+            "tertulia",
+            "poscomida",
+            "conversación"
+        ]
+    },
+    {
+        "palabra": "Soliloquio",
+        "categoria": "sustantivo",
+        "silabas": "So-li-lo-qui-o",
+        "pronunciacion": "/so-li-lo-kjo/",
+        "origen": "Del latín soliloquium, de solus (solo) y loqui (hablar).",
+        "definiciones": [
+            {
+                "texto": "Discurso que alguien hace consigo mismo, hablando en voz alta estando solo.",
+                "ejemplo": "El actor rompió en un largo soliloquio para mostrar la locura de su personaje al público."
+            }
+        ],
+        "sinonimos": [
+            "Monólogo",
+            "parlamento",
+            "diálogo consigo mismo."
+        ]
+    },
+    {
+        "palabra": "susurrar",
+        "categoria": "verbo",
+        "silabas": "su-su-rrar",
+        "pronunciacion": "/su.suˈɾaɾ/",
+        "origen": "Del latín susurrare, onomatopéyico",
+        "definiciones": [
+            {
+                "texto": "Hablar en voz muy baja, de modo que solo se oiga un sonido suave y confuso.",
+                "ejemplo": "Le susurró al oído que la amaba."
+            },
+            {
+                "texto": "Producir un sonido suave y continuado, como el viento entre las hojas.",
+                "ejemplo": "La brisa susurraba entre los álamos del parque."
+            }
+        ],
+        "sinonimos": [
+            "cuchichear",
+            "murmurar",
+            "murmullar"
+        ]
+    },
+    {
+        "palabra": "Trampantojo",
+        "categoria": "sustantivo",
+        "silabas": "Tram-pan-to-jo",
+        "pronunciacion": "/tɾampanˈtoxo/",
+        "origen": "Es una palabra compuesta por \"trampa\" y \"ojo\". Literalmente significa una \"trampa para el ojo\"",
+        "definiciones": [
+            {
+                "texto": "En sentido figurado, cualquier ilusión o artilugio con el que se pretende engañar a alguien haciéndole creer algo que no es.",
+                "ejemplo": "Su propuesta de mejora laboral resultó ser un trampantojo, ya que, aunque parecía ofrecer más beneficios, en realidad ocultaba una carga de trabajo inasumible."
+            }
+        ],
+        "sinonimos": [
+            "Ilusión óptica",
+            "artificio",
+            "engaño",
+            "simulación",
+            "fingimiento."
+        ]
+    },
+    {
+        "palabra": "Trapisonda",
+        "categoria": "sustantivo",
+        "silabas": "Tra-pi-son-da",
+        "pronunciacion": "/tɾapiˈsonda/",
+        "origen": "Se asocia a \"Trebisonda\" (la antigua ciudad griega de Trapezunte), debido a la expresión \"ir a Trebisonda\", que sugería un lugar lejano, extraño o caótico.",
+        "definiciones": [
+            {
+                "texto": "Alboroto, confusión o ruido causado por varias personas que discuten o pelean.",
+                "ejemplo": "La reunión terminó en una auténtica trapisonda cuando todos empezaron a gritar al mismo tiempo sin llegar a ningún acuerdo."
+            },
+            {
+                "texto": "Acción o conjunto de acciones que generan un enredo, altercado o desorden.",
+                "ejemplo": ""
+            }
+        ],
+        "sinonimos": [
+            "Alboroto",
+            "altercado",
+            "trifulca",
+            "desorden",
+            "enredo",
+            "algarabía"
+        ]
+    },
+    {
+        "palabra": "traslúcida",
+        "categoria": "adjetivo",
+        "silabas": "tras-lú-ci-da",
+        "pronunciacion": "/tɾasˈlu.θi.ða/",
+        "origen": "Del latín translucere, 'traspasar la luz'",
+        "definiciones": [
+            {
+                "texto": "Que deja pasar la luz de forma difusa, sin permitir ver con claridad los objetos al otro lado.",
+                "ejemplo": "La cortina traslúcida dejaba entrar una luz suave y difusa."
+            },
+            {
+                "texto": "En sentido figurado, claro, evidente, fácil de percibir.",
+                "ejemplo": "Sus intenciones eran traslúcidas para todos menos para él."
+            }
+        ],
+        "sinonimos": [
+            "translúcida",
+            "semitransparente",
+            "nítida",
+            "diáfana"
+        ]
+    },
+    {
+        "palabra": "Turbación",
+        "categoria": "sustantivo",
+        "silabas": "Tur-ba-ción",
+        "pronunciacion": "/tur-ba-θjon/",
+        "origen": "Del latín turbatio, de turbare (perturbar).",
+        "definiciones": [
+            {
+                "texto": "Alteración del orden o la quietud de algo",
+                "ejemplo": "La turbación del tráfico era evidente a causa del accidente"
+            },
+            {
+                "texto": "Perturbación moral o del ánimo, que suele causar confusión o desasosiego.",
+                "ejemplo": "La inesperada visita le causó una profunda turbación."
+            }
+        ],
+        "sinonimos": [
+            "Conmoción",
+            "alteración",
+            "perturbación",
+            "desasosiego."
+        ]
+    },
+    {
+        "palabra": "Umbral",
+        "categoria": "sustantivo",
+        "silabas": "Um-bral",
+        "pronunciacion": "/um-βral/",
+        "origen": "Del latín liminaris",
+        "definiciones": [
+            {
+                "texto": "Parte inferior del marco de una puerta, que se apoya en el suelo.",
+                "ejemplo": "Se quedó vacilando en el umbral antes de decidir entrar."
+            },
+            {
+                "texto": "Límite, principio o comienzo de algo.",
+                "ejemplo": "La humanidad se encuentra en el umbral de una nueva era tecnológica."
+            }
+        ],
+        "sinonimos": [
+            "Entrada",
+            "límite",
+            "borde",
+            "comienzo"
+        ]
+    },
+    {
+        "palabra": "Vaguido",
+        "categoria": "sustantivo",
+        "silabas": "Va-gui-do",
+        "pronunciacion": "/Vaguido/",
+        "origen": "Onomatopéyica, derivada del sonido \"va-gue\".",
+        "definiciones": [
+            {
+                "texto": "Ruido sordo y continuo que se oye a lo lejos, como el de voces distantes o del viento.",
+                "ejemplo": "Desde mi habitación solo alcanzaba a escuchar el vaguido de la gente en la calle."
+            }
+        ],
+        "sinonimos": [
+            "Zumbido",
+            "murmullo lejano",
+            "rumor confuso."
+        ]
+    },
+    {
+        "palabra": "vehemencia",
+        "categoria": "sustantivo",
+        "silabas": "ve-he-men-cia",
+        "pronunciacion": "/be.eˈmen.θja/",
+        "origen": "Del latín vehementia",
+        "definiciones": [
+            {
+                "texto": "Cualidad de vehemente; impetuosidad, furor, violencia en el modo de actuar o hablar.",
+                "ejemplo": "Defendió sus ideas con vehemencia ante el tribunal."
+            },
+            {
+                "texto": "Intensidad grande de un sentimiento o pasión.",
+                "ejemplo": "La vehemencia de su amor la conducía a decisiones temerarias."
+            }
+        ],
+        "sinonimos": [
+            "impetuosidad",
+            "furia",
+            "ardor",
+            "pasión",
+            "ímpetu"
+        ]
+    },
+    {
+        "palabra": "Vesánico",
+        "categoria": "adjetivo",
+        "silabas": "Ve-sá-ni-co",
+        "pronunciacion": "/be.ˈsa.ni.ko/",
+        "origen": "Del Latin vesanīcus",
+        "definiciones": [
+            {
+                "texto": "Que padece de vesania (demencia, locura furiosa o delirio); relativo o perteneciente a esta condición",
+                "ejemplo": "El hombre irrumpió en la sala con un grito vesánico que asustó a todos los presentes"
+            }
+        ],
+        "sinonimos": [
+            "Demente",
+            "loco",
+            "insano",
+            "alienado",
+            "perturbado"
+        ]
+    },
+    {
+        "palabra": "Wagneriano",
+        "categoria": "adjetivo",
+        "silabas": "Wag-ne-ria-no",
+        "pronunciacion": "/waɣ-ne-rja-no/",
+        "origen": "Derivado del apellido del compositor alemán Richard Wagner (1813-1883).",
+        "definiciones": [
+            {
+                "texto": "Dicho de una obra artística, un espectáculo o una situación: Que resulta apabullante, espectacular, dramático y de gran despliegue.",
+                "ejemplo": "El clímax de la película tuvo un desenlace wagneriano, lleno de efectos especiales y música épica."
+            }
+        ],
+        "sinonimos": [
+            "Épico",
+            "grandioso",
+            "dramático",
+            "apabullante."
+        ]
+    },
+    {
+        "palabra": "Xilografía",
+        "categoria": "sustantivo",
+        "silabas": "Xi-lo-gra-fí-a",
+        "pronunciacion": "/xi-lo-ɣra-fja/",
+        "origen": "Del griego xylon (madera) y gráphein (escribir, grabar).",
+        "definiciones": [
+            {
+                "texto": "Arte de grabar en madera, tallando con gubias el dibujo en el bloque. // Estampa o impresión sacada de una plancha de madera grabada de este modo.",
+                "ejemplo": "El artista dedicó su vida a perfeccionar la técnica de la xilografía japonesa."
+            }
+        ],
+        "sinonimos": [
+            "Grabado en madera",
+            "estampa xilográfica."
+        ]
+    },
+    {
+        "palabra": "Yermo",
+        "categoria": "sustantivo",
+        "silabas": "Yer-mo",
+        "pronunciacion": "",
+        "origen": "Del latín eremus, y este del griego erēmos (desierto, solitario).",
+        "definiciones": [
+            {
+                "texto": "Terreno estéril que no produce vegetación.",
+                "ejemplo": "El camello avanzaba lentamente por el yermo del desierto sin encontrar un oasis."
+            },
+            {
+                "texto": "Solo, desamparado, abandonado.",
+                "ejemplo": "Tras la muerte de su esposa, se sentía un yermo emocional inmenso."
+            }
+        ],
+        "sinonimos": [
+            "Desierto",
+            "baldío",
+            "despoblado",
+            "solo",
+            "abandonado."
+        ]
+    },
+    {
+        "palabra": "Zaguán",
+        "categoria": "sustantivo",
+        "silabas": "Za-guán",
+        "pronunciacion": "/θa-ɣwan/",
+        "origen": "Del árabe hispánico astwān, y este del persa ustuwān (umbral, pieza de madera).",
+        "definiciones": [
+            {
+                "texto": "Espacio cubierto, situado a la entrada de una casa, que sirve de vestíbulo y comunica la calle con el patio interior.",
+                "ejemplo": "Dejó los paraguas goteando en el zaguán antes de pasar a la sala de estar."
+            }
+        ],
+        "sinonimos": [
+            "Vestíbulo",
+            "recibidor",
+            "portal"
+        ]
+    },
+    {
+        "palabra": "Zangolotino",
+        "categoria": "adjetivo",
+        "silabas": "Zan-go-lo-ti-no",
+        "pronunciacion": "/saŋɡoloˈtino/",
+        "origen": "Su origen es incierto, pero se considera una voz expresiva popular formada probablemente por la combinación de otros términos despectivos o burlescos.",
+        "definiciones": [
+            {
+                "texto": "Persona, generalmente adulta o de mayor edad, que se comporta con la falta de madurez, la ligereza o la frivolidad propias de un niño o un adolescente. Se suele usar para describir a alguien que se comporta de manera \"alocada\" o poco seria para la edad que aparenta.",
+                "ejemplo": "Es increíble que, a sus cincuenta años, siga actuando como un zangolotino en lugar de tomarse sus responsabilidades con seriedad."
+            }
+        ],
+        "sinonimos": [
+            "Inmaduro",
+            "infantil",
+            "alocado",
+            "chiquillada",
+            "aniñado",
+            "informal"
+        ]
+    },
+    {
+        "palabra": "Ziranda",
+        "categoria": "sustantivo",
+        "silabas": "Zi-ran-da",
+        "pronunciacion": "/θi-ran-da/",
+        "origen": "Del náhuatl tzilantli (cosa torcida, colgante o trenzada).",
+        "definiciones": [
+            {
+                "texto": "Cenefa o encaje que adorna el borde de las camas, cortinas o pañuelos.",
+                "ejemplo": "Su abuela bordó una fina ziranda de hilos blancos para decorar la cama."
+            }
+        ],
+        "sinonimos": [
+            "Enredadera",
+            "cenefa",
+            "volante",
+            "randas."
+        ]
+    },
+    {
+        "palabra": "Zozobra",
+        "categoria": "sustantivo",
+        "silabas": "Zo-zo-bra",
+        "pronunciacion": "/θo-θo-βra/",
+        "origen": "De origen incierto (posiblemente del latín subturbare, o voz expresiva alterada).",
+        "definiciones": [
+            {
+                "texto": "Inquietud, temor o angustia que impide el sosiego y la tranquilidad.",
+                "ejemplo": "La zozobra de perder su empleo le quitaba el sueño todas las noches."
+            },
+            {
+                "texto": "Peligro o riesgo inminente.",
+                "ejemplo": "El barco navegaba en medio de la zozobra causada por la tormenta."
+            }
+        ],
+        "sinonimos": [
+            "Angustia",
+            "ansiedad",
+            "inquietud",
+            "alarme",
+            "peligro."
         ]
     }
 ]
