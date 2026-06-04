@@ -273,6 +273,7 @@ function renderLista(forzar = false) {
         }).join('');
 
         bindCardEvents();
+        revealCards();
     } else {
         lista.querySelectorAll(".word-card").forEach(card => {
             const palabra = card.dataset.palabra;
@@ -283,6 +284,47 @@ function renderLista(forzar = false) {
     }
 
     document.getElementById("totalWords").textContent = DICCIONARIO.length;
+}
+
+// ============================================================
+// SCROLL REVEAL (Intersection Observer)
+// ============================================================
+let revealObserver = null;
+
+function revealCards() {
+    // Si el usuario prefiere reducir movimiento, mostrar todo de una
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('.word-card').forEach(c => c.classList.add('revealed'));
+        return;
+    }
+
+    // Crear observer una sola vez
+    if (!revealObserver) {
+        revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    // Stagger sutil: las cards visibles al mismo tiempo
+                    // reciben un delay progresivo
+                    const card = entry.target;
+                    const delay = card.dataset.revealDelay || 0;
+                    setTimeout(() => {
+                        card.classList.add('revealed');
+                    }, delay);
+                    revealObserver.unobserve(card);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        });
+    }
+
+    const cards = document.querySelectorAll('.word-card:not(.revealed)');
+    cards.forEach((card, i) => {
+        // Stagger: máximo 60ms entre cards, resetea cada 8
+        card.dataset.revealDelay = (i % 8) * 40;
+        revealObserver.observe(card);
+    });
 }
 
 // ============================================================

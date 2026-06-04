@@ -555,6 +555,15 @@ header {
     overflow: hidden;
     display: flex;
     align-items: stretch;
+    /* Scroll reveal: estado inicial */
+    opacity: 0;
+    transform: translateY(16px);
+}
+
+.word-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .word-card::before {
@@ -569,7 +578,7 @@ header {
     transition: opacity 0.3s;
 }
 
-.word-card:hover {
+.word-card.revealed:hover {
     border-color: var(--accent-glow);
     transform: translateY(-2px);
     box-shadow: var(--card-shadow);
@@ -1065,5 +1074,9 @@ body.light-mode .fab-action {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
+    }
+    .word-card {
+        opacity: 1;
+        transform: none;
     }
 }
