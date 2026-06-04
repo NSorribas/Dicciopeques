@@ -38,6 +38,11 @@ CREATE POLICY "Allow authenticated insert" ON app_config
 CREATE POLICY "Allow authenticated update" ON app_config
     FOR UPDATE USING (auth.role() = 'authenticated');
 
+-- GRANTs necesarios para que el rol authenticated pueda acceder (requerido por Supabase REST API)
+GRANT SELECT ON public.app_config TO authenticated;
+GRANT INSERT ON public.app_config TO authenticated;
+GRANT UPDATE ON public.app_config TO authenticated;
+
 -- Insertar el token de GitHub (reemplazar por el token real)
 -- INSERT INTO app_config (key, value, description) VALUES
 -- ('github_token', 'TU_TOKEN_AQUI', 'Token de GitHub para disparar workflows desde el admin');
