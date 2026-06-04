@@ -40,54 +40,29 @@ async function cargarDiccionario() {
     }
 
     try {
-        // Cargar palabras
-        const { data: palabras, error: errPalabras } = await supabaseClient
+        // Una sola consulta con joins (mismo patrón que admin.js)
+        const { data: palabras, error } = await supabaseClient
             .from('palabras')
-            .select('*')
+            .select('*, definiciones(*), sinonimos(*)')
             .order('palabra', { ascending: true });
 
-        if (errPalabras) throw errPalabras;
+        if (error) throw error;
         if (!palabras || palabras.length === 0) {
             await cargarDesdeJSON();
             return;
         }
 
-        // Cargar definiciones
-        const { data: definiciones, error: errDef } = await supabaseClient
-            .from('definiciones')
-            .select('*')
-            .order('numero', { ascending: true });
-
-        if (errDef) throw errDef;
-
-        // Cargar sinónimos
-        const { data: sinonimos, error: errSin } = await supabaseClient
-            .from('sinonimos')
-            .select('*');
-
-        if (errSin) throw errSin;
-
-        // Armar estructura de datos
-        const defMap = {};
-        (definiciones || []).forEach(d => {
-            if (!defMap[d.palabra_id]) defMap[d.palabra_id] = [];
-            defMap[d.palabra_id].push({ texto: d.texto, ejemplo: d.ejemplo || '' });
-        });
-
-        const sinMap = {};
-        (sinonimos || []).forEach(s => {
-            if (!sinMap[s.palabra_id]) sinMap[s.palabra_id] = [];
-            sinMap[s.palabra_id].push(s.sinonimo);
-        });
-
+        // Mapear al formato que usa la app
         DICCIONARIO = palabras.map(p => ({
             palabra: p.palabra,
             categoria: p.categoria,
             silabas: p.silabas || '',
             pronunciacion: p.pronunciacion || '',
             origen: p.origen || '',
-            definiciones: defMap[p.id] || [],
-            sinonimos: sinMap[p.id] || []
+            definiciones: (p.definiciones || [])
+                .sort((a, b) => a.numero - b.numero)
+                .map(d => ({ texto: d.texto, ejemplo: d.ejemplo || '' })),
+            sinonimos: (p.sinonimos || []).map(s => s.sinonimo)
         }));
 
     } catch (error) {

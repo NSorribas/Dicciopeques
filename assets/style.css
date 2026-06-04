@@ -694,6 +694,25 @@ footer a {
     text-decoration: none;
 }
 
+.footer-sep {
+    margin: 0 8px;
+    opacity: 0.3;
+}
+
+.footer-admin-link {
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.footer-admin-link:hover {
+    opacity: 1;
+}
+
+.footer-admin-link i {
+    font-size: 11px;
+    margin-right: 3px;
+}
+
 /* === SCROLL BAR === */
 ::-webkit-scrollbar {
     width: 8px;
