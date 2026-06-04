@@ -15,8 +15,11 @@ let terminoBusqueda = "";
 let tarjetaExpandida = null;
 let ultimoResultadoKey = "";
 let debounceTimer = null;
+let filtroFavoritos = false;
 
 const STORAGE_KEY_LETRA = "dicciopeques_letra";
+const STORAGE_KEY_FAVS = "dicciopeques_favoritos";
+const STORAGE_KEY_THEME = "dicciopeques_tema";
 const ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 // ============================================================
@@ -122,6 +125,9 @@ function guardarLetra(letra) {
 // ============================================================
 function filtrarPalabras() {
     return DICCIONARIO.filter(p => {
+        // Filtro de favoritos
+        if (filtroFavoritos && !esFavorito(p.palabra)) return false;
+
         if (!terminoBusqueda && letraActiva) {
             if (getLetraInicial(p.palabra) !== letraActiva) return false;
         }
@@ -187,11 +193,13 @@ function renderLista(forzar = false) {
     const info = document.getElementById("resultsInfo");
     const resultados = filtrarPalabras();
 
-    const nuevaKey = resultados.map(p => p.palabra).join("|") + "|" + terminoBusqueda + "|" + letraActiva;
+    const nuevaKey = resultados.map(p => p.palabra).join("|") + "|" + terminoBusqueda + "|" + letraActiva + "|" + filtroFavoritos;
     const contenidoCambio = nuevaKey !== ultimoResultadoKey;
     ultimoResultadoKey = nuevaKey;
 
-    if (terminoBusqueda) {
+    if (filtroFavoritos) {
+        info.innerHTML = `<i class="fas fa-star" style="color:var(--accent);margin-right:4px"></i> Mostrando <strong>${resultados.length}</strong> palabra${resultados.length !== 1 ? 's' : ''} favorita${resultados.length !== 1 ? 's' : ''}`;
+    } else if (terminoBusqueda) {
         info.innerHTML = `<strong>${resultados.length}</strong> resultado${resultados.length !== 1 ? 's' : ''} para "${terminoBusqueda}"`;
     } else if (letraActiva) {
         info.innerHTML = `Mostrando <strong>${resultados.length}</strong> palabra${resultados.length !== 1 ? 's' : ''} que empiezan con <strong>${letraActiva}</strong>`;
@@ -200,7 +208,9 @@ function renderLista(forzar = false) {
     }
 
     if (resultados.length === 0) {
-        const mensaje = terminoBusqueda
+        const mensaje = filtroFavoritos
+            ? 'No tenés palabras favoritas todavía. Tocá la <i class="far fa-star" style="color:var(--accent)"></i> en cualquier palabra para guardarla.'
+            : terminoBusqueda
             ? "No se encontraron palabras que coincidan con tu búsqueda."
             : `No hay palabras que empiecen con la letra <strong>${letraActiva}</strong>.`;
         lista.innerHTML = `
@@ -215,42 +225,48 @@ function renderLista(forzar = false) {
         lista.innerHTML = resultados.map((p) => {
             const expandida = tarjetaExpandida === p.palabra;
             const catClass = `cat-${p.categoria}`;
+            const fav = esFavorito(p.palabra);
             return `
             <article class="word-card ${expandida ? 'expanded' : ''}"
                 data-palabra="${p.palabra}"
                 role="listitem"
                 aria-expanded="${expandida}">
-                <div class="word-header">
-                    <div class="word-main">
-                        <h2 class="word-term">${resaltar(p.palabra, terminoBusqueda)}</h2>
-                        <div class="word-meta">
-                            <span class="word-category ${catClass}">${p.categoria}</span>
-                            <span class="word-syllables">${p.silabas}</span>
-                            <span class="word-pronunciation">${p.pronunciacion}</span>
+                <button class="word-fav ${fav ? 'favorited' : ''}" data-fav="${p.palabra}" aria-label="${fav ? 'Quitar de favoritos' : 'Agregar a favoritos'}" title="${fav ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
+                    <i class="${fav ? 'fas' : 'far'} fa-star"></i>
+                </button>
+                <div class="word-card-inner">
+                    <div class="word-header">
+                        <div class="word-main">
+                            <h2 class="word-term">${resaltar(p.palabra, terminoBusqueda)}</h2>
+                            <div class="word-meta">
+                                <span class="word-category ${catClass}">${p.categoria}</span>
+                                <span class="word-syllables">${p.silabas}</span>
+                                <span class="word-pronunciation">${p.pronunciacion}</span>
+                            </div>
                         </div>
+                        <i class="fas fa-chevron-down word-expand-icon"></i>
                     </div>
-                    <i class="fas fa-chevron-down word-expand-icon"></i>
-                </div>
-                <div class="word-detail">
-                    <div class="word-detail-inner">
-                        ${p.definiciones.map((d, di) => `
-                            <div class="definition-block">
-                                <p class="def-text">
-                                    ${p.definiciones.length > 1 ? `<span class="def-number">${di + 1}</span>` : ''}
-                                    ${resaltar(d.texto, terminoBusqueda)}
-                                </p>
-                                ${d.ejemplo ? `<p class="def-example">${resaltar(d.ejemplo, terminoBusqueda)}</p>` : ''}
-                            </div>
-                        `).join('')}
-                        ${p.sinonimos.length ? `
-                            <div class="synonyms-block">
-                                <div class="synonyms-label">Sinónimos</div>
-                                ${p.sinonimos.map(s => `<span class="synonym-tag" data-synonym="${s}">${resaltar(s, terminoBusqueda)}</span>`).join('')}
-                            </div>
-                        ` : ''}
-                        ${p.origen ? `
-                            <div class="origin-block"><strong>Etimología:</strong> ${p.origen}</div>
-                        ` : ''}
+                    <div class="word-detail">
+                        <div class="word-detail-inner">
+                            ${p.definiciones.map((d, di) => `
+                                <div class="definition-block">
+                                    <p class="def-text">
+                                        ${p.definiciones.length > 1 ? `<span class="def-number">${di + 1}</span>` : ''}
+                                        ${resaltar(d.texto, terminoBusqueda)}
+                                    </p>
+                                    ${d.ejemplo ? `<p class="def-example">${resaltar(d.ejemplo, terminoBusqueda)}</p>` : ''}
+                                </div>
+                            `).join('')}
+                            ${p.sinonimos.length ? `
+                                <div class="synonyms-block">
+                                    <div class="synonyms-label">Sinónimos</div>
+                                    ${p.sinonimos.map(s => `<span class="synonym-tag" data-synonym="${s}">${resaltar(s, terminoBusqueda)}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                            ${p.origen ? `
+                                <div class="origin-block"><strong>Etimología:</strong> ${p.origen}</div>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             </article>`;
@@ -276,7 +292,29 @@ function bindCardEvents() {
     const lista = document.getElementById("wordList");
 
     lista.querySelectorAll(".word-card").forEach(card => {
+        // Click en estrella de favoritos
+        const favBtn = card.querySelector('.word-fav');
+        if (favBtn) {
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const palabra = favBtn.dataset.fav;
+                const ahoraEsFav = toggleFavorito(palabra);
+                favBtn.classList.toggle('favorited', ahoraEsFav);
+                favBtn.querySelector('i').className = ahoraEsFav ? 'fas fa-star' : 'far fa-star';
+                favBtn.setAttribute('aria-label', ahoraEsFav ? 'Quitar de favoritos' : 'Agregar a favoritos');
+                favBtn.setAttribute('title', ahoraEsFav ? 'Quitar de favoritos' : 'Agregar a favoritos');
+
+                // Si estamos en filtro de favoritos y se quitó, re-renderizar
+                if (filtroFavoritos && !ahoraEsFav) {
+                    renderLista(true);
+                }
+            });
+        }
+
         card.addEventListener("click", (e) => {
+            // Ignorar clicks en el botón de favoritos
+            if (e.target.closest('.word-fav')) return;
+
             const synonymTag = e.target.closest(".synonym-tag");
             if (synonymTag) {
                 e.stopPropagation();
@@ -329,6 +367,160 @@ function renderPalabraDelDia() {
 }
 
 // ============================================================
+// FAVORITOS
+// ============================================================
+function getFavoritos() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY_FAVS)) || [];
+    } catch { return []; }
+}
+
+function esFavorito(palabra) {
+    return getFavoritos().includes(palabra);
+}
+
+function toggleFavorito(palabra) {
+    let favs = getFavoritos();
+    if (favs.includes(palabra)) {
+        favs = favs.filter(f => f !== palabra);
+    } else {
+        favs.push(palabra);
+    }
+    localStorage.setItem(STORAGE_KEY_FAVS, JSON.stringify(favs));
+    actualizarBadgeFavoritos();
+    return favs.includes(palabra);
+}
+
+function actualizarBadgeFavoritos() {
+    const badge = document.getElementById('fabFavBadge');
+    const count = getFavoritos().length;
+    if (badge) {
+        badge.textContent = count;
+        badge.classList.toggle('visible', count > 0);
+    }
+}
+
+// ============================================================
+// TEMA CLARO/OSCURO
+// ============================================================
+function getTema() {
+    return localStorage.getItem(STORAGE_KEY_THEME) || 'dark';
+}
+
+function aplicarTema(tema) {
+    document.body.classList.toggle('light-mode', tema === 'light');
+    const icon = document.querySelector('#fabTheme i');
+    if (icon) {
+        icon.className = tema === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+    localStorage.setItem(STORAGE_KEY_THEME, tema);
+}
+
+function toggleTema() {
+    const temaActual = getTema();
+    aplicarTema(temaActual === 'dark' ? 'light' : 'dark');
+}
+
+// ============================================================
+// PALABRA ALEATORIA
+// ============================================================
+function irAPalabraAleatoria() {
+    if (DICCIONARIO.length === 0) return;
+    const indice = Math.floor(Math.random() * DICCIONARIO.length);
+    const palabra = DICCIONARIO[indice].palabra;
+
+    // Limpiar búsqueda y filtro de favoritos
+    const searchInput = document.getElementById("searchInput");
+    searchInput.value = "";
+    terminoBusqueda = "";
+    document.getElementById("searchClear").classList.remove("visible");
+    filtroFavoritos = false;
+    document.getElementById('fabFavorites').classList.remove('active');
+
+    // Ir a la letra de la palabra
+    letraActiva = getLetraInicial(palabra);
+    guardarLetra(letraActiva);
+    tarjetaExpandida = palabra;
+    renderAZNav();
+    renderLista(true);
+
+    // Scroll a la tarjeta
+    setTimeout(() => {
+        const card = document.querySelector(`.word-card[data-palabra="${CSS.escape(palabra)}"]`);
+        if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Breve highlight
+            card.style.boxShadow = '0 0 0 2px var(--accent), var(--card-shadow)';
+            setTimeout(() => { card.style.boxShadow = ''; }, 1500);
+        }
+    }, 100);
+
+    mostrarToast(`Aleatoria: "${palabra}"`);
+}
+
+// ============================================================
+// FAB: FLOATING ACTION BUTTON
+// ============================================================
+function initFAB() {
+    const toggle = document.getElementById('fabToggle');
+    const menu = document.getElementById('fabMenu');
+
+    // Agregar badges a los botones
+    const fabFav = document.getElementById('fabFavorites');
+    fabFav.style.position = 'relative';
+    fabFav.innerHTML = '<i class="fas fa-star"></i><span class="fab-badge" id="fabFavBadge">0</span>';
+
+    toggle.addEventListener('click', () => {
+        const isOpen = menu.classList.toggle('open');
+        toggle.classList.toggle('active', isOpen);
+    });
+
+    // Cerrar al hacer click fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.fab-container')) {
+            menu.classList.remove('open');
+            toggle.classList.remove('active');
+        }
+    });
+
+    // Favoritos
+    fabFav.addEventListener('click', () => {
+        filtroFavoritos = !filtroFavoritos;
+        fabFav.classList.toggle('active', filtroFavoritos);
+        tarjetaExpandida = null;
+        renderLista(true);
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+
+        if (filtroFavoritos) {
+            // Desactivar búsqueda y letra cuando filtramos favoritos
+            const searchInput = document.getElementById("searchInput");
+            searchInput.value = "";
+            terminoBusqueda = "";
+            document.getElementById("searchClear").classList.remove("visible");
+            letraActiva = null;
+            renderAZNav();
+        }
+    });
+
+    // Random
+    document.getElementById('fabRandom').addEventListener('click', () => {
+        irAPalabraAleatoria();
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+    });
+
+    // Tema
+    document.getElementById('fabTheme').addEventListener('click', () => {
+        toggleTema();
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+    });
+
+    actualizarBadgeFavoritos();
+}
+
+// ============================================================
 // TOAST
 // ============================================================
 function mostrarToast(mensaje) {
@@ -344,6 +536,9 @@ function mostrarToast(mensaje) {
 // INICIALIZACIÓN
 // ============================================================
 document.addEventListener("DOMContentLoaded", async () => {
+    // Aplicar tema guardado ANTES de que se pinte (evitar flash)
+    aplicarTema(getTema());
+
     // Inicializar Supabase
     initSupabase();
 
@@ -361,6 +556,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderPalabraDelDia();
     renderAZNav();
     renderLista();
+
+    // Inicializar FAB
+    initFAB();
 
     // Mostrar app con fade
     setTimeout(() => {
@@ -380,6 +578,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             terminoBusqueda = searchInput.value.trim();
             searchClear.classList.toggle("visible", terminoBusqueda.length > 0);
             tarjetaExpandida = null;
+            // Desactivar filtro de favoritos al buscar
+            if (terminoBusqueda && filtroFavoritos) {
+                filtroFavoritos = false;
+                document.getElementById('fabFavorites').classList.remove('active');
+            }
             if (terminoBusqueda) {
                 document.querySelectorAll(".az-letter.active").forEach(el => el.classList.remove("active"));
             } else {
