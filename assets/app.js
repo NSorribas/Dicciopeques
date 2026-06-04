@@ -241,7 +241,10 @@ function renderLista(forzar = false) {
                             <div class="word-meta">
                                 <span class="word-category ${catClass}">${p.categoria}</span>
                                 <span class="word-syllables">${p.silabas}</span>
-                                <span class="word-pronunciation">${p.pronunciacion}</span>
+                                ${p.pronunciacion ? `<span class="word-pronunciation">${p.pronunciacion}</span>` : ''}
+                                <button class="word-speak" data-speak="${p.palabra}" aria-label="Escuchar ${p.palabra}" title="Escuchar pronunciación">
+                                    <i class="fas fa-volume-high"></i>
+                                </button>
                             </div>
                         </div>
                         <i class="fas fa-chevron-down word-expand-icon"></i>
@@ -284,6 +287,41 @@ function renderLista(forzar = false) {
     }
 
     document.getElementById("totalWords").textContent = DICCIONARIO.length;
+}
+
+// ============================================================
+// PRONUNCIACIÓN (Web Speech API)
+// ============================================================
+function hablarPalabra(palabra, btn) {
+    if (!('speechSynthesis' in window)) return;
+
+    // Cancelar si ya está hablando
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(palabra);
+    utterance.lang = 'es-ES';
+    utterance.rate = 0.85;
+
+    // Intentar usar una voz local en español
+    const voces = speechSynthesis.getVoices();
+    const vozEs = voces.find(v => v.lang.startsWith('es') && v.localService)
+               || voces.find(v => v.lang.startsWith('es'));
+    if (vozEs) utterance.voice = vozEs;
+
+    // Animación mientras habla
+    if (btn) {
+        btn.classList.add('speaking');
+        utterance.onend = () => btn.classList.remove('speaking');
+        utterance.onerror = () => btn.classList.remove('speaking');
+    }
+
+    speechSynthesis.speak(utterance);
+}
+
+// Cargar voces (algunos navegadores las cargan async)
+if ('speechSynthesis' in window) {
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 }
 
 // ============================================================
@@ -353,6 +391,15 @@ function bindCardEvents() {
             });
         }
 
+        // Click en pronunciación
+        const speakBtn = card.querySelector('.word-speak');
+        if (speakBtn) {
+            speakBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hablarPalabra(speakBtn.dataset.speak, speakBtn);
+            });
+        }
+
         card.addEventListener("click", (e) => {
             // Ignorar clicks en el botón de favoritos
             if (e.target.closest('.word-fav')) return;
@@ -400,7 +447,11 @@ function renderPalabraDelDia() {
             <p class="wod-def">${p.definiciones[0].texto}</p>
             <div class="wod-footer">
                 <span class="word-category cat-${p.categoria}">${p.categoria}</span>
-                <span style="font-size:13px;color:var(--fg-muted)">${p.pronunciacion}</span>
+                ${p.pronunciacion ? `<span style="font-size:13px;color:var(--fg-muted)">${p.pronunciacion}</span>` : ''}
+                <button class="wod-speak" data-speak="${p.palabra}" aria-label="Escuchar ${p.palabra}" title="Escuchar pronunciación">
+                    <i class="fas fa-volume-high"></i>
+                    <span class="wod-speak-text">Escuchar</span>
+                </button>
             </div>
         </div>
         <div class="wod-letter" aria-hidden="true">${letraInicial}</div>
@@ -582,6 +633,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Renderizar (reemplaza los skeletons)
     renderPalabraDelDia();
+
+    // Event listener para pronunciación de la WOD
+    document.getElementById('wordOfDay').addEventListener('click', (e) => {
+        const speakBtn = e.target.closest('.wod-speak');
+        if (speakBtn) {
+            e.stopPropagation();
+            hablarPalabra(speakBtn.dataset.speak, speakBtn);
+        }
+    });
+
     renderAZNav();
     renderLista();
 
