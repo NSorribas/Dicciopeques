@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DiccioPeques</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="assets/style.css">
@@ -30,14 +31,8 @@
                 <div class="stat-item">
                     <span class="stat-num" id="totalWords">0</span> palabras
                 </div>
-                <div class="stat-item">
-                    <span class="stat-num" id="totalCats">0</span> categorías
-                </div>
             </div>
         </header>
-
-        <!-- Palabra del día -->
-        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día"></section>
 
         <!-- Búsqueda -->
         <section class="search-section" aria-label="Búsqueda">
@@ -57,8 +52,16 @@
             </div>
         </section>
 
-        <!-- Filtros -->
-        <nav class="filters-bar" id="filtersBar" aria-label="Filtrar por categoría"></nav>
+        <!-- Navegación A-Z -->
+        <nav class="az-nav" id="azNav" aria-label="Navegación alfabética"></nav>
+
+        <!-- Palabra del día -->
+        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día"></section>
+
+        <!-- Separador decorativo -->
+        <div class="separator" aria-hidden="true">
+            <img src="assets/separator.svg" alt="" loading="lazy">
+        </div>
 
         <!-- Info de resultados -->
         <div class="results-info" id="resultsInfo"></div>

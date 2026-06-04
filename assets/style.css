@@ -86,7 +86,7 @@ body {
 
 /* === HEADER === */
 header {
-    padding: 60px 0 40px;
+    padding: 60px 0 32px;
     text-align: center;
     position: relative;
 }
@@ -139,7 +139,7 @@ header {
     display: flex;
     justify-content: center;
     gap: 32px;
-    margin-top: 28px;
+    margin-top: 20px;
 }
 
 .stat-item {
@@ -158,7 +158,7 @@ header {
 
 /* === BARRA DE BÚSQUEDA === */
 .search-section {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     position: relative;
 }
 
@@ -228,46 +228,153 @@ header {
     color: var(--accent);
 }
 
-/* === FILTROS POR CATEGORÍA === */
-.filters-bar {
+/* === NAVEGACIÓN A-Z === */
+.az-nav {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 36px;
+    gap: 4px;
+    margin-bottom: 32px;
+    padding: 0 8px;
 }
 
-.filter-chip {
-    padding: 7px 18px;
-    border-radius: 30px;
+.az-letter {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
     border: 1.5px solid var(--border);
     background: transparent;
     color: var(--fg-muted);
-    font-size: 13px;
-    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
     font-weight: 600;
+    font-family: 'Source Sans 3', sans-serif;
     cursor: pointer;
     transition: all 0.25s ease;
-    text-transform: capitalize;
+    position: relative;
 }
 
-.filter-chip:hover {
+.az-letter:hover {
     border-color: var(--accent);
     color: var(--accent);
     background: var(--accent-dim);
 }
 
-.filter-chip.active {
+.az-letter.active {
     background: var(--accent);
     color: var(--bg);
     border-color: var(--accent);
+    box-shadow: 0 2px 12px var(--accent-glow);
 }
 
-.filter-chip .chip-count {
-    display: inline-block;
-    margin-left: 6px;
+.az-letter.disabled {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+}
+
+.az-letter .az-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.az-letter.active .az-count {
+    background: var(--bg);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* === PALABRA DEL DÍA === */
+.word-of-day {
+    background: linear-gradient(135deg, var(--bg-card), rgba(212,168,67,0.06));
+    border: 1.5px solid var(--accent-glow);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.word-of-day::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--accent-dim), transparent 70%);
+    pointer-events: none;
+}
+
+.wod-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 11px;
-    opacity: 0.7;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.wod-label i {
+    font-size: 14px;
+}
+
+.wod-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--fg);
+    margin-bottom: 6px;
+}
+
+.wod-def {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--fg-muted);
+    max-width: 560px;
+}
+
+.wod-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+/* === SEPARADOR DECORATIVO === */
+.separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0 32px;
+    padding: 0 20px;
+}
+
+.separator img {
+    width: 100%;
+    max-width: 500px;
+    height: 30px;
+    object-fit: contain;
+    opacity: 0.6;
 }
 
 /* === LISTADO DE RESULTADOS === */
@@ -290,7 +397,7 @@ header {
     padding-bottom: 80px;
 }
 
-/* === TARJETA DE PALABRA — SIN animación de entrada === */
+/* === TARJETA DE PALABRA === */
 .word-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -516,66 +623,6 @@ header {
     color: var(--fg);
 }
 
-/* === PALABRA DEL DÍA === */
-.word-of-day {
-    background: linear-gradient(135deg, var(--bg-card), rgba(212,168,67,0.06));
-    border: 1.5px solid var(--accent-glow);
-    border-radius: var(--radius);
-    padding: 32px;
-    margin-bottom: 36px;
-    position: relative;
-    overflow: hidden;
-}
-
-.word-of-day::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, var(--accent-dim), transparent 70%);
-    pointer-events: none;
-}
-
-.wod-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent);
-    margin-bottom: 12px;
-}
-
-.wod-label i {
-    font-size: 14px;
-}
-
-.wod-term {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    font-weight: 900;
-    color: var(--fg);
-    margin-bottom: 6px;
-}
-
-.wod-def {
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--fg-muted);
-    max-width: 560px;
-}
-
-.wod-footer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 16px;
-}
-
 /* === ESTADO VACÍO === */
 .empty-state {
     text-align: center;
@@ -672,6 +719,9 @@ footer a {
     .wod-term { font-size: 30px; }
     .word-of-day { padding: 24px; }
     .header-stats { gap: 20px; }
+    .az-nav { gap: 3px; }
+    .az-letter { width: 32px; height: 32px; font-size: 12px; border-radius: 6px; }
+    .az-letter .az-count { display: none; }
 }
 
 /* === REDUCCIÓN DE MOVIMIENTO === */

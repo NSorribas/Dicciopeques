@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a843"/>
+      <stop offset="100%" style="stop-color:#b8912e"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo redondeado -->
+  <rect width="64" height="64" rx="14" fill="#0f1a14"/>
+  <!-- Libro izquierdo -->
+  <path d="M14 16 Q14 14 16 14 L28 14 Q30 14 30 16 L30 48 Q30 46 28 46 L16 46 Q14 46 14 48 Z" fill="url(#bookGrad)" opacity="0.9"/>
+  <!-- Libro derecho -->
+  <path d="M34 16 Q34 14 36 14 L48 14 Q50 14 50 16 L50 48 Q50 46 48 46 L36 46 Q34 46 34 48 Z" fill="url(#bookGrad)" opacity="0.9"/>
+  <!-- Líneas libro izquierdo -->
+  <line x1="18" y1="22" x2="26" y2="22" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="18" y1="27" x2="26" y2="27" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="18" y1="32" x2="26" y2="32" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="18" y1="37" x2="24" y2="37" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Líneas libro derecho -->
+  <line x1="38" y1="22" x2="46" y2="22" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="38" y1="27" x2="46" y2="27" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="38" y1="32" x2="46" y2="32" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="38" y1="37" x2="44" y2="37" stroke="#0f1a14" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Lomo del libro -->
+  <line x1="32" y1="14" x2="32" y2="48" stroke="#d4a843" stroke-width="1.5" opacity="0.5"/>
+</svg>
