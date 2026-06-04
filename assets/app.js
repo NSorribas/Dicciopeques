@@ -313,14 +313,18 @@ function renderPalabraDelDia() {
     const hoy = new Date();
     const indice = (hoy.getFullYear() * 366 + hoy.getMonth() * 31 + hoy.getDate()) % DICCIONARIO.length;
     const p = DICCIONARIO[indice];
+    const letraInicial = p.palabra.charAt(0).toUpperCase();
     document.getElementById("wordOfDay").innerHTML = `
-        <div class="wod-label"><i class="fas fa-star"></i> Palabra del día</div>
-        <h2 class="wod-term">${p.palabra}</h2>
-        <p class="wod-def">${p.definiciones[0].texto}</p>
-        <div class="wod-footer">
-            <span class="word-category cat-${p.categoria}">${p.categoria}</span>
-            <span style="font-size:13px;color:var(--fg-muted)">${p.pronunciacion}</span>
+        <div class="wod-content">
+            <div class="wod-label"><i class="fas fa-star"></i> Palabra del día</div>
+            <h2 class="wod-term">${p.palabra}</h2>
+            <p class="wod-def">${p.definiciones[0].texto}</p>
+            <div class="wod-footer">
+                <span class="word-category cat-${p.categoria}">${p.categoria}</span>
+                <span style="font-size:13px;color:var(--fg-muted)">${p.pronunciacion}</span>
+            </div>
         </div>
+        <div class="wod-letter" aria-hidden="true">${letraInicial}</div>
     `;
 }
 

@@ -309,6 +309,30 @@ header {
     margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.wod-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 140px;
+    font-weight: 900;
+    color: #d4a843;
+    opacity: 0.08;
+    line-height: 1;
+    flex-shrink: 0;
+    user-select: none;
+    pointer-events: none;
+    margin: -20px -10px 0 0;
+}
+
+.wod-content {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .word-of-day::after {
@@ -737,6 +761,7 @@ footer a {
     .word-term { font-size: 22px; }
     .wod-term { font-size: 30px; }
     .word-of-day { padding: 24px; }
+    .wod-letter { font-size: 90px; margin: -12px -6px 0 0; }
     .header-stats { gap: 20px; }
     .az-nav { gap: 3px; }
     .az-letter { width: 32px; height: 32px; font-size: 12px; border-radius: 6px; }
