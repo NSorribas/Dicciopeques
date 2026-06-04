@@ -10,16 +10,168 @@ let palabraEnEdicion = null;
 let palabraAEliminar = null;
 
 // ============================================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN CON AUTH
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
     if (typeof supabase !== 'undefined' && supabase.createClient) {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+        ocultarSplash('Error: Supabase no disponible');
+        return;
     }
 
-    initEventListeners();
-    await cargarPalabras();
+    // Escuchar cambios de sesión (login, logout, token refresh)
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+            mostrarPanel(session.user);
+        } else if (event === 'SIGNED_OUT') {
+            mostrarLogin();
+        }
+    });
+
+    // Verificar sesión existente
+    try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        if (error) throw error;
+
+        // Simular tiempo mínimo de splash
+        await new Promise(r => setTimeout(r, 800));
+
+        if (session && session.user) {
+            mostrarPanel(session.user);
+        } else {
+            mostrarLogin();
+        }
+    } catch (error) {
+        console.error('Error verificando sesión:', error);
+        await new Promise(r => setTimeout(r, 800));
+        mostrarLogin();
+    }
 });
+
+// ============================================================
+// PANTALLAS: SPLASH / LOGIN / PANEL
+// ============================================================
+function ocultarSplash(mensaje) {
+    const splash = document.getElementById('splash');
+    splash.style.opacity = '0';
+    setTimeout(() => {
+        splash.style.display = 'none';
+        if (mensaje) {
+            document.getElementById('loginError').textContent = mensaje;
+        }
+    }, 400);
+}
+
+function mostrarLogin() {
+    // Ocultar splash
+    const splash = document.getElementById('splash');
+    splash.style.opacity = '0';
+    setTimeout(() => { splash.style.display = 'none'; }, 400);
+
+    // Mostrar login, ocultar panel
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminPanel').style.display = 'none';
+}
+
+function mostrarPanel(user) {
+    // Ocultar splash y login
+    const splash = document.getElementById('splash');
+    splash.style.opacity = '0';
+    setTimeout(() => { splash.style.display = 'none'; }, 400);
+
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+
+    // Mostrar email del usuario
+    document.getElementById('userEmail').textContent = user.email;
+
+    // Inicializar el panel
+    initEventListeners();
+    cargarPalabras();
+}
+
+// ============================================================
+// AUTH: LOGIN
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginSubmit = document.getElementById('loginSubmit');
+    const togglePassword = document.getElementById('togglePassword');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.textContent = '';
+
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+            loginError.textContent = 'Completá email y contraseña.';
+            return;
+        }
+
+        // Estado cargando
+        loginSubmit.classList.add('loading');
+        loginSubmit.disabled = true;
+
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) {
+                // Mensajes de error en español
+                if (error.message.includes('Invalid login credentials')) {
+                    loginError.textContent = 'Email o contraseña incorrectos.';
+                } else if (error.message.includes('Email not confirmed')) {
+                    loginError.textContent = 'Email no confirmado. Revisá tu casilla de correo.';
+                } else if (error.message.includes('Too many requests')) {
+                    loginError.textContent = 'Demasiados intentos. Esperá unos segundos y volvé a intentar.';
+                } else {
+                    loginError.textContent = 'Error al iniciar sesión: ' + error.message;
+                }
+                return;
+            }
+
+            // Login exitoso — onAuthStateChange se encarga de mostrar el panel
+        } catch (err) {
+            loginError.textContent = 'Error de conexión. Intentá de nuevo.';
+            console.error('Error login:', err);
+        } finally {
+            loginSubmit.classList.remove('loading');
+            loginSubmit.disabled = false;
+        }
+    });
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', () => {
+        const input = document.getElementById('loginPassword');
+        const icon = togglePassword.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+});
+
+// ============================================================
+// AUTH: LOGOUT
+// ============================================================
+async function logout() {
+    try {
+        await supabaseClient.auth.signOut();
+        // onAuthStateChange se encarga de mostrar el login
+    } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        mostrarToast('Error al cerrar sesión', 'error');
+    }
+}
 
 // ============================================================
 // CARGA DE DATOS
@@ -56,7 +208,12 @@ async function cargarPalabras() {
 
     } catch (error) {
         console.error('Error cargando palabras:', error);
-        mostrarToast('Error al cargar las palabras', 'error');
+        if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
+            mostrarToast('Sesión expirada. Ingresá de nuevo.', 'error');
+            setTimeout(() => logout(), 1500);
+        } else {
+            mostrarToast('Error al cargar las palabras', 'error');
+        }
     }
 }
 
@@ -206,7 +363,12 @@ async function guardarPalabra(event) {
 
     } catch (error) {
         console.error('Error guardando:', error);
-        mostrarToast('Error al guardar: ' + (error.message || 'Error desconocido'), 'error');
+        if (error.code === 'PGRST301' || error.message?.includes('JWT')) {
+            mostrarToast('Sesión expirada. Ingresá de nuevo.', 'error');
+            setTimeout(() => logout(), 1500);
+        } else {
+            mostrarToast('Error al guardar: ' + (error.message || 'Error desconocido'), 'error');
+        }
     }
 }
 
@@ -628,6 +790,9 @@ function mostrarToast(mensaje, tipo = 'info') {
 // EVENT LISTENERS
 // ============================================================
 function initEventListeners() {
+    // Logout
+    document.getElementById('btnLogout').addEventListener('click', logout);
+
     // Nueva palabra
     document.getElementById('btnNueva').addEventListener('click', nuevaPalabra);
 

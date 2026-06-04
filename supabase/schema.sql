@@ -87,38 +87,33 @@ CREATE POLICY "Lectura pública sinonimos" ON sinonimos
     FOR SELECT USING (true);
 
 -- Escritura solo para usuarios autenticados
--- (por ahora también permitimos anon para el PoC del admin)
--- TODO: Remover las políticas de escritura para anon cuando se implemente auth
+CREATE POLICY "Escritura authenticated palabras" ON palabras
+    FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "Escritura anon palabras" ON palabras
-    FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Escritura authenticated definiciones" ON definiciones
+    FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "Escritura anon definiciones" ON definiciones
-    FOR ALL USING (true) WITH CHECK (true);
-
-CREATE POLICY "Escritura anon sinonimos" ON sinonimos
-    FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Escritura authenticated sinonimos" ON sinonimos
+    FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- 6. GRANTs explícitos (requerido por el cambio de May 2026)
 -- ============================================================
 
--- Permisos para anon (lectura + escritura temporal para admin PoC)
-GRANT SELECT, INSERT, UPDATE, DELETE ON palabras TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON definiciones TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON sinonimos TO anon;
+-- Permisos para anon: SOLO lectura (el diccionario público no necesita escribir)
+GRANT SELECT ON palabras TO anon;
+GRANT SELECT ON definiciones TO anon;
+GRANT SELECT ON sinonimos TO anon;
 
--- Permisos para authenticated
+-- Permisos para authenticated: lectura + escritura (admin panel)
 GRANT SELECT, INSERT, UPDATE, DELETE ON palabras TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON definiciones TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON sinonimos TO authenticated;
 
 -- Permisos sobre secuencias (necesario para INSERT con GENERATED ALWAYS AS IDENTITY)
-GRANT USAGE, SELECT ON SEQUENCE palabras_id_seq TO anon;
+-- Solo authenticated necesita crear nuevos registros
 GRANT USAGE, SELECT ON SEQUENCE palabras_id_seq TO authenticated;
-GRANT USAGE, SELECT ON SEQUENCE definiciones_id_seq TO anon;
 GRANT USAGE, SELECT ON SEQUENCE definiciones_id_seq TO authenticated;
-GRANT USAGE, SELECT ON SEQUENCE sinonimos_id_seq TO anon;
 GRANT USAGE, SELECT ON SEQUENCE sinonimos_id_seq TO authenticated;
 
 -- ============================================================
