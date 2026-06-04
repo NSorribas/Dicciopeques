@@ -350,13 +350,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cargar datos
     await cargarDiccionario();
 
+    // Ocultar splash con fade
+    const splash = document.getElementById('splash');
+    splash.style.opacity = '0';
+
     // Restaurar letra activa
     letraActiva = getLetraGuardada();
 
-    // Renderizar
+    // Renderizar (reemplaza los skeletons)
     renderPalabraDelDia();
     renderAZNav();
     renderLista();
+
+    // Mostrar app con fade
+    setTimeout(() => {
+        splash.style.display = 'none';
+        const appContainer = document.getElementById('appContainer');
+        appContainer.style.transition = 'opacity 0.4s ease';
+        appContainer.style.opacity = '1';
+    }, 400);
 
     // Búsqueda con debounce
     const searchInput = document.getElementById("searchInput");

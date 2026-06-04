@@ -11,6 +11,17 @@
 </head>
 <body>
 
+    <!-- Splash Screen -->
+    <div class="splash" id="splash">
+        <div class="splash-inner">
+            <div class="splash-icon"><i class="fas fa-book-open"></i></div>
+            <div class="splash-title">DiccioPeques</div>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Fondo atmosférico -->
     <div class="bg-atmosphere" aria-hidden="true">
         <div class="blob"></div>
@@ -18,7 +29,7 @@
         <div class="blob"></div>
     </div>
 
-    <div class="app-container">
+    <div class="app-container" id="appContainer" style="opacity:0">
 
         <!-- Cabecera -->
         <header>
@@ -56,7 +67,14 @@
         <nav class="az-nav" id="azNav" aria-label="Navegación alfabética"></nav>
 
         <!-- Palabra del día -->
-        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día"></section>
+        <section class="word-of-day" id="wordOfDay" aria-label="Palabra del día">
+            <div class="wod-content">
+                <div class="skel skel-label"></div>
+                <div class="skel skel-title"></div>
+                <div class="skel skel-text"></div>
+                <div class="skel skel-text skel-sm"></div>
+            </div>
+        </section>
 
         <!-- Separador decorativo -->
         <div class="separator" aria-hidden="true">
@@ -67,7 +85,12 @@
         <div class="results-info" id="resultsInfo"></div>
 
         <!-- Listado de palabras -->
-        <main class="word-list" id="wordList" role="list"></main>
+        <main class="word-list" id="wordList" role="list">
+            <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
+            <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
+            <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
+            <div class="skel-card"><div class="skel skel-word"></div><div class="skel skel-meta"></div></div>
+        </main>
 
         <footer>
             Proyecto Léxico &mdash; Datos alojados en Supabase
