@@ -653,8 +653,14 @@ function actualizarBotonNotificaciones() {
     const btn = document.getElementById('fabNotify');
     if (!btn) return;
 
+    // Siempre mostrar el botón. Si no hay soporte push, se muestra
+    // con icono de campana tachada y al click se explica cómo activarlo.
     if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
-        btn.style.display = 'none';
+        btn.classList.remove('subscribed');
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fas fa-bell-slash';
+        btn.setAttribute('aria-label', 'Notificaciones no disponibles');
+        btn.setAttribute('title', 'Notificaciones no disponibles');
         return;
     }
 
@@ -669,6 +675,10 @@ function actualizarBotonNotificaciones() {
         }
         btn.setAttribute('aria-label', suscrito ? 'Desactivar notificaciones' : 'Activar notificaciones');
         btn.setAttribute('title', suscrito ? 'Desactivar notificaciones' : 'Activar notificaciones');
+    }).catch(() => {
+        // Si falla (ej: SW no listo), mostrar como no disponible
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fas fa-bell-slash';
     });
 }
 
@@ -684,16 +694,32 @@ function initNotificaciones() {
         toggle.classList.remove('active');
         toggle.setAttribute('aria-expanded', 'false');
 
-        // Verificar si ya está suscrito
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.getSubscription();
-
-        if (subscription) {
-            await desuscribirPush();
-        } else {
-            await suscribirPush();
+        // Si no hay soporte push, explicar que hay que instalar la app
+        if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (isStandalone) {
+                mostrarToast('Tu dispositivo no soporta notificaciones push');
+            } else {
+                mostrarToast('Instalá la app en tu pantalla de inicio para activar notificaciones', 4000);
+            }
+            return;
         }
-        actualizarBotonNotificaciones();
+
+        // Verificar si ya está suscrito
+        try {
+            const registration = await navigator.serviceWorker.ready;
+            const subscription = await registration.pushManager.getSubscription();
+
+            if (subscription) {
+                await desuscribirPush();
+            } else {
+                await suscribirPush();
+            }
+            actualizarBotonNotificaciones();
+        } catch (error) {
+            console.error('Error en notificaciones:', error);
+            mostrarToast('No se pudieron configurar las notificaciones');
+        }
     });
 
     actualizarBotonNotificaciones();
