@@ -185,7 +185,8 @@
                 <div class="admin-form-row">
                     <div class="admin-form-group admin-form-group-wide">
                         <label for="formPalabraTexto">Palabra *</label>
-                        <input type="text" id="formPalabraTexto" required placeholder="Ej: serendipia">
+                        <input type="text" id="formPalabraTexto" required placeholder="Ej: serendipia" aria-describedby="dupWarning">
+                        <div class="admin-form-warning" id="dupWarning" role="alert" aria-live="polite"></div>
                     </div>
                     <div class="admin-form-group">
                         <label for="formCategoria">Categoría *</label>

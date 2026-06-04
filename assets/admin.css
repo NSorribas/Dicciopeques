@@ -781,6 +781,17 @@ body {
     border-color: var(--accent);
 }
 
+/* Input con borde rojo cuando la palabra es duplicada */
+.admin-form-group input.input-duplicado {
+    border-color: var(--red) !important;
+    box-shadow: 0 0 0 3px var(--red-dim);
+}
+
+.admin-form-group input.input-duplicado:focus {
+    border-color: var(--red) !important;
+    box-shadow: 0 0 0 3px var(--red-dim);
+}
+
 .admin-form-group textarea {
     resize: vertical;
     min-height: 60px;
@@ -882,6 +893,34 @@ body {
     text-transform: lowercase;
     letter-spacing: 0;
     opacity: 0.7;
+}
+
+/* === ADVERTENCIA DE DUPLICADO === */
+.admin-form-warning {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, margin 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+    font-size: 13px;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+}
+
+.admin-form-warning.visible {
+    max-height: 40px;
+    opacity: 1;
+    margin-top: 6px;
+}
+
+.admin-form-warning i {
+    flex-shrink: 0;
+}
+
+.admin-form-warning strong {
+    color: var(--red);
 }
 
 .admin-form-label-row {

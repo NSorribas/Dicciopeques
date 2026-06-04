@@ -512,6 +512,13 @@ function editarPalabra(id) {
     p.definiciones.forEach((d, i) => agregarDefBlock(i + 1, d.texto, d.ejemplo));
 
     document.getElementById('modalTitulo').textContent = `Editar: ${p.palabra}`;
+
+    // Limpiar advertencia de duplicado y rehabilitar botón
+    const warningEl = document.getElementById('dupWarning');
+    if (warningEl) { warningEl.innerHTML = ''; warningEl.classList.remove('visible'); }
+    document.getElementById('formPalabraTexto').classList.remove('input-duplicado');
+    document.getElementById('btnGuardar').disabled = false;
+
     abrirModal();
 }
 
@@ -525,6 +532,11 @@ function nuevaPalabra() {
     document.getElementById('definicionesContainer').innerHTML = '';
     agregarDefBlock(1);
     document.getElementById('modalTitulo').textContent = 'Nueva palabra';
+    // Limpiar advertencia de duplicado y rehabilitar botón
+    const warningEl = document.getElementById('dupWarning');
+    if (warningEl) { warningEl.innerHTML = ''; warningEl.classList.remove('visible'); }
+    document.getElementById('formPalabraTexto').classList.remove('input-duplicado');
+    document.getElementById('btnGuardar').disabled = false;
     abrirModal();
 }
 
@@ -750,7 +762,7 @@ function separarSilabas(palabra) {
     return result.join('-');
 }
 
-// Auto-completar sílabas al escribir la palabra
+// Auto-completar sílabas al escribir la palabra + validación de duplicados en tiempo real
 let silabasAutocompletadas = false;
 
 function onPalabraInput() {
@@ -767,6 +779,44 @@ function onPalabraInput() {
     // Reset flag si el usuario borra la palabra
     if (!palabra) {
         silabasAutocompletadas = false;
+    }
+
+    // Validar duplicado en tiempo real
+    verificarDuplicado(palabra);
+}
+
+function verificarDuplicado(palabra) {
+    const warningEl = document.getElementById('dupWarning');
+    const btnGuardar = document.getElementById('btnGuardar');
+    const inputPalabra = document.getElementById('formPalabraTexto');
+    const editId = document.getElementById('formPalabraId').value;
+
+    if (!palabra || palabra.length === 0) {
+        warningEl.innerHTML = '';
+        warningEl.classList.remove('visible');
+        inputPalabra.classList.remove('input-duplicado');
+        btnGuardar.disabled = false;
+        return;
+    }
+
+    const palabraNorm = palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const duplicada = todasLasPalabras.find(p => {
+        const pNorm = p.palabra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        // Ignorar la palabra que se está editando (mismo id)
+        if (editId && p.id === parseInt(editId)) return false;
+        return pNorm === palabraNorm;
+    });
+
+    if (duplicada) {
+        warningEl.innerHTML = `<i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Ya existe "<strong>${escaparHTML(duplicada.palabra)}</strong>" en el diccionario`;
+        warningEl.classList.add('visible');
+        inputPalabra.classList.add('input-duplicado');
+        btnGuardar.disabled = true;
+    } else {
+        warningEl.innerHTML = '';
+        warningEl.classList.remove('visible');
+        inputPalabra.classList.remove('input-duplicado');
+        btnGuardar.disabled = false;
     }
 }
 
