@@ -38,10 +38,8 @@ CREATE POLICY "Allow anonymous delete" ON push_subscriptions
 CREATE POLICY "Allow anonymous select" ON push_subscriptions
     FOR SELECT USING (true);
 
--- GRANTs necesarios para que el rol anon pueda acceder (requerido por Supabase REST API)
-GRANT SELECT ON public.push_subscriptions TO anon;
-GRANT INSERT ON public.push_subscriptions TO anon;
-GRANT DELETE ON public.push_subscriptions TO anon;
-GRANT SELECT ON public.push_subscriptions TO authenticated;
-GRANT INSERT ON public.push_subscriptions TO authenticated;
-GRANT DELETE ON public.push_subscriptions TO authenticated;
+-- GRANTs necesarios para que los roles anon y authenticated puedan acceder
+-- (requerido por Supabase REST API — las tablas creadas con SQL no obtienen GRANTs automáticos)
+-- UPDATE es necesario para upsert (la PWA guarda suscripciones con upsert)
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.push_subscriptions TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.push_subscriptions TO authenticated;
