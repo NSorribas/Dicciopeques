@@ -2,8 +2,8 @@
   "name": "DiccioPeques — Diccionario de Palabras",
   "short_name": "DiccioPeques",
   "description": "Diccionario interactivo de palabras para niños y niñas. Aprende vocabulario con definiciones, sinónimos, ejemplos y pronunciación.",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#d4a843",
@@ -42,13 +42,13 @@
     {
       "name": "Palabra del día",
       "short_name": "Palabra del día",
-      "url": "/index.html#palabra-del-dia",
+      "url": "./index.html#palabra-del-dia",
       "icons": [{ "src": "assets/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Favoritos",
       "short_name": "Favoritos",
-      "url": "/index.html?fav=1",
+      "url": "./index.html?fav=1",
       "icons": [{ "src": "assets/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]

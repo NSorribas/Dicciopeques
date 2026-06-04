@@ -5,20 +5,20 @@ const CACHE_NAME = 'dicciopeques-v1';
 const STATIC_CACHE = 'dicciopeques-static-v1';
 const DATA_CACHE = 'dicciopeques-data-v1';
 
-// Assets estáticos para cachear al instalar
+// Assets estáticos para cachear al instalar (paths relativos para GitHub Pages)
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/admin.html',
-  '/assets/style.css',
-  '/assets/admin.css',
-  '/assets/app.js',
-  '/assets/admin.js',
-  '/assets/favicon.svg',
-  '/assets/icons/icon-192x192.png',
-  '/assets/icons/icon-512x512.png',
-  '/assets/data/diccionario.json',
-  '/manifest.json'
+  './',
+  './index.html',
+  './admin.html',
+  './assets/style.css',
+  './assets/admin.css',
+  './assets/app.js',
+  './assets/admin.js',
+  './assets/favicon.svg',
+  './assets/icons/icon-192x192.png',
+  './assets/icons/icon-512x512.png',
+  './assets/data/diccionario.json',
+  './manifest.json'
 ];
 
 // Dominios de datos dinámicos (Supabase)
@@ -98,7 +98,7 @@ async function cacheFirst(request) {
   } catch (error) {
     // Si es navegación y estamos offline, devolver index.html cacheado
     if (request.mode === 'navigate') {
-      const fallback = await caches.match('/index.html');
+      const fallback = await caches.match('./index.html');
       if (fallback) return fallback;
     }
     return new Response('Offline', { status: 503, statusText: 'Sin conexión' });
