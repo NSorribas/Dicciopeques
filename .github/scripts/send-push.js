@@ -146,20 +146,28 @@ async function main() {
   console.log('=== DiccioPeques — Notificación Push ===');
   console.log(`Fecha: ${new Date().toISOString()}`);
 
-  // Verificar si hay mensaje personalizado (desde el admin)
-  const customTitle = process.env.CUSTOM_TITLE || '';
-  const customBody = process.env.CUSTOM_BODY || '';
+  // Limpia y verifica si hay mensaje personalizado auténtico
+  // GitHub Actions puede pasar placeholders literales como "${{ github.event.inputs.custom_title }}"
+  // cuando el workflow se ejecuta por schedule (cron) en vez de workflow_dispatch
+  const isActionPlaceholder = (str) => str.startsWith('${{') && str.endsWith('}}');
+
+  const customTitle = (process.env.CUSTOM_TITLE || '').trim();
+  const customBody = (process.env.CUSTOM_BODY || '').trim();
+
+  const hasCustomContent =
+    (customTitle && !isActionPlaceholder(customTitle)) ||
+    (customBody && !isActionPlaceholder(customBody));
 
   let payload;
 
-  if (customTitle || customBody) {
+  if (hasCustomContent) {
     // Mensaje personalizado desde el panel de admin
     payload = {
       title: customTitle || 'DiccioPeques',
       body: customBody || 'Notificación de prueba',
       icon: './assets/icons/icon-192x192.png',
       badge: './assets/icons/icon-192x192.png',
-      url: customTitle ? './index.html' : './index.html'
+      url: './index.html'
     };
     console.log(`[MODO] Mensaje personalizado`);
     console.log(`  Título: ${payload.title}`);
