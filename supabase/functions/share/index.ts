@@ -1,6 +1,6 @@
 // DiccioPeques — Edge Function: OG Tag Preview
-// Si es un crawler de redes sociales: devuelve HTML con OG tags
-// Si es un usuario real: redirige con HTTP 302 a la app
+// SIEMPRE devuelve HTML con OG tags (para crawlers y validadores)
+// + meta refresh para redirigir usuarios reales a la app
 // URL: https://leivaafvepovjrkzntxr.supabase.co/functions/v1/share?word=petricor
 
 const SB_URL = Deno.env.get('SB_URL') ?? ''
@@ -8,28 +8,6 @@ const SB_ANON_KEY = Deno.env.get('SB_ANON_KEY') ?? ''
 
 const APP_URL = 'https://nsorribas.github.io/Dicciopeques/'
 const FUNCTION_URL = 'https://leivaafvepovjrkzntxr.supabase.co/functions/v1/share'
-
-// Crawlers conocidos de redes sociales y mensajería
-const CRAWLER_PATTERNS = [
-  'facebookexternalhit',
-  'Facebot',
-  'Twitterbot',
-  'linkedinbot',
-  'WhatsApp',
-  'TelegramBot',
-  'discordbot',
-  'Slackbot',
-  'Slack-LinkExpanding',
-  'Googlebot',
-  'bingbot',
-  'preview', // algunos clientes de mail
-]
-
-function isCrawler(userAgent: string): boolean {
-  return CRAWLER_PATTERNS.some(pattern =>
-    userAgent.toLowerCase().includes(pattern.toLowerCase())
-  )
-}
 
 Deno.serve(async (req: Request) => {
   const url = new URL(req.url)
@@ -40,16 +18,7 @@ Deno.serve(async (req: Request) => {
     return Response.redirect(APP_URL, 302)
   }
 
-  const shareUrl = APP_URL + '#' + encodeURIComponent(word)
-  const canonicalUrl = FUNCTION_URL + '?word=' + encodeURIComponent(word)
-
-  // Si NO es crawler, redirigir directo a la app con HTTP 302
-  const userAgent = req.headers.get('user-agent') || ''
-  if (!isCrawler(userAgent)) {
-    return Response.redirect(shareUrl, 302)
-  }
-
-  // Es un crawler: buscar la palabra en Supabase y servir OG tags
+  // Buscar la palabra en Supabase
   let palabra: { palabra: string; categoria: string; definiciones: { numero: number; texto: string }[] } | null = null
   try {
     const res = await fetch(
@@ -80,8 +49,11 @@ Deno.serve(async (req: Request) => {
     ? palabra.definiciones[0].texto
     : ''
   const description = palabra.palabra + ' (' + categoria + '): ' + definicion
+  const canonicalUrl = FUNCTION_URL + '?word=' + encodeURIComponent(palabra.palabra)
+  const shareUrl = APP_URL + '#' + encodeURIComponent(palabra.palabra)
   const iconUrl = APP_URL + 'assets/icons/icon-512x512.png'
 
+  // SIEMPRE servir HTML con OG tags + meta refresh para redirigir
   const html = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -94,6 +66,9 @@ Deno.serve(async (req: Request) => {
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:image" content="${iconUrl}">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="${esc(title)}">
   <meta property="og:url" content="${esc(canonicalUrl)}">
   <meta property="og:site_name" content="DiccioPeques">
   <meta property="og:locale" content="es_ES">
@@ -103,10 +78,16 @@ Deno.serve(async (req: Request) => {
   <meta name="twitter:title" content="${esc(title)}">
   <meta name="twitter:description" content="${esc(description)}">
   <meta name="twitter:image" content="${iconUrl}">
+  <meta name="twitter:image:alt" content="${esc(title)}">
+
+  <!-- Redirigir al usuario real a la app (no usa JS, no lo bloquea CSP) -->
+  <meta http-equiv="refresh" content="0;url=${esc(shareUrl)}">
+  <link rel="canonical" href="${esc(canonicalUrl)}">
 </head>
 <body>
   <h1>${esc(palabra.palabra)}</h1>
   <p>${esc(description)}</p>
+  <p><a href="${esc(shareUrl)}">Abrir en DiccioPeques</a></p>
 </body>
 </html>`
 
@@ -114,7 +95,7 @@ Deno.serve(async (req: Request) => {
     status: 200,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600'
+      'Cache-Control': 'public, s-maxage=3600'
     }
   })
 })
