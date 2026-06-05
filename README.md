@@ -12,7 +12,7 @@ Un proyecto léxico web con definiciones, sinónimos, silabeo automático, pronu
 [![Backend](https://img.shields.io/badge/backend-Supabase-3ECF8E?logo=supabase)](https://supabase.com/)
 [![PWA](https://img.shields.io/badge/PWA-Installable-purple?logo=pwa)](https://nsorribas.github.io/Dicciopeques/)
 
-[Ver demo en vivo](https://nsorribas.github.io/Dicciopeques/) · [Panel de administración](https://nsorribas.github.io/Dicciopeques/admin.html)
+[Ver demo en vivo](https://nsorribas.github.io/Dicciopeques/)
 
 </div>
 
