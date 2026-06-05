@@ -7,6 +7,7 @@ const SB_URL = Deno.env.get('SB_URL') ?? ''
 const SB_ANON_KEY = Deno.env.get('SB_ANON_KEY') ?? ''
 
 const APP_URL = 'https://nsorribas.github.io/Dicciopeques/'
+const FUNCTION_URL = 'https://leivaafvepovjrkzntxr.supabase.co/functions/v1/share'
 
 // Crawlers conocidos de redes sociales y mensajería
 const CRAWLER_PATTERNS = [
@@ -40,6 +41,7 @@ Deno.serve(async (req: Request) => {
   }
 
   const shareUrl = APP_URL + '#' + encodeURIComponent(word)
+  const canonicalUrl = FUNCTION_URL + '?word=' + encodeURIComponent(word)
 
   // Si NO es crawler, redirigir directo a la app con HTTP 302
   const userAgent = req.headers.get('user-agent') || ''
@@ -92,7 +94,7 @@ Deno.serve(async (req: Request) => {
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:image" content="${iconUrl}">
-  <meta property="og:url" content="${esc(shareUrl)}">
+  <meta property="og:url" content="${esc(canonicalUrl)}">
   <meta property="og:site_name" content="DiccioPeques">
   <meta property="og:locale" content="es_ES">
 
