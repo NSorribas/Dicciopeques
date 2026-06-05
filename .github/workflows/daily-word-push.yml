@@ -2,8 +2,9 @@ name: Palabra del Día — Notificación Push
 
 on:
   schedule:
-    # 8:00 AM Argentina (UTC-3) = 11:00 UTC
-    - cron: '0 11 * * *'
+    # 6:10 PM Argentina (UTC-3) = 21:10 UTC
+    # Off-peak: 10 min past the hour evita picos de demanda de GitHub Actions
+    - cron: '10 21 * * *'
   workflow_dispatch:
     inputs:
       custom_title:
