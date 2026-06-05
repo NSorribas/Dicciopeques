@@ -5,8 +5,8 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
+const SB_URL = Deno.env.get('SB_URL')!
+const SB_ANON_KEY = Deno.env.get('SB_ANON_KEY')!
 
 const APP_URL = 'https://nsorribas.github.io/Dicciopeques/'
 
@@ -26,11 +26,11 @@ serve(async (req) => {
   let palabra = null
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/palabras?palabra=eq.${encodeURIComponent(word)}&select=palabra,categoria,definiciones(numero,texto)&definiciones.order=numero.asc&limit=1`,
+      `${SB_URL}/rest/v1/palabras?palabra=eq.${encodeURIComponent(word)}&select=palabra,categoria,definiciones(numero,texto)&definiciones.order=numero.asc&limit=1`,
       {
         headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+          apikey: SB_ANON_KEY,
+          Authorization: `Bearer ${SB_ANON_KEY}`
         }
       }
     )
@@ -50,7 +50,7 @@ serve(async (req) => {
     })
   }
 
-  const title = `DiccioPeques — ${palabra.palabra}`
+  const title = `DiccioPeques \u2014 ${palabra.palabra}`
   const categoria = palabra.categoria || ''
   const definicion = palabra.definiciones && palabra.definiciones.length > 0
     ? palabra.definiciones[0].texto

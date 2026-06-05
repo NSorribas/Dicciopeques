@@ -556,8 +556,9 @@ function compartirPalabra(palabra) {
     const entry = DICCIONARIO.find(p => p.palabra === palabra);
     if (!entry) return;
 
-    const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(palabra)}`;
-    const shareTitle = `DiccioPeques — ${palabra}`;
+    const OG_FUNCTION_URL = 'https://leivaafvepovjrkzntxr.supabase.co/functions/v1/share';
+    const shareUrl = `${OG_FUNCTION_URL}?word=${encodeURIComponent(palabra)}`;
+    const shareTitle = `DiccioPeques \u2014 ${palabra}`;
     const shareText = `${palabra} (${entry.categoria}): ${entry.definiciones[0]?.texto || ''}`;
 
     if (navigator.share) {
