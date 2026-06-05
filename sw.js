@@ -1,9 +1,9 @@
 // DiccioPeques — Service Worker
 // Estrategia: Cache-first para assets, Network-first para datos de Supabase
 
-const CACHE_NAME = 'dicciopeques-v5';
-const STATIC_CACHE = 'dicciopeques-static-v5';
-const DATA_CACHE = 'dicciopeques-data-v5';
+const CACHE_NAME = 'dicciopeques-v6';
+const STATIC_CACHE = 'dicciopeques-static-v6';
+const DATA_CACHE = 'dicciopeques-data-v6';
 
 // Assets estáticos para cachear al instalar (paths relativos para GitHub Pages)
 const STATIC_ASSETS = [

@@ -16,6 +16,7 @@ let tarjetaExpandida = null;
 let ultimoResultadoKey = "";
 let debounceTimer = null;
 let filtroFavoritos = false;
+let hashNavegando = false; // evita loop entre hashchange y navegarAPalabra
 
 const STORAGE_KEY_LETRA = "dicciopeques_letra";
 const STORAGE_KEY_FAVS = "dicciopeques_favoritos";
@@ -295,6 +296,11 @@ function renderLista(forzar = false) {
                             ${p.origen ? `
                                 <div class="origin-block"><strong>Etimología:</strong> ${p.origen}</div>
                             ` : ''}
+                            <div class="word-share-row">
+                                <button class="word-share" data-share="${p.palabra}" aria-label="Compartir ${p.palabra}" title="Compartir">
+                                    <i class="fas fa-share-nodes"></i> Compartir
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -417,6 +423,15 @@ function bindCardEvents() {
             });
         }
 
+        // Click en compartir
+        const shareBtn = card.querySelector('.word-share');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                compartirPalabra(shareBtn.dataset.share);
+            });
+        }
+
         // Click en pronunciación
         const speakBtn = card.querySelector('.word-speak');
         if (speakBtn) {
@@ -454,9 +469,13 @@ function bindCardEvents() {
 
             const palabra = card.dataset.palabra;
             if (tarjetaExpandida === palabra) {
+                // Colapsar: limpiar hash
                 tarjetaExpandida = null;
+                history.pushState(null, '', window.location.pathname);
             } else {
-                tarjetaExpandida = palabra;
+                // Expandir: navegar a la palabra (actualiza hash)
+                navegarAPalabra(palabra, false);
+                return;
             }
             lista.querySelectorAll(".word-card").forEach(c => {
                 const esLaTarjeta = c.dataset.palabra === tarjetaExpandida;
@@ -465,6 +484,99 @@ function bindCardEvents() {
             });
         });
     });
+}
+
+// ============================================================
+// HASH ROUTING + NAVEGACIÓN
+// ============================================================
+
+/**
+ * Navegar a una palabra: setea la letra, expande la tarjeta, scrollea
+ * y actualiza el hash de la URL para que sea compartible.
+ * @param {string} palabra - La palabra a la que navegar
+ * @param {boolean} scroll - Si hay que hacer scroll a la tarjeta
+ */
+function navegarAPalabra(palabra, scroll = true) {
+    const entry = DICCIONARIO.find(p => p.palabra === palabra);
+    if (!entry) return;
+
+    // Limpiar búsqueda y favoritos
+    const searchInput = document.getElementById("searchInput");
+    searchInput.value = "";
+    terminoBusqueda = "";
+    document.getElementById("searchClear").classList.remove("visible");
+    filtroFavoritos = false;
+    document.getElementById('fabFavorites').classList.remove('active');
+
+    // Ir a la letra de la palabra
+    letraActiva = getLetraInicial(palabra);
+    guardarLetra(letraActiva);
+    tarjetaExpandida = palabra;
+
+    // Actualizar hash sin disparar hashchange
+    hashNavegando = true;
+    history.pushState(null, '', `#${encodeURIComponent(palabra)}`);
+    setTimeout(() => { hashNavegando = false; }, 50);
+
+    renderAZNav();
+    renderLista(true);
+
+    if (scroll) {
+        setTimeout(() => {
+            const card = document.querySelector(`.word-card[data-palabra="${CSS.escape(palabra)}"]`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.focus();
+                card.style.boxShadow = '0 0 0 2px var(--accent), var(--card-shadow)';
+                setTimeout(() => { card.style.boxShadow = ''; }, 1500);
+            }
+        }, 100);
+    }
+}
+
+/**
+ * Procesar el hash de la URL al cargar la página o al navegar con back/forward.
+ */
+function procesarHash() {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    if (!hash) return;
+
+    // Buscar la palabra (case-insensitive, normalizada)
+    const entry = DICCIONARIO.find(p => normalizar(p.palabra) === normalizar(hash));
+    if (entry) {
+        navegarAPalabra(entry.palabra, true);
+    }
+}
+
+/**
+ * Compartir una palabra: usa Web Share API si está disponible,
+ * sino copia el link al portapapeles.
+ */
+function compartirPalabra(palabra) {
+    const entry = DICCIONARIO.find(p => p.palabra === palabra);
+    if (!entry) return;
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(palabra)}`;
+    const shareTitle = `DiccioPeques — ${palabra}`;
+    const shareText = `${palabra} (${entry.categoria}): ${entry.definiciones[0]?.texto || ''}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: shareTitle,
+            text: shareText,
+            url: shareUrl
+        }).catch(() => {
+            // El usuario canceló o falló — no mostrar error
+        });
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            mostrarToast('Link copiado al portapapeles');
+        }).catch(() => {
+            mostrarToast('No se pudo copiar el link');
+        });
+    } else {
+        mostrarToast('Tu navegador no soporta compartir');
+    }
 }
 
 // ============================================================
@@ -758,35 +870,7 @@ function mostrarToast(mensaje, duracion = 3000) {
 function irAPalabraAleatoria() {
     if (DICCIONARIO.length === 0) return;
     const indice = Math.floor(Math.random() * DICCIONARIO.length);
-    const palabra = DICCIONARIO[indice].palabra;
-
-    // Limpiar búsqueda y filtro de favoritos
-    const searchInput = document.getElementById("searchInput");
-    searchInput.value = "";
-    terminoBusqueda = "";
-    document.getElementById("searchClear").classList.remove("visible");
-    filtroFavoritos = false;
-    document.getElementById('fabFavorites').classList.remove('active');
-
-    // Ir a la letra de la palabra
-    letraActiva = getLetraInicial(palabra);
-    guardarLetra(letraActiva);
-    tarjetaExpandida = palabra;
-    renderAZNav();
-    renderLista(true);
-
-    // Scroll a la tarjeta y enfocar
-    setTimeout(() => {
-        const card = document.querySelector(`.word-card[data-palabra="${CSS.escape(palabra)}"]`);
-        if (card) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            card.focus();
-            // Breve highlight
-            card.style.boxShadow = '0 0 0 2px var(--accent), var(--card-shadow)';
-            setTimeout(() => { card.style.boxShadow = ''; }, 1500);
-        }
-    }, 100);
-
+    navegarAPalabra(DICCIONARIO[indice].palabra, true);
 }
 
 // ============================================================
@@ -953,6 +1037,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderAZNav();
     renderLista();
+
+    // Procesar hash si hay uno en la URL (link compartido)
+    procesarHash();
+
+    // Escuchar back/forward del navegador
+    window.addEventListener('hashchange', () => {
+        if (hashNavegando) return;
+        if (window.location.hash) {
+            procesarHash();
+        } else {
+            // Volvió a la raíz — colapsar tarjeta
+            tarjetaExpandida = null;
+            renderLista();
+        }
+    });
 
     // Inicializar FAB
     initFAB();
