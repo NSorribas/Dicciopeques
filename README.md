@@ -41,7 +41,7 @@ Un proyecto léxico web con definiciones, sinónimos, silabeo automático, pronu
 ### PWA y notificaciones
 
 - **Instalable** — Funciona como app nativa en iOS y Android con ícono, splash y pantalla completa
-- **Notificaciones push** — Palabra del día automática a las 8 AM (hora Argentina) vía GitHub Actions + Web Push
+- **Notificaciones push** — Palabra del día automática a las 6:10 PM (hora Argentina) vía GitHub Actions + Web Push
 - **Offline** — Service Worker con estrategia cache-first para assets y network-first para datos de Supabase
 - **Acciones en notificación** — Botones "Ver palabra" y "Cerrar" directamente desde la notificación
 
@@ -182,7 +182,7 @@ Todas las tablas tienen Row Level Security (RLS) habilitado con políticas espec
 El flujo completo de notificaciones funciona así:
 
 1. **Suscripción** — El usuario activa la campanita en la PWA → el Service Worker registra la suscripción con VAPID → se guarda en `push_subscriptions` vía upsert
-2. **Envío automático** — GitHub Actions ejecuta un cron a las 11:00 UTC (8:00 AM Argentina) → `send-push.js` obtiene la palabra del día desde Supabase → envía push a todas las suscripciones → elimina las expiradas
+2. **Envío automático** — GitHub Actions ejecuta un cron a las 21:10 UTC (6:10 PM Argentina, horario off-peak) → `send-push.js` obtiene la palabra del día desde Supabase → envía push a todas las suscripciones → elimina las expiradas
 3. **Envío manual** — Desde el panel admin se puede disparar un `workflow_dispatch` con mensaje personalizado
 4. **Recepción** — El Service Worker muestra la notificación con acciones "Ver palabra" / "Cerrar"
 

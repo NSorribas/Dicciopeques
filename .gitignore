@@ -1,2 +1,9 @@
 node_modules/
 supabase/.temp/
+.env
+Dicciopeques/
+dicciopeques-refactor/
+repo/
+skills/
+download/
+upload/

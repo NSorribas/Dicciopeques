@@ -1,6 +1,6 @@
 /**
  * DiccioPeques — Enviar notificación push con la palabra del día
- * Ejecutado por GitHub Actions todos los días a las 8 AM (Argentina)
+ * Ejecutado por GitHub Actions todos los días a las 6:10 PM (Argentina)
  */
 
 const webpush = require('web-push');
@@ -82,7 +82,9 @@ function supabaseFetch(path) {
  */
 function getPalabraDelDia(palabras) {
   const hoy = new Date();
-  // Usar UTC para consistencia con el cron de GitHub Actions
+  // Mismo algoritmo que la app (usa hora local de Argentina, UTC-3)
+  // El cron corre a las 21:10 UTC = 18:10 Argentina, así que getUTCDate
+  // coincide con la fecha argentina (todavía no cambió de día)
   const indice = (hoy.getUTCFullYear() * 366 + hoy.getUTCMonth() * 31 + hoy.getUTCDate()) % palabras.length;
   return palabras[indice];
 }
@@ -157,7 +159,7 @@ async function main() {
       body: customBody || 'Notificación de prueba',
       icon: './assets/icons/icon-192x192.png',
       badge: './assets/icons/icon-192x192.png',
-      url: './index.html'
+      url: customTitle ? './index.html' : './index.html'
     };
     console.log(`[MODO] Mensaje personalizado`);
     console.log(`  Título: ${payload.title}`);
@@ -187,10 +189,11 @@ async function main() {
       body: `${palabraDelDia.palabra} (${palabraDelDia.categoria}): ${primeraDef.substring(0, 100)}${primeraDef.length > 100 ? '...' : ''}`,
       icon: './assets/icons/icon-192x192.png',
       badge: './assets/icons/icon-192x192.png',
-      url: './index.html'
+      url: `./index.html#${encodeURIComponent(palabraDelDia.palabra)}`
     };
 
     console.log(`[MODO] Palabra del día: ${palabraDelDia.palabra}`);
+    console.log(`  URL: ${payload.url}`);
   }
 
   // Obtener suscripciones y enviar
