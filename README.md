@@ -41,7 +41,7 @@ Un proyecto léxico web con definiciones, sinónimos, silabeo automático, pronu
 ### PWA y notificaciones
 
 - **Instalable** — Funciona como app nativa en iOS y Android con ícono, splash y pantalla completa
-- **Notificaciones push** — Palabra del día automática a las 6:10 PM (hora Argentina) vía GitHub Actions + Web Push
+- **Notificaciones push** — Palabra del día automática a las 6:00 PM (hora Argentina) vía cron-job.org + GitHub Actions + Web Push
 - **Offline** — Service Worker con estrategia cache-first para assets y network-first para datos de Supabase
 - **Acciones en notificación** — Botones "Ver palabra" y "Cerrar" directamente desde la notificación
 
@@ -71,7 +71,7 @@ Un proyecto léxico web con definiciones, sinónimos, silabeo automático, pronu
 | Backend / DB | [Supabase](https://supabase.com/) (PostgreSQL + Auth + REST API) |
 | Edge Functions | [Supabase Edge Functions](https://supabase.com/docs/guides/functions) (Deno) — OG dinámico |
 | Hosting | [GitHub Pages](https://pages.github.com/) |
-| Push notifications | [Web Push](https://github.com/web-push-libs/web-push) + GitHub Actions |
+| Push notifications | [Web Push](https://github.com/web-push-libs/web-push) + GitHub Actions + [cron-job.org](https://cron-job.org) |
 | PWA | Service Worker, Web App Manifest, VAPID |
 | OG images | [og_edge](https://github.com/supabase/og_edge) ImageResponse (Deno) |
 
@@ -104,7 +104,7 @@ Dicciopeques/
 │       └── favicon-32x32.png
 ├── .github/
 │   ├── workflows/
-│   │   └── daily-word-push.yml # GitHub Actions: cron 8AM + manual
+│   │   └── daily-word-push.yml # GitHub Actions: workflow_dispatch (cron externo) + manual
 │   └── scripts/
 │       └── send-push.js        # Script Node.js que envía las notificaciones push
 └── supabase/
@@ -182,9 +182,11 @@ Todas las tablas tienen Row Level Security (RLS) habilitado con políticas espec
 El flujo completo de notificaciones funciona así:
 
 1. **Suscripción** — El usuario activa la campanita en la PWA → el Service Worker registra la suscripción con VAPID → se guarda en `push_subscriptions` vía upsert
-2. **Envío automático** — GitHub Actions ejecuta un cron a las 21:10 UTC (6:10 PM Argentina, horario off-peak) → `send-push.js` obtiene la palabra del día desde Supabase → envía push a todas las suscripciones → elimina las expiradas
+2. **Envío automático** — [cron-job.org](https://cron-job.org) dispara un `workflow_dispatch` a las 21:00 UTC (6:00 PM Argentina) → GitHub Actions ejecuta `send-push.js` → obtiene la palabra del día desde Supabase → envía push a todas las suscripciones con URL de hash routing (`#palabra`) → elimina las suscripciones expiradas (410/404)
 3. **Envío manual** — Desde el panel admin se puede disparar un `workflow_dispatch` con mensaje personalizado
 4. **Recepción** — El Service Worker muestra la notificación con acciones "Ver palabra" / "Cerrar"
+
+> **¿Por qué cron-job.org?** GitHub Actions scheduled workflows (`on.schedule`) son notoriamente poco confiables: pueden demorar horas o directamente no ejecutarse, especialmente en repos con poca actividad. cron-job.org garantiza ejecución puntual llamando al endpoint `workflow_dispatch` de la API de GitHub, que se procesa inmediatamente.
 
 Las claves VAPID se almacenan como secrets de GitHub y nunca se exponen al cliente.
 
@@ -217,6 +219,7 @@ Las claves VAPID se almacenan como secrets de GitHub y nunca se exponen al clien
 4. Generar claves VAPID con `npx web-push generate-vapid-keys`
 5. Deployar la Edge Function: `supabase functions deploy og-image --no-verify-jwt`
 6. Configurar los secrets `SB_URL` y `SB_ANON_KEY` en el dashboard de Supabase (Edge Functions → Secrets)
+7. Crear un PAT de GitHub (Classic) con scopes `repo` + `workflow` y configurar un job en [cron-job.org](https://cron-job.org) que haga POST al endpoint `workflow_dispatch` de la API de GitHub a las 21:00 UTC
 
 > **Nota sobre tablas creadas con SQL:** Las tablas creadas desde el SQL Editor de Supabase (a diferencia del dashboard) no reciben GRANTs automáticos para los roles `anon` y `authenticated`. Es necesario ejecutar los GRANTs manualmente tal como están en los scripts de la carpeta `supabase/`.
 
