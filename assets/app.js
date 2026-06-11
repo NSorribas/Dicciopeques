@@ -586,7 +586,14 @@ function compartirPalabra(palabra) {
 function renderPalabraDelDia() {
     if (DICCIONARIO.length === 0) return;
     const hoy = new Date();
-    const indice = (hoy.getFullYear() * 366 + hoy.getMonth() * 31 + hoy.getDate()) % DICCIONARIO.length;
+    // Hash determinista de la fecha: misma palabra el mismo día, pero apariencia aleatoria
+    const dateStr = `${hoy.getFullYear()}-${hoy.getMonth()}-${hoy.getDate()}`;
+    let hash = 0;
+    for (let i = 0; i < dateStr.length; i++) {
+        hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+        hash |= 0;
+    }
+    const indice = Math.abs(hash) % DICCIONARIO.length;
     const p = DICCIONARIO[indice];
     const letraInicial = p.palabra.charAt(0).toUpperCase();
     document.getElementById("wordOfDay").innerHTML = `

@@ -82,10 +82,15 @@ function supabaseFetch(path) {
  */
 function getPalabraDelDia(palabras) {
   const hoy = new Date();
-  // Mismo algoritmo que la app (usa hora local de Argentina, UTC-3)
-  // El cron corre a las 21:10 UTC = 18:10 Argentina, así que getUTCDate
-  // coincide con la fecha argentina (todavía no cambió de día)
-  const indice = (hoy.getUTCFullYear() * 366 + hoy.getUTCMonth() * 31 + hoy.getUTCDate()) % palabras.length;
+  // Hash determinista de la fecha (mismo algoritmo que la app)
+  // Usa hora local de Argentina (UTC-3). El cron corre a las 21:00 UTC = 18:00 Argentina
+  const dateStr = `${hoy.getUTCFullYear()}-${hoy.getUTCMonth()}-${hoy.getUTCDate()}`;
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+    hash |= 0;
+  }
+  const indice = Math.abs(hash) % palabras.length;
   return palabras[indice];
 }
 
@@ -94,7 +99,9 @@ function getPalabraDelDia(palabras) {
  */
 async function sendPush(subscription, payload) {
   try {
-    await webpush.sendNotification(subscription, JSON.stringify(payload));
+    // TTL de 2 horas: si el navegador está cerrado más de 2hs, la notificación expira
+    // y no se acumulan notificaciones viejas al abrir el navegador después de días
+    await webpush.sendNotification(subscription, JSON.stringify(payload), { TTL: 7200 });
     return { success: true };
   } catch (error) {
     // Si la suscripción expiró o fue revocada, marcar para limpiar
